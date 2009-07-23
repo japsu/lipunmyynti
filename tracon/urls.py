@@ -1,17 +1,13 @@
+# encoding: utf-8
+# vim: shiftwidth=4 expandtab
+
 from django.conf.urls.defaults import *
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.contrib import admin
+admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Example:
-    # (r'^tracon/', include('tracon.foo.urls')),
-
-    # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
-    # to INSTALLED_APPS to enable admin documentation:
-    # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # (r'^admin/(.*)', admin.site.root),
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^admin/(.*)', admin.site.root),
+    url(r'^', include('tracon.ticket_sales.urls'))
 )
