@@ -1,0 +1,128 @@
+[
+    {
+        "pk": 1, 
+        "model": "ticket_sales.shirtsize", 
+        "fields": {
+            "available": false, 
+            "ladyfit": false, 
+            "name": "XS"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "ticket_sales.shirtsize", 
+        "fields": {
+            "available": true, 
+            "ladyfit": false, 
+            "name": "S"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "ticket_sales.shirtsize", 
+        "fields": {
+            "available": true, 
+            "ladyfit": false, 
+            "name": "M"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "ticket_sales.shirtsize", 
+        "fields": {
+            "available": true, 
+            "ladyfit": false, 
+            "name": "L"
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "ticket_sales.shirtsize", 
+        "fields": {
+            "available": true, 
+            "ladyfit": false, 
+            "name": "XL"
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "ticket_sales.shirtsize", 
+        "fields": {
+            "available": true, 
+            "ladyfit": false, 
+            "name": "XXL"
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "ticket_sales.shirtsize", 
+        "fields": {
+            "available": true, 
+            "ladyfit": false, 
+            "name": "XXXL"
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "ticket_sales.shirtsize", 
+        "fields": {
+            "available": true, 
+            "ladyfit": true, 
+            "name": "XS"
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "ticket_sales.shirtsize", 
+        "fields": {
+            "available": true, 
+            "ladyfit": true, 
+            "name": "S"
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "ticket_sales.shirtsize", 
+        "fields": {
+            "available": true, 
+            "ladyfit": true, 
+            "name": "M"
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "ticket_sales.shirtsize", 
+        "fields": {
+            "available": true, 
+            "ladyfit": true, 
+            "name": "L"
+        }
+    }, 
+    {
+        "pk": 12, 
+        "model": "ticket_sales.shirtsize", 
+        "fields": {
+            "available": true, 
+            "ladyfit": true, 
+            "name": "XL"
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "ticket_sales.shirtsize", 
+        "fields": {
+            "available": false, 
+            "ladyfit": true, 
+            "name": "XXL"
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "ticket_sales.shirtsize", 
+        "fields": {
+            "available": false, 
+            "ladyfit": true, 
+            "name": "XXXL"
+        }
+    }
+]
