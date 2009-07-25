@@ -80,13 +80,13 @@ class ShirtSize(models.Model):
         else:
             return self.name
 
-class Shirt(models.Model):
+class ShirtOrder(models.Model):
     order = models.ForeignKey(Order)
-    index = models.IntegerField()
     size = models.ForeignKey(ShirtSize)
+    count = models.IntegerField()
 
     def __unicode__(self):
-        return u"#%d %s".format(
-            self.index,
+        return u"%dx%s" % (
+            self.count,
             self.size
         )
