@@ -21,8 +21,10 @@ def Phase():
         elif request.method == "POST":
             self.save()
 
-            # XXX next, prev etc.
-            # XXX completedness
+            action = self.request.POST.get("action", "next")
+            if action in ("next", "prev", "cancel"):
+                method = getattr(self, action)
+                method()
         
 
 def welcome_view(request):
