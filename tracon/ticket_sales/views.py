@@ -9,6 +9,22 @@ from django.core.urlresolvers import reverse
 from tracon.ticket_sales.models import *
 from tracon.ticket_sales.forms import *
 
+def Phase():
+    methods = ["GET", "POST"]
+
+    def __call__(self, request):
+        if not request.method in self.methods:
+            return HttpResponseNotAllowed(self.methods)
+        
+        if request.method == "GET":
+            return self.get()
+        elif request.method == "POST":
+            self.save()
+
+            # XXX next, prev etc.
+            # XXX completedness
+        
+
 def welcome_view(request):
     if request.method == "GET":
         vars = RequestContext(request, {})
@@ -181,7 +197,7 @@ def confirm_view(request):
         vars=RequestContext(request, {
             "order" : order,
             "shirts" : shirts
-        )
+        })
         return render_to_response("ticket_sales/confirm.html", vars)
 
     elif request.method == "POST":

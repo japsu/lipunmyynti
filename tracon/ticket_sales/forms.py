@@ -6,9 +6,6 @@ from django.contrib.localflavor.fi.forms import FIZipCodeField
 
 from tracon.ticket_sales.models import *
 
-class WelcomeForm(forms.Form):
-    pass
-
 class ProductInfoForm(forms.ModelForm):
     class Meta:
         model = ProductInfo
