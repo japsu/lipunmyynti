@@ -8,8 +8,9 @@ from django.core.urlresolvers import reverse
 
 from tracon.ticket_sales.models import *
 from tracon.ticket_sales.forms import *
+from tracon.ticket_sales.helpers import *
 
-def Phase():
+class Phase(object):
     methods = ["GET", "POST"]
 
     def __call__(self, request):
@@ -25,31 +26,25 @@ def Phase():
             if action in ("next", "prev", "cancel"):
                 method = getattr(self, action)
                 method()
-        
 
-def welcome_view(request):
-    if request.method == "GET":
-        vars = RequestContext(request, {})
-        return render_to_response("ticket_sales/welcome.html", vars)
-    elif request.method == "POST":
-        if not request.session.has_key("tracon.ticket_sales.order_id"):
-            order = Order(ip_address = request.META["REMOTE_ADDR"])
-            order.save()
+    def make_form(self, post_data):
+        return NullForm()
 
-            request.session["tracon.ticket_sales.order_id"] = order.pk
 
-        request.session["tracon.ticket_sales.completed"] = ["welcome"]
-        return HttpResponseRedirect(reverse("tickets_view"))
-    else:
-        return HttpResponseNotAllowed(["GET", "POST"])
+class WelcomePhase(Phase):
+    name = "welcome"
+    template = "ticket_sales/welcome.html"
+    prerequisites = []
 
-def tickets_view(request):
-    if not "welcome" in request.session.get("tracon.ticket_sales.completed", []):
-        return HttpResponseRedirect(reverse("welcome_view"))
+    def save(self, request, form):
+        order = Order(ip_address = request.META["REMOTE_ADDR"])
+        order.save()
 
-    order = Order.objects.get(
-        pk=request.session["tracon.ticket_sales.order_id"])
+        set_order(order)
 
+welcome_view = WelcomePhase()
+
+class TicketsPhase(Phase):
     if request.method == "GET":
         form = ProductInfoForm(instance=order.product_info)
 
