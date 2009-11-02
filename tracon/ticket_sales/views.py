@@ -12,24 +12,38 @@ from tracon.ticket_sales.helpers import *
 
 class Phase(object):
     methods = ["GET", "POST"]
+    prerequisites = []
+    template = "ticket_sales/dummy.html"
 
     def __call__(self, request):
-        if not request.method in self.methods:
+        if request.method not in self.methods:
             return HttpResponseNotAllowed(self.methods)
+
+        for prereq in self.prerequisites:
         
         if request.method == "GET":
-            return self.get()
+            return self.get(request)
         elif request.method == "POST":
-            self.save()
+            self.save(request)
 
             action = self.request.POST.get("action", "next")
             if action in ("next", "prev", "cancel"):
                 method = getattr(self, action)
-                method()
+                return method()
 
-    def make_form(self, post_data):
+    def get(self, request):
+        form = self.make_form(request)
+        order = get_order(request)
+
+        context = RequestContext(request, {})
+        vars = dict(form=form, order=order)
+        return render_to_response(self.template, vars, context_instance=context)
+
+    def make_form(self, request):
         return NullForm()
 
+    def save(self, request):
+        raise NotImplementedError()
 
 class WelcomePhase(Phase):
     name = "welcome"
@@ -45,29 +59,30 @@ class WelcomePhase(Phase):
 welcome_view = WelcomePhase()
 
 class TicketsPhase(Phase):
-    if request.method == "GET":
-        form = ProductInfoForm(instance=order.product_info)
+    def make_form(self, request):
 
-        vars = RequestContext(request, {"form" : form})
-        return render_to_response("ticket_sales/tickets.html", vars)
+        return ProductInfoForm(instance=order.product_info)
 
-    elif request.method == "POST":
-        form = ProductInfoForm(request.POST, instance=order.product_info)
-
-        try:
-            product_info = form.save()
-        except ValueError:
             vars = RequestContext(request, {"form" : form})
             return render_to_response("ticket_sales/tickets.html", vars)
 
-        order.product_info = product_info
-        order.save()
+        elif request.method == "POST":
+            form = ProductInfoForm(request.POST, instance=order.product_info)
 
-        request.session.get("tracon.ticket_sales.completed").append("tickets")
-        return HttpResponseRedirect(reverse("shirts_view"))
+            try:
+                product_info = form.save()
+            except ValueError:
+                vars = RequestContext(request, {"form" : form})
+                return render_to_response("ticket_sales/tickets.html", vars)
 
-    else:
-        return HttpResponseNotAllowed(["GET", "POST"])        
+            order.product_info = product_info
+            order.save()
+
+            request.session.get("tracon.ticket_sales.completed").append("tickets")
+            return HttpResponseRedirect(reverse("shirts_view"))
+
+        else:
+            return HttpResponseNotAllowed(["GET", "POST"])        
 
 def shirts_view(request):
     if not "tickets" in request.session.get("tracon.ticket_sales.completed", []):
