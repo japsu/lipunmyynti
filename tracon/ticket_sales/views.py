@@ -61,11 +61,11 @@ class Phase(object):
         order = get_order(request)
 
         context = RequestContext(request, {})
-        vars = dict(form=form, order=order, phase=self)
+        vars = dict(self.vars(request, form), form=form, order=order, phase=self)
         return render_to_response(self.template, vars, context_instance=context)
 
     def make_form(self, request):
-        return NullForm(request.POST)
+        return init_form(NullForm, request, instance=None)
 
     def save(self, request, form):
         form.save()
@@ -81,6 +81,9 @@ class Phase(object):
         clear_completed(request)
         return HttpResponseRedirect(EXIT_URL)
 
+    def vars(self, request, form):
+        return {}
+
 class WelcomePhase(Phase):
     name = "welcome_phase"
     template = "ticket_sales/welcome.html"
@@ -89,7 +92,7 @@ class WelcomePhase(Phase):
 
     def make_form(self, request):
         order = get_order(request)
-        return WelcomeForm(request.POST, instance=order, initial=dict(ip_address="0.0.0.0"))
+        return init_form(WelcomeForm, request, instance=order)
 
     def save(self, request, form):
         order = form.save()
@@ -108,7 +111,7 @@ class TicketsPhase(Phase):
 
     def make_form(self, request):
         order = get_order(request)
-        return ProductInfoForm(request.POST, instance=order.product_info)
+        return init_form(ProductInfoForm, request, instance=order.product_info)
 
     def save(self, request, form):
         order = get_order(request)
@@ -120,19 +123,20 @@ class TicketsPhase(Phase):
 
 tickets_view = TicketsPhase()
 
-def shirts_view(request):
-    if not "tickets" in request.session.get("tracon.ticket_sales.completed", []):
-        return HttpResponseRedirect(reverse("welcome_view"))
+class ShirtsPhase(Phase):
+    name = "shirts_phase"
+    template = "ticket_sales/shirts.html"
+    next_phase = "confirm_phase"
+    prev_phase = "tickets_phase"
 
-    sizes = ShirtSize.objects.all()
-    order = Order.objects.get(
-        pk=request.session["tracon.ticket_sales.order_id"])
-    num_shirts = order.product_info.num_shirts
+    def __get_sizes(self):
+        return ShirtSize.objects.all().order_by("id")
 
-    if request.method == "GET":
+    def vars(self, request, form):
+        order = get_order(request)
         data = []
 
-        for size in sizes:
+        for size in self.__get_sizes():
             try:
                 shirt_order = ShirtOrder.objects.get(
                     order=order,
@@ -145,29 +149,37 @@ def shirts_view(request):
             available = size.available
             data.append((size, count, available))
 
-        vars = RequestContext(request, {"data":data,"num_shirts":num_shirts})
-        return render_to_response("ticket_sales/shirts.html")
+        return dict(data=data)
 
-    elif request.method == "POST":
+    def save(self, request, form):
         data = []
         errors = set()
-        for size in sizes:
+        for size in self.__get_sizes():
+            # Some shirt sizes are not available, but they are shown for
+            # symmetry.
             available = size.available
 
+            # Try to extract the number of shirts of a size from the POST
+            # form data.
             try:
                 count = int(request.POST.get("s%d" % size.pk, 0))
             except ValueError:
                 errors.add("syntax")
                 count = 0
 
+            # Negative amounts of shirts are not tolerated.
             if count < 0:
                 errors.add("negative")
                 count = 0
 
+            # Ordering shirts of unavailable sizes though POST data
+            # manipulation is not tolerated.
             if count > 0 and not available:
                 errors.add("hax")
                 count = 0
 
+            # Now check if we're modifying an existing order and a shirt
+            # order for this size already exists.
             try:
                 shirt_order = ShirtOrder.objects.get(
                     order=order,
@@ -177,6 +189,7 @@ def shirts_view(request):
                 shirt_order = None
 
             if shirt_order is None and count > 0:
+                # Create a new shirt order.
                 shirt_order = ShirtOrder(
                     order=order,
                     size=size,
@@ -184,94 +197,66 @@ def shirts_view(request):
                 )
                 shirt_order.save()
             elif shirt_order is not None and count > 0:
+                # Update an existing shirt order.
                 shirt_order.count = count
                 shirt_order.save()
             elif shirt_order is not None and count == 0:
+                # This shirt order was zeroed, so delete it.
                 shirt_order.delete()
      
             # do nothing on shirt_order None and count 0
             data.append((size, count, available))            
 
-        if errors:
-            vars = RequestContext(request, {"errors":errors,"data":data,"num_shirts":num_shirts})
-            return render_to_response("ticket_sales/shirts.html", vars)
-        else:
-            request.session["tracon.ticket_sales.completed"].append("shirts")
-            return HttpResponseRedirect(reverse("address_view"))
+            # TODO: Communicate errors to template and re-do phase
 
-    else:
-        return HttpResponseNotAllowed(["GET", "POST"])
+shirts_view = ShirtsPhase()
 
-def address_view(request):
-    if not "shirts" in request.session.get("tracon.ticket_sales.completed", []):
-        return HttpResponseRedirect(reverse("welcome_view"))
+class AddressPhase(Phase):
+    name = "address_phase"
+    template = "ticket_sales/address.html"
+    prev_phase = "shirts_phase"
+    next_phase = "confirm_phase"
 
-    order = Order.objects.get(
-        pk=request.session["tracon.ticket_sales.order_id"])
+    def make_form(self, request):
+        return init_form(CustomerForm, request, instance=order.customer)
 
-    if request.method == "GET":
-        form = CustomerForm(instance=order.customer)
-    
-        vars = RequestContext(request, {"form":form})    
-        return render_to_response("ticket_sales/address.html", vars)
-
-    elif request.method == "POST":
-        form = CustomerForm(request.POST, instance=order.customer)
-
-        try:
-            cust = CustomerForm.save()
-        except ValueError():
-            vars = RequestContext(request, {"form":form})
-            return render_to_response("ticket_saless/address.html", vars)
+    def save(self, request, form):
+        cust = CustomerForm.save()
 
         order.customer = cust
         order.save()
 
-        request.session["tracon.ticket_sales.completed"].append("address")
-        return HttpResponseRedirect(reverse("confirm_view"))
+address_view = AddressPhase()
 
-    else:
-        return HttpResponseNotAllowed(["GET", "POST"])
+class ConfirmPhase(Phase):
+    name = "confirm_phase"
+    template = "ticket_sales/confirm.html"
+    prev_phase = "shirts_phase"
+    next_phase = "thanks_phase"
 
-def confirm_view(request):
-    if not "address" in request.session.get("tracon.ticket_sales.completed", []):
-        return HttpResponseRedirect(reverse("welcome_view"))
+    def vars(self, request):
+        order = get_order(request)
+        shirts = ShirtOrder.objects.get(order=order)
 
-    order = Order.objects.get(
-        pk=request.session["tracon.ticket_sales.order_id"])
-    shirts = ShirtOrder.objects.filter(order=order)
+        return dict(shirts=shirts)
 
-    if request.method == "GET":
-        vars=RequestContext(request, {
-            "order" : order,
-            "shirts" : shirts
-        })
-        return render_to_response("ticket_sales/confirm.html", vars)
-
-    elif request.method == "POST":
+    def save(self, request, form):
         order.confirm()
         order.save()
 
-        del request.session["tracon.ticket_sales.completed"]
-        del request.session["tracon.ticket_sales.order_id"]
+confirm_view = ConfirmPhase()
 
-        request.session["tracon.ticket_sales.thanks_order_id"] = order.pk
+class ThanksPhase(Phase):
+    name = "thanks_phase"
+    template = "ticket_sales/thanks.html"
+    prev_phase = "confirm_phase"
+    next_phase = None
+    methods = ["GET"]
 
-        return HttpResponseRedirect(reverse("thanks_view"))
-
-    else:
-        return HttpResponseNotAllowed(["GET", "POST"])
-
-def thanks_view(request):
-    if request.method == "GET":
-        order_id = request.session.get("tracon.ticket_sales.thanks_order_id", None)
-        if order_id is None:
-            return HttpResponseRedirect(reverse("welcome_view"))
-
-        order = Order.objects.get(pk=order_id)
+    def vars(self, request):
+        order = get_order(request)
         shirts = ShirtOrder.objects.filter(order=order)
 
-        vars = RequestContext(request, {"order":order,"shirts":shirts})
-        return render_to_response("ticket_sales/thanks.html", vars)
-    else:
-        return HttpResponseNotAllowed(["GET"])
+        return dict(shirts=shirts)
+
+thanks_view = ThanksPhase()

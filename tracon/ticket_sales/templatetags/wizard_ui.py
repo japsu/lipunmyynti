@@ -6,14 +6,14 @@ from django import template
 register = template.Library()
 
 @register.simple_tag
-def wizard_buttons():
+def wizard_buttons(phase):
     button_template = template.loader.get_template("wizard_ui/buttons.html")
-    context = template.Context({})
+    context = template.Context(dict(phase=phase))
     return button_template.render(context)
 
 @register.simple_tag
-def progress_bar():
+def progress_bar(phase):
     progress_bar_template = template.loader.get_template(
         "wizard_ui/progress.html")
-    context = template.Context({})
+    context = template.Context(dict(phase=phase))
     return progress_bar_template.render(context)

@@ -15,6 +15,7 @@ __all__ = [
     "get_completed",
     "mark_as_completed",
     "clear_completed",
+    "init_form",
 ]
 
 ORDER_KEY = "tracon.ticket_sales.order_id"
@@ -62,3 +63,16 @@ def mark_as_completed(request, phase_name):
 def clear_completed(request):
     if request.session.has_key(COMPLETED_KEY):
         del request.session[COMPLETED_KEY]
+
+def init_form(form_class, request, instance=None):
+    if request.method == "POST":
+        args = [request.POST]
+    else:
+        args = []
+
+    if instance is not None:
+        kwargs = dict(instance=instance)
+    else:
+        kwargs = {}
+
+    return form_class(*args, **kwargs)
