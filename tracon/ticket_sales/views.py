@@ -10,79 +10,115 @@ from tracon.ticket_sales.models import *
 from tracon.ticket_sales.forms import *
 from tracon.ticket_sales.helpers import *
 
+__all__ = [
+    "welcome_view",
+    "tickets_view",
+    "shirts_view",
+    "address_view",
+    "confirm_view",
+    "thanks_view"
+]    
+
+FIRST_PHASE = "welcome_phase"
+EXIT_URL = "http://2010.tracon.fi"
+
 class Phase(object):
+    name = "XXX_fill_me_in"
     methods = ["GET", "POST"]
-    prerequisites = []
     template = "ticket_sales/dummy.html"
+    prev_phase = None
+    next_phase = None
 
     def __call__(self, request):
         if request.method not in self.methods:
             return HttpResponseNotAllowed(self.methods)
 
-        for prereq in self.prerequisites:
+        if not self.prerequisites_completed(request):
+            return redirect(FIRST_PHASE)
+
+        form = self.make_form(request)
         
         if request.method == "GET":
-            return self.get(request)
+            return self.get(request, form)
         elif request.method == "POST":
-            self.save(request)
+            self.save(request, form)
+            mark_as_completed(request, self.name)
 
-            action = self.request.POST.get("action", "next")
+            action = request.POST.get("action", "next")
             if action in ("next", "prev", "cancel"):
                 method = getattr(self, action)
-                return method()
+                return method(request)
 
-    def get(self, request):
-        form = self.make_form(request)
+    def prerequisites_completed(self, request):
+        completed = get_completed(request)
+
+        if not self.prev_phase:
+            return True
+
+        return self.prev_phase in completed
+
+    def get(self, request, form):
         order = get_order(request)
 
         context = RequestContext(request, {})
-        vars = dict(form=form, order=order)
+        vars = dict(form=form, order=order, phase=self)
         return render_to_response(self.template, vars, context_instance=context)
 
     def make_form(self, request):
-        return NullForm()
-
-    def save(self, request):
-        raise NotImplementedError()
-
-class WelcomePhase(Phase):
-    name = "welcome"
-    template = "ticket_sales/welcome.html"
-    prerequisites = []
+        return NullForm(request.POST)
 
     def save(self, request, form):
-        order = Order(ip_address = request.META["REMOTE_ADDR"])
+        form.save()
+
+    def next(self, request):
+        return redirect(self.next_phase)
+
+    def prev(self, request):
+        return redirect(self.prev_phase)
+
+    def cancel(self, request):
+        destroy_order(request)
+        clear_completed(request)
+        return HttpResponseRedirect(EXIT_URL)
+
+class WelcomePhase(Phase):
+    name = "welcome_phase"
+    template = "ticket_sales/welcome.html"
+    prev_phase = None
+    next_phase = "tickets_phase"
+
+    def make_form(self, request):
+        order = get_order(request)
+        return WelcomeForm(request.POST, instance=order, initial=dict(ip_address="0.0.0.0"))
+
+    def save(self, request, form):
+        order = form.save()
+        order.ip_address = request.META.get("REMOTE_ADDR")
         order.save()
 
-        set_order(order)
+        set_order(request, order)
 
 welcome_view = WelcomePhase()
 
 class TicketsPhase(Phase):
+    name = "tickets_phase"
+    template = "ticket_sales/tickets.html"
+    prev_phase = "welcome_phase"
+    next_phase = "shirts_phase"
+
     def make_form(self, request):
+        order = get_order(request)
+        return ProductInfoForm(request.POST, instance=order.product_info)
 
-        return ProductInfoForm(instance=order.product_info)
+    def save(self, request, form):
+        order = get_order(request)
 
-            vars = RequestContext(request, {"form" : form})
-            return render_to_response("ticket_sales/tickets.html", vars)
+        product_info = form.save()
 
-        elif request.method == "POST":
-            form = ProductInfoForm(request.POST, instance=order.product_info)
+        order.product_info = product_info
+        order.save()
 
-            try:
-                product_info = form.save()
-            except ValueError:
-                vars = RequestContext(request, {"form" : form})
-                return render_to_response("ticket_sales/tickets.html", vars)
-
-            order.product_info = product_info
-            order.save()
-
-            request.session.get("tracon.ticket_sales.completed").append("tickets")
-            return HttpResponseRedirect(reverse("shirts_view"))
-
-        else:
-            return HttpResponseNotAllowed(["GET", "POST"])        
+tickets_view = TicketsPhase()
 
 def shirts_view(request):
     if not "tickets" in request.session.get("tracon.ticket_sales.completed", []):

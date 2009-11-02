@@ -2,16 +2,17 @@
 # vim: shiftwidth=4 expandtab
 
 from django.conf.urls.defaults import *
+from django.views.generic.simple import redirect_to
 
 from tracon.ticket_sales.views import *
 
 urlpatterns = patterns('',
-    url(r'^welcome/$', welcome_view, name="welcome_view"),
-    url(r'^tickets/$', tickets_view, name="tickets_view"),
-    url(r'^shirts/$', shirts_view, name="shirts_view"),
-    url(r'^address/$', address_view, name="address_view"),
-    url(r'^confirm/$', confirm_view, name="confirm_view"),
-    url(r'^thanks/$', thanks_view, name="thanks_view"),
+    url(r'^welcome/$', welcome_view, name="welcome_phase"),
+    url(r'^tickets/$', tickets_view, name="tickets_phase"),
+    url(r'^shirts/$', shirts_view, name="shirts_phase"),
+    url(r'^address/$', address_view, name="address_phase"),
+    url(r'^confirm/$', confirm_view, name="confirm_phase"),
+    url(r'^thanks/$', thanks_view, name="thanks_phase"),
 
-    url(r'^', welcome_view, name="empty_url")
+    url(r'^', redirect_to, dict(url='/welcome/'), name="empty_url"),
 )

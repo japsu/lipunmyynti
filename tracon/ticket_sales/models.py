@@ -43,7 +43,7 @@ class Order(models.Model):
     customer = models.OneToOneField(Customer, null=True, blank=True)
     start_time = models.DateTimeField(auto_now=True)
     confirm_time = models.DateTimeField(null=True, blank=True)
-    ip_address = models.IPAddressField()
+    ip_address = models.CharField(max_length=15, null=True, blank=True)
     payment_time = models.DateTimeField(null=True, blank=True)
 
     @property

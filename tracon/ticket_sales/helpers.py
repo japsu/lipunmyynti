@@ -4,6 +4,19 @@
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
+from tracon.ticket_sales.models import Order
+
+__all__ = [
+    "redirect",
+    "set_order",
+    "get_order",
+    "clear_order",
+    "destroy_order",
+    "get_completed",
+    "mark_as_completed",
+    "clear_completed",
+]
+
 ORDER_KEY = "tracon.ticket_sales.order_id"
 COMPLETED_KEY = "tracon.ticket_sales.completed_phases"
 
@@ -18,11 +31,25 @@ def get_order(request):
     if order_id is not None:
         return Order.objects.get(id=order_id)
     else:
-        return None
+        o = Order.objects.create()
+        set_order(request, o)
+        return o
 
 def clear_order(request):
     if request.session.has_key(ORDER_KEY):
         del request.session[ORDER_KEY]
+
+def destroy_order(request):
+    order = get_order(request)
+    
+    if order.product_info:
+        order.product_info.delete()
+
+    for shirt in ShirtOrder.objects.get(order=order):
+        shirt.delete()
+
+    order.delete()
+    clear_order(request)
 
 def get_completed(request):
     return request.session.get(COMPLETED_KEY, [])
