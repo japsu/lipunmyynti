@@ -38,16 +38,23 @@ class Phase(object):
 
         form = self.make_form(request)
         
-        if request.method == "GET":
-            return self.get(request, form)
-        elif request.method == "POST":
-            self.save(request, form)
-            mark_as_completed(request, self.name)
+        if request.method == "POST":
+            action = request.POST.get("action", "cancel")
+            if action == "cancel":
+                return self.cancel(request)
 
-            action = request.POST.get("action", "next")
-            if action in ("next", "prev", "cancel"):
+            if action not in ("next", "prev"):
+                # TODO the user is manipulating the POST data
+                raise NotImplementedError("evil user")
+    
+            if self.validate(request, form):
+                self.save(request, form)
+                mark_as_completed(request, self.name)
+
                 method = getattr(self, action)
                 return method(request)
+
+        return self.get(request, form)
 
     def prerequisites_completed(self, request):
         completed = get_completed(request)
@@ -56,6 +63,9 @@ class Phase(object):
             return True
 
         return self.prev_phase in completed
+
+    def validate(self, request, form):
+        return form.is_valid()
 
     def get(self, request, form):
         order = get_order(request)
@@ -147,7 +157,7 @@ class ShirtsPhase(Phase):
                 count = 0
 
             available = size.available
-            data.append((size, count, available))
+            data.append((size, count))
 
         return dict(data=data)
 

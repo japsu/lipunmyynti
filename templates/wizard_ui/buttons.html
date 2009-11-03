@@ -1,13 +1,13 @@
 {% if phase.prev_phase %}
-  <button type="submit" name="submit" value="prev">Edellinen</button>
+  <button type="submit" name="action" value="prev">Edellinen</button>
 {% else %}
-  <button type="submit" name="submit" value="prev" disabled="disabled">Edellinen</button>
+  <button type="submit" name="action" value="prev" disabled="disabled">Edellinen</button>
 {% endif %}
 
-<button type="submit" name="submit" value="cancel">Keskeytä</button>
+<button type="submit" name="action" value="cancel">Keskeytä</button>
 
 {% if phase.next_phase %}
-  <button type="submit" name="submit" value="next">Seuraava</button>
+  <button type="submit" name="action" value="next">Seuraava</button>
 {% else %}
-  <button type="submit" name="submit" value="next" disabled="disabled">Seuraava</button>
+  <button type="submit" name="action" value="next" disabled="disabled">Seuraava</button>
 {% endif %}
