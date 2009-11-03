@@ -1,1 +1,12 @@
-1. Tervetuloa &raquo; 2. Liput &raquo; 3. Paidat &raquo; 4. Toimitusosoite &raquo; 5. Tilausvahvistus
+{% load wizard_ui %}
+{% for phase, available in phases %}
+  {% if available %}
+    <a href="{% url_ptr phase.name %}">{{ forloop.counter }}. {{ phase.friendly_name }}</a>
+  {% else %}
+    {{ forloop.counter }}. {{ phase.friendly_name }}
+  {% endif %}
+
+  {% if not forloop.last %}
+    &raquo;
+  {% endif %}
+{% endfor %}

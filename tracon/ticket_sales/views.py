@@ -16,7 +16,8 @@ __all__ = [
     "shirts_view",
     "address_view",
     "confirm_view",
-    "thanks_view"
+    "thanks_view",
+    "ALL_PHASES"
 ]    
 
 FIRST_PHASE = "welcome_phase"
@@ -24,6 +25,7 @@ EXIT_URL = "http://2010.tracon.fi"
 
 class Phase(object):
     name = "XXX_fill_me_in"
+    friendly_name = "XXX Fill Me In"
     methods = ["GET", "POST"]
     template = "ticket_sales/dummy.html"
     prev_phase = None
@@ -39,7 +41,11 @@ class Phase(object):
         form = self.make_form(request)
         
         if request.method == "POST":
+            # Which button was clicked?
             action = request.POST.get("action", "cancel")
+
+            # On "Cancel" there's no need to do form validation, just bail out
+            # right away.
             if action == "cancel":
                 return self.cancel(request)
 
@@ -51,9 +57,17 @@ class Phase(object):
                 self.save(request, form)
                 mark_as_completed(request, self.name)
 
-                method = getattr(self, action)
-                return method(request)
+                # The "Next" button should only proceed with valid data.
+                if action == "next":
+                    return self.next(request)
 
+            # The "Previous" button should work regardless of form validity.
+            if action == "prev":
+                return self.prev(request)
+
+            # "Next" with invalid data falls through.
+
+        # POST with invalid data and GET are handled the same.
         return self.get(request, form)
 
     def prerequisites_completed(self, request):
@@ -96,6 +110,7 @@ class Phase(object):
 
 class WelcomePhase(Phase):
     name = "welcome_phase"
+    friendly_name = "Tervetuloa"
     template = "ticket_sales/welcome.html"
     prev_phase = None
     next_phase = "tickets_phase"
@@ -115,6 +130,7 @@ welcome_view = WelcomePhase()
 
 class TicketsPhase(Phase):
     name = "tickets_phase"
+    friendly_name = "Liput"
     template = "ticket_sales/tickets.html"
     prev_phase = "welcome_phase"
     next_phase = "shirts_phase"
@@ -135,6 +151,7 @@ tickets_view = TicketsPhase()
 
 class ShirtsPhase(Phase):
     name = "shirts_phase"
+    friendly_name = "Paidat"
     template = "ticket_sales/shirts.html"
     next_phase = "confirm_phase"
     prev_phase = "tickets_phase"
@@ -162,7 +179,6 @@ class ShirtsPhase(Phase):
         return dict(data=data)
 
     def save(self, request, form):
-        data = []
         errors = set()
         for size in self.__get_sizes():
             # Some shirt sizes are not available, but they are shown for
@@ -215,14 +231,13 @@ class ShirtsPhase(Phase):
                 shirt_order.delete()
      
             # do nothing on shirt_order None and count 0
-            data.append((size, count, available))            
-
             # TODO: Communicate errors to template and re-do phase
 
 shirts_view = ShirtsPhase()
 
 class AddressPhase(Phase):
     name = "address_phase"
+    friendly_name = "Toimitusosoite"
     template = "ticket_sales/address.html"
     prev_phase = "shirts_phase"
     next_phase = "confirm_phase"
@@ -240,6 +255,7 @@ address_view = AddressPhase()
 
 class ConfirmPhase(Phase):
     name = "confirm_phase"
+    friendly_name = "Tilausvahvistus"
     template = "ticket_sales/confirm.html"
     prev_phase = "shirts_phase"
     next_phase = "thanks_phase"
@@ -258,6 +274,7 @@ confirm_view = ConfirmPhase()
 
 class ThanksPhase(Phase):
     name = "thanks_phase"
+    friendly_name = "Kuitti"
     template = "ticket_sales/thanks.html"
     prev_phase = "confirm_phase"
     next_phase = None
@@ -270,3 +287,5 @@ class ThanksPhase(Phase):
         return dict(shirts=shirts)
 
 thanks_view = ThanksPhase()
+
+ALL_PHASES = [welcome_view, tickets_view, shirts_view, address_view, confirm_view, thanks_view]

@@ -5,16 +5,17 @@ encoding: utf-8
 vim: shiftwidth=2 expandtab
 {% endcomment %}
 {% block content %}
-{% progress_bar phase %}
+{% progress_bar request phase %}
 <h1>Ilmoita paitojen koot</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
 <form method="post" action="{% url address_phase %}">
   <table>
     <tr>
       {% for size, count in data %}
-        <td>{{ size.name }}
-  
-
+        <td>{{ size.name }}</td>
+      {% endfor %}
+    </tr>
+  </table>
 {% wizard_buttons phase %}
 </form>
 {% endblock %}

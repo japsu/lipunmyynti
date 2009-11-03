@@ -5,16 +5,16 @@ from django.db import models
 from datetime import datetime
 
 class DiscountCode(models.Model):
-    code = modes.CharField(max_length=16)
+    code = models.CharField(max_length=16)
     discount = models.IntegerField()
 
 class ProductInfo(models.Model):
     # REVERSE: order = OneToOne(Order)
 
-    tickets = models.IntegerField()
-    tickets_tshirts = models.IntegerField()
-    tickets_accommodation = models.IntegerField()
-    tickets_tshirts_accommodation = models.IntegerField()
+    tickets = models.IntegerField(default=0)
+    tickets_tshirts = models.IntegerField(default=0)
+    tickets_accommodation = models.IntegerField(default=0)
+    tickets_tshirts_accommodation = models.IntegerField(default=0)
 
     discount_code = models.OneToOneField(DiscountCode, null=True, blank=True)
 
