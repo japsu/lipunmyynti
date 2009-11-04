@@ -153,32 +153,33 @@ class ShirtsPhase(Phase):
     name = "shirts_phase"
     friendly_name = "Paidat"
     template = "ticket_sales/shirts.html"
-    next_phase = "confirm_phase"
+    next_phase = "address_phase"
     prev_phase = "tickets_phase"
 
-    def __get_sizes(self):
-        return ShirtSize.objects.all().order_by("id")
+    def __get_sizes(self, **kwargs):
+        return ShirtSize.objects.filter(**kwargs).order_by("id")
 
     def vars(self, request, form):
         order = get_order(request)
-        data = []
+        ladyfit_sizes, normal_sizes = list(), list()
 
-        for size in self.__get_sizes():
-            try:
-                shirt_order = ShirtOrder.objects.get(
-                    order=order,
-                    size=size
-                )
-                count = shirt_order.count
-            except ShirtOrder.DoesNotExist:
-                count = 0
+        for container, ladyfit in ((normal_sizes, False), (ladyfit_sizes, True)):
+            for size in self.__get_sizes(ladyfit=ladyfit):
+                try:
+                    shirt_order = ShirtOrder.objects.get(
+                        order=order,
+                        size=size
+                    )
+                    count = shirt_order.count
+                except ShirtOrder.DoesNotExist:
+                    count = 0
 
-            available = size.available
-            data.append((size, count))
+                container.append((size, count))
 
-        return dict(data=data)
+        return dict(normal_sizes=normal_sizes, ladyfit_sizes=ladyfit_sizes)
 
     def save(self, request, form):
+        order = get_order(request)
         errors = set()
         for size in self.__get_sizes():
             # Some shirt sizes are not available, but they are shown for
@@ -243,10 +244,13 @@ class AddressPhase(Phase):
     next_phase = "confirm_phase"
 
     def make_form(self, request):
+        order = get_order(request)
+
         return init_form(CustomerForm, request, instance=order.customer)
 
     def save(self, request, form):
-        cust = CustomerForm.save()
+        order = get_order(request)
+        cust = form.save()
 
         order.customer = cust
         order.save()
@@ -260,13 +264,14 @@ class ConfirmPhase(Phase):
     prev_phase = "shirts_phase"
     next_phase = "thanks_phase"
 
-    def vars(self, request):
+    def vars(self, request, form):
         order = get_order(request)
-        shirts = ShirtOrder.objects.get(order=order)
+        shirts = ShirtOrder.objects.filter(order=order)
 
         return dict(shirts=shirts)
 
     def save(self, request, form):
+        order = get_order(request)
         order.confirm()
         order.save()
 
@@ -276,11 +281,11 @@ class ThanksPhase(Phase):
     name = "thanks_phase"
     friendly_name = "Kuitti"
     template = "ticket_sales/thanks.html"
-    prev_phase = "confirm_phase"
+    prev_phase = None
     next_phase = None
     methods = ["GET"]
 
-    def vars(self, request):
+    def vars(self, request, form):
         order = get_order(request)
         shirts = ShirtOrder.objects.filter(order=order)
 

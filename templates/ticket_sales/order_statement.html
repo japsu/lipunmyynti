@@ -1,0 +1,53 @@
+<h2>Liput</h2>
+
+<dl>
+{# XXX ugly copypastah #}
+{% with order.product_info.tickets_tshirts_accommodation as n %}
+  {% if n %}
+    <dt>tickets tshirts accommodation</dt>
+    <dd>{{ n }}</dd>
+  {% endif %}
+{% endwith %} 
+{% with order.product_info.tickets_accommodation as n %}
+  {% if n %}
+    <dt>tickets accommodation</dt>
+    <dd>{{ n }}</dd>
+  {% endif %}
+{% endwith %} 
+{% with order.product_info.tickets_tshirts as n %}
+  {% if n %}
+    <dt>tickets tshirts</dt>
+    <dd>{{ n }}</dd>
+  {% endif %}
+{% endwith %} 
+{% with order.product_info.tickets as n %}
+  {% if n %}
+    <dt>tickets</dt>
+    <dd>{{ n }}</dd>
+  {% endif %}
+{% endwith %} 
+</dl>
+
+<h2>Paidat</h2>
+
+<dl>
+  {% for shirt in shirts %}
+    <dt>{{ shirt.size }}</dt>
+    <dd>{{ shirt.count }}</dd>
+  {% endfor %}
+</dl>
+
+<h2>Toimitusosoite</h2>
+
+<dl>
+<dt>Nimi</dt>
+<dd>{{ order.customer.name }}</dd>
+<dt>Sähköpostiosoite</dt>
+<dd>{{ order.customer.email }}</dd>
+<dt>Osoite</dt>
+<dd>{{ order.customer.address }}</dd>
+<dt>Postinumero ja -toimipaikka</dt>
+<dd>{{ order.customer.zip_code }} {{ order.customer.city }}</dd>
+<dt>Puhelinnumero</dt>
+<dd>{{ order.customer.phone_number }}</dd>
+</dl>

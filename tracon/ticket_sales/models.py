@@ -63,6 +63,7 @@ class Order(models.Model):
     def confirm(self):
         assert self.product_info is not None
         assert self.customer is not None
+        assert self.confirm_time is None
 
         self.confirm_time = datetime.now()
 

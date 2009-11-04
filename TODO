@@ -1,0 +1,18 @@
+Toiminnalliset puutteet
+=======================
+
+* Skippaa Paidat-vaihe jos paitoja ei tilata
+* Näytä tilausvahvistus-vaiheessa "Seuraava"-tekstin tilalla "Vahvista", "Tilaa" tjsp.
+* Tarkista lippu- ja paitatilausvaiheissa että lukumäärät ovat järkeviä (0 < x < N?)
+* Tarkista paitatilausvaiheessa että paitojen summa täsmää
+* Paitatilausvaiheen mahd. virheiden kommunikointi templatelle
+* Progress bar nätimmin ja kätevämmin
+* Kun tilaus on vahvistettu, estä navigointi taaksepäin
+* Kun tilaus on vahvistettu, järkevä mekanismi uuden tilauksen tekemiselle
+
+* Sähköpostivahvistus tilaajalle tilauksesta
+* Sähköposti-ilmoitus sopivalle conitean osajoukolle tilauksista
+* Sähköposti-ilmoitus odottamattomista virhetilanteista
+
+* Tilausten täyttäjän käyttöliittymä
+* Ylläpitäjän käyttöliittymä
