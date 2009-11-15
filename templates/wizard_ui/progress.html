@@ -1,12 +1,14 @@
 {% load wizard_ui %}
-{% for phase, available in phases %}
+<ul>
+{% for the_phase, available, current in phases %}
   {% if available %}
-    <a href="{% url_ptr phase.name %}">{{ forloop.counter }}. {{ phase.friendly_name }}</a>
+    {% if current %}
+      <li class="progress_current"><a href="{% url_ptr the_phase.name %}">{{ forloop.counter }}. {{ the_phase.friendly_name }}</a></li>
+    {% else %}
+      <li class="progress_available"><a href="{% url_ptr the_phase.name %}">{{ forloop.counter }}. {{ the_phase.friendly_name }}</a></li>
+    {% endif %}
   {% else %}
-    {{ forloop.counter }}. {{ phase.friendly_name }}
-  {% endif %}
-
-  {% if not forloop.last %}
-    &raquo;
+    <li class="progress_unavailable">{{ forloop.counter }}. {{ the_phase.friendly_name }}</li>
   {% endif %}
 {% endfor %}
+</ul>

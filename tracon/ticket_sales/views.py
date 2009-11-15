@@ -35,7 +35,7 @@ class Phase(object):
         if request.method not in self.methods:
             return HttpResponseNotAllowed(self.methods)
 
-        if not self.prerequisites_completed(request):
+        if not self.available(request):
             return redirect(FIRST_PHASE)
 
         form = self.make_form(request)
@@ -70,11 +70,8 @@ class Phase(object):
         # POST with invalid data and GET are handled the same.
         return self.get(request, form)
 
-    def prerequisites_completed(self, request):
+    def available(self, request):
         completed = get_completed(request)
-
-        if not self.prev_phase:
-            return True
 
         return self.prev_phase in completed
 
@@ -126,6 +123,9 @@ class WelcomePhase(Phase):
 
         set_order(request, order)
 
+    def available(self, request):
+        return True
+
 welcome_view = WelcomePhase()
 
 class TicketsPhase(Phase):
@@ -146,6 +146,19 @@ class TicketsPhase(Phase):
 
         order.product_info = product_info
         order.save()
+
+    def next(self, request):
+        order = get_order(request)
+
+        if order.product_info.tshirts > 0:
+            # The user is ordering T-shirts. Ask for shirt sizes.
+            next_phase = "shirts_phase"
+        else:
+            # The user is not ordering T-shirts. Skip the shirt size phase.
+            mark_as_completed(request, "shirts_phase")
+            next_phase = "address_phase"
+
+        return redirect(next_phase)
 
 tickets_view = TicketsPhase()
 
@@ -234,6 +247,12 @@ class ShirtsPhase(Phase):
             # do nothing on shirt_order None and count 0
             # TODO: Communicate errors to template and re-do phase
 
+    def available(self, request):
+        order = get_order(request)
+        sup_available = super(ShirtsPhase, self).available(request)
+
+        return sup_available and order.product_info.tshirts > 0
+
 shirts_view = ShirtsPhase()
 
 class AddressPhase(Phase):
@@ -261,7 +280,7 @@ class ConfirmPhase(Phase):
     name = "confirm_phase"
     friendly_name = "Tilausvahvistus"
     template = "ticket_sales/confirm.html"
-    prev_phase = "shirts_phase"
+    prev_phase = "address_phase"
     next_phase = "thanks_phase"
 
     def vars(self, request, form):

@@ -1,7 +1,7 @@
 Toiminnalliset puutteet
 =======================
 
-* Skippaa Paidat-vaihe jos paitoja ei tilata
+* Mitä tehdään ShirtOrdereille kun käyttäjä muuttaa tilattavien paitojen määrää? Järäytetään kaikki ja pakotetaan iteroimaan?
 * Näytä tilausvahvistus-vaiheessa "Seuraava"-tekstin tilalla "Vahvista", "Tilaa" tjsp.
 * Tarkista lippu- ja paitatilausvaiheissa että lukumäärät ovat järkeviä (0 < x < N?)
 * Tarkista paitatilausvaiheessa että paitojen summa täsmää
