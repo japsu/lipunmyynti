@@ -1,0 +1,27 @@
+To: Ahto Simakuutio <ahto.simakuutio@noksu.fi>
+From: Tracon V -lipunmyynti <lipunmyynti10@tracon.fi>
+Subject: Tracon V: Lippunne on toimitettu
+X-Tracon-Order-ID: {{ order.pk }}
+
+Hyvä vastaanottaja,
+
+Seuraavat lipputuotteet on postitettu:
+
+1 kpl	Foo
+
+Liput on postitettu seuraavaan osoitteeseen:
+
+Ahto Simakuutio
+Ikuisenteekkarinkatu 7 N 300
+33720 HERWOOD
+
++358 50 555 1234
+ahto.simakuutio@noksu.fi
+
+Mikäli ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
+yhteyttä lipunmyyntiin sähköpostitse osoitteella lipunmyynti10@tracon.fi
+tai puhelimitse numeroon +358 45 555 5555.
+
+Ystävällisin terveisin
+-- 
+Tracon V -lipunmyynti <lipunmyynti10@tracon.fi>

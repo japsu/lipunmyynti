@@ -6,7 +6,6 @@ Toiminnalliset puutteet
 * Tarkista lippu- ja paitatilausvaiheissa että lukumäärät ovat järkeviä (0 < x < N?)
 * Tarkista paitatilausvaiheessa että paitojen summa täsmää
 * Paitatilausvaiheen mahd. virheiden kommunikointi templatelle
-* Progress bar nätimmin ja kätevämmin
 * Kun tilaus on vahvistettu, estä navigointi taaksepäin
 * Kun tilaus on vahvistettu, järkevä mekanismi uuden tilauksen tekemiselle
 
