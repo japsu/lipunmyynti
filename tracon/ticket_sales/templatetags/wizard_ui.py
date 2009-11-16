@@ -24,5 +24,11 @@ def progress_bar(request, current_phase):
     return progress_bar_template.render(context)
 
 @register.simple_tag
+def show_errors(errors):
+    error_template = template.loader.get_template("wizard_ui/errors.html")
+    context = template.Context(dict(errors=errors))
+    return error_template.render(context)
+
+@register.simple_tag
 def url_ptr(name):
     return reverse(name)

@@ -4,10 +4,14 @@
   <button type="submit" name="action" value="prev" disabled="disabled">Edellinen</button>
 {% endif %}
 
-<button type="submit" name="action" value="cancel">Keskeytä</button>
+{% if phase.can_cancel %}
+  <button type="submit" name="action" value="cancel">Keskeytä</button>
+{% else %}
+  <button type="submit" name="action" value="cancel" disabled="disabled">Keskeytä</button>
+{% endif %}
 
 {% if phase.next_phase %}
-  <button type="submit" name="action" value="next">Seuraava</button>
+  <button type="submit" name="action" value="next">{{ phase.next_text }}</button>
 {% else %}
-  <button type="submit" name="action" value="next" disabled="disabled">Seuraava</button>
+  <button type="submit" name="action" value="next" disabled="disabled">{{ phase.next_text }}</button>
 {% endif %}

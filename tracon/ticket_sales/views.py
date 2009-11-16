@@ -22,6 +22,7 @@ __all__ = [
 
 FIRST_PHASE = "welcome_phase"
 EXIT_URL = "http://2010.tracon.fi"
+PRODUCT_NAMES = ("tickets", "tickets_tshirts", "tickets_tshirts_accommodation", "tickets_accommodation")
 
 class Phase(object):
     name = "XXX_fill_me_in"
@@ -30,6 +31,8 @@ class Phase(object):
     template = "ticket_sales/dummy.html"
     prev_phase = None
     next_phase = None
+    next_text = "Seuraava"
+    can_cancel = True
 
     def __call__(self, request):
         if request.method not in self.methods:
@@ -52,9 +55,13 @@ class Phase(object):
             if action not in ("next", "prev"):
                 # TODO the user is manipulating the POST data
                 raise NotImplementedError("evil user")
-    
-            if self.validate(request, form):
+
+            # Data validity is checked before even attempting save.
+            errors = self.validate(request, form)
+
+            if not errors:    
                 self.save(request, form)
+
                 mark_as_completed(request, self.name)
 
                 # The "Next" button should only proceed with valid data.
@@ -66,23 +73,29 @@ class Phase(object):
                 return self.prev(request)
 
             # "Next" with invalid data falls through.
+        else:
+            errors = []
 
         # POST with invalid data and GET are handled the same.
-        return self.get(request, form)
+        return self.get(request, form, errors)
 
     def available(self, request):
+        order = get_order(request)
         completed = get_completed(request)
 
-        return self.prev_phase in completed
+        return self.prev_phase in completed and not order.is_confirmed
 
     def validate(self, request, form):
-        return form.is_valid()
+        if not form.is_valid():
+            return ["syntax"]
+        else:
+            return []
 
-    def get(self, request, form):
+    def get(self, request, form, errors):
         order = get_order(request)
 
         context = RequestContext(request, {})
-        vars = dict(self.vars(request, form), form=form, order=order, phase=self)
+        vars = dict(self.vars(request, form), form=form, errors=errors, order=order, phase=self)
         return render_to_response(self.template, vars, context_instance=context)
 
     def make_form(self, request):
@@ -139,6 +152,14 @@ class TicketsPhase(Phase):
         order = get_order(request)
         return init_form(ProductInfoForm, request, instance=order.product_info)
 
+    def validate(self, request, form):
+        if not form.is_valid():
+            return ["syntax"]
+        elif sum(form.cleaned_data[i] for i in PRODUCT_NAMES) <= 0:
+            return ["zero"]
+        else:
+            return []
+
     def save(self, request, form):
         order = get_order(request)
 
@@ -172,12 +193,27 @@ class ShirtsPhase(Phase):
     def __get_sizes(self, **kwargs):
         return ShirtSize.objects.filter(**kwargs).order_by("id")
 
+    def __get_count(self, request, size):
+        # Try to extract the number of shirts of a size from the POST
+        # form data.
+        data = int(request.POST.get("s%d" % size.pk, None))
+        if data is None:
+            return 0
+
+        try:
+            return int(data)
+        except ValueError:
+            raise
+
     def vars(self, request, form):
         order = get_order(request)
         ladyfit_sizes, normal_sizes = list(), list()
+        num_shirts = order.product_info.tshirts
 
         for container, ladyfit in ((normal_sizes, False), (ladyfit_sizes, True)):
             for size in self.__get_sizes(ladyfit=ladyfit):
+                # TODO Retain user input even if it's faulty
+
                 try:
                     shirt_order = ShirtOrder.objects.get(
                         order=order,
@@ -189,34 +225,48 @@ class ShirtsPhase(Phase):
 
                 container.append((size, count))
 
-        return dict(normal_sizes=normal_sizes, ladyfit_sizes=ladyfit_sizes)
+        return dict(normal_sizes=normal_sizes, ladyfit_sizes=ladyfit_sizes, num_shirts=num_shirts)
 
-    def save(self, request, form):
+    def validate(self, request, form):
         order = get_order(request)
         errors = set()
+
+        num_shirts = 0
+
         for size in self.__get_sizes():
             # Some shirt sizes are not available, but they are shown for
             # symmetry.
             available = size.available
 
-            # Try to extract the number of shirts of a size from the POST
-            # form data.
             try:
-                count = int(request.POST.get("s%d" % size.pk, 0))
+                count = self.__get_count(request, size)
             except ValueError:
+                # Non-integral data                
                 errors.add("syntax")
-                count = 0
 
-            # Negative amounts of shirts are not tolerated.
             if count < 0:
+                # Negative amounts of shirts are not tolerated.
                 errors.add("negative")
-                count = 0
-
-            # Ordering shirts of unavailable sizes though POST data
-            # manipulation is not tolerated.
-            if count > 0 and not available:
+                continue
+            elif count > 0 and not available:
+                # Ordering shirts of unavailable sizes though POST data
+                # manipulation is not tolerated.
                 errors.add("hax")
-                count = 0
+                continue
+
+            num_shirts += count
+
+        # Make sure the number of shirt ordered matches the number of ticket
+        # products that include a shirt.
+        if num_shirts != order.product_info.tshirts:
+            errors.add("num_shirts")
+
+        return list(errors)
+
+    def save(self, request, form):
+        order = get_order(request)
+        for size in self.__get_sizes():
+            count = self.__get_count(request, size)
 
             # Now check if we're modifying an existing order and a shirt
             # order for this size already exists.
@@ -245,7 +295,6 @@ class ShirtsPhase(Phase):
                 shirt_order.delete()
      
             # do nothing on shirt_order None and count 0
-            # TODO: Communicate errors to template and re-do phase
 
     def available(self, request):
         order = get_order(request)
@@ -267,6 +316,14 @@ class AddressPhase(Phase):
 
         return init_form(CustomerForm, request, instance=order.customer)
 
+    def prev(self, request):
+        order = get_order(request)
+
+        if order.product_info.tshirts:
+            return redirect("shirts_phase")
+        else:
+            return redirect("tickets_phase")
+
     def save(self, request, form):
         order = get_order(request)
         cust = form.save()
@@ -282,6 +339,7 @@ class ConfirmPhase(Phase):
     template = "ticket_sales/confirm.html"
     prev_phase = "address_phase"
     next_phase = "thanks_phase"
+    next_text = "Vahvista"
 
     def vars(self, request, form):
         order = get_order(request)
@@ -302,7 +360,12 @@ class ThanksPhase(Phase):
     template = "ticket_sales/thanks.html"
     prev_phase = None
     next_phase = None
+    can_cancel = False
     methods = ["GET"]
+
+    def available(self, request):
+        order = get_order(request)
+        return order.is_confirmed
 
     def vars(self, request, form):
         order = get_order(request)
