@@ -300,7 +300,10 @@ class ShirtsPhase(Phase):
         order = get_order(request)
         sup_available = super(ShirtsPhase, self).available(request)
 
-        return sup_available and order.product_info.tshirts > 0
+        if not sup_available:
+            return False
+
+        return order.product_info.tshirts > 0
 
 shirts_view = ShirtsPhase()
 

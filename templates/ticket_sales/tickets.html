@@ -10,7 +10,10 @@ vim: shiftwidth=2 expandtab
 <h1>Valitse ostettavat lippupaketit</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
 <form method="post" action="{% url tickets_phase %}">
-{{ form.as_p }}
+<p>Lippu ja T-paita {{ form.tickets_tshirts }} kpl</p>
+<p>Lippu, T-paita ja lattiamajoitus {{ form.tickets_tshirts_accommodation}} kpl</p>
+<p>Lippu ja lattiamajoitus {{ form.tickets_accommodation }} kpl</p>
+<p>Pelkkä lippu {{ form.tickets }} kpl</p>
 {% wizard_buttons phase %}
 </form>
 {% endblock %}
