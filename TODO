@@ -1,9 +1,8 @@
 Toiminnalliset puutteet
 =======================
 
-* Mitä tehdään ShirtOrdereille kun käyttäjä muuttaa tilattavien paitojen määrää? Järäytetään kaikki ja pakotetaan iteroimaan?
+* Hintojen esittäminen ja käsittely
 * Tarkista lippu- ja paitatilausvaiheissa että lukumäärät ovat järkeviä (0 < x < N?)
-* Kun tilaus on vahvistettu, järkevä mekanismi uuden tilauksen tekemiselle
 * CAPTCHA
 * Enterin painallus vie seuraavaan
 

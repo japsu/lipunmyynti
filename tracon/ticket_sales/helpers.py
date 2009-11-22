@@ -12,14 +12,15 @@ __all__ = [
     "get_order",
     "clear_order",
     "destroy_order",
+    "set_completed",
     "get_completed",
-    "mark_as_completed",
     "clear_completed",
     "init_form",
 ]
 
 ORDER_KEY = "tracon.ticket_sales.order_id"
-COMPLETED_KEY = "tracon.ticket_sales.completed_phases"
+COMPLETED_KEY = "tracon.ticket_sales.completed_index"
+PRIOR_KEY = "tracon.ticket_sales.prior_orders"
 
 def redirect(view_name, **kwargs):
     return HttpResponseRedirect(reverse(view_name, kwargs=kwargs))
@@ -52,13 +53,11 @@ def destroy_order(request):
     order.delete()
     clear_order(request)
 
-def get_completed(request):
-    return request.session.get(COMPLETED_KEY, [])
+def set_completed(request, index): 
+    request.session[COMPLETED_KEY] = index
 
-def mark_as_completed(request, phase_name):
-    completed = get_completed(request)
-    completed.append(phase_name)
-    request.session[COMPLETED_KEY] = completed
+def get_completed(request):
+    return request.session.get(COMPLETED_KEY, -1)
 
 def clear_completed(request):
     if request.session.has_key(COMPLETED_KEY):

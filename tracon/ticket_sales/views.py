@@ -21,6 +21,7 @@ __all__ = [
 ]    
 
 FIRST_PHASE = "welcome_phase"
+LAST_PHASE = "thanks_phase"
 EXIT_URL = "http://2010.tracon.fi"
 PRODUCT_NAMES = ("tickets", "tickets_tshirts", "tickets_tshirts_accommodation", "tickets_accommodation")
 
@@ -33,13 +34,19 @@ class Phase(object):
     next_phase = None
     next_text = "Seuraava &raquo;"
     can_cancel = True
+    index = None
 
     def __call__(self, request):
         if request.method not in self.methods:
             return HttpResponseNotAllowed(self.methods)
 
+        # Check phase proconditions
+        order = get_order(request)
         if not self.available(request):
-            return redirect(FIRST_PHASE)
+            if order.is_confirmed:
+                return redirect(LAST_PHASE)
+            else:
+                return redirect(FIRST_PHASE)
 
         form = self.make_form(request)
         
@@ -62,7 +69,7 @@ class Phase(object):
             if not errors:    
                 self.save(request, form)
 
-                mark_as_completed(request, self.name)
+                set_completed(request, self.index)
 
                 # The "Next" button should only proceed with valid data.
                 if action == "next":
@@ -83,7 +90,7 @@ class Phase(object):
         order = get_order(request)
         completed = get_completed(request)
 
-        return self.prev_phase in completed and not order.is_confirmed
+        return self.index <= completed + 1 and not order.is_confirmed
 
     def validate(self, request, form):
         if not form.is_valid():
@@ -137,7 +144,8 @@ class WelcomePhase(Phase):
         set_order(request, order)
 
     def available(self, request):
-        return True
+        order = get_order(request)
+        return not order.is_confirmed
 
 welcome_view = WelcomePhase()
 
@@ -173,10 +181,11 @@ class TicketsPhase(Phase):
 
         if order.product_info.tshirts > 0:
             # The user is ordering T-shirts. Ask for shirt sizes.
+            set_completed(request, self.index)
             next_phase = "shirts_phase"
         else:
             # The user is not ordering T-shirts. Skip the shirt size phase.
-            mark_as_completed(request, "shirts_phase")
+            set_completed(request, shirts_phase.index)
             next_phase = "address_phase"
 
         return redirect(next_phase)
@@ -362,9 +371,9 @@ class ThanksPhase(Phase):
     friendly_name = "Kiitos!"
     template = "ticket_sales/thanks.html"
     prev_phase = None
-    next_phase = None
+    next_phase = "welcome_phase"
+    next_text = "Uusi tilaus"
     can_cancel = False
-    methods = ["GET"]
 
     def available(self, request):
         order = get_order(request)
@@ -376,6 +385,24 @@ class ThanksPhase(Phase):
 
         return dict(shirts=shirts)
 
+    def save(self, request, form):
+        pass
+
+    def next(self, request):
+        # Start a new order
+        clear_order(request)
+        clear_completed(request)
+
+        return redirect(self.next_phase)
+
 thanks_view = ThanksPhase()
 
 ALL_PHASES = [welcome_view, tickets_view, shirts_view, address_view, confirm_view, thanks_view]
+for num, phase in enumerate(ALL_PHASES):
+    phase.index = num
+
+def redirect_view(self, request):
+    completed = get_completed(request)
+    next = completed + 1
+    view = ALL_PHASES[next]
+    return redirect(view.name)
