@@ -359,7 +359,7 @@ confirm_view = ConfirmPhase()
 
 class ThanksPhase(Phase):
     name = "thanks_phase"
-    friendly_name = "Kuitti"
+    friendly_name = "Kiitos!"
     template = "ticket_sales/thanks.html"
     prev_phase = None
     next_phase = None
