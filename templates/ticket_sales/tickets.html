@@ -4,16 +4,30 @@
 encoding: utf-8
 vim: shiftwidth=2 expandtab
 {% endcomment %}
-{% block content %}
-{% progress_bar request phase %}
-{% show_errors errors %}
-<h1>Valitse ostettavat lippupaketit</h1>
+{% block helptext %}
+<h1>Valitse ostettavat ennakkolippupaketit</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-<form method="post" action="{% url tickets_phase %}">
-<p>Lippu ja T-paita {{ form.tickets_tshirts }} kpl</p>
-<p>Lippu, T-paita ja lattiamajoitus {{ form.tickets_tshirts_accommodation}} kpl</p>
-<p>Lippu ja lattiamajoitus {{ form.tickets_accommodation }} kpl</p>
-<p>Pelkkä lippu {{ form.tickets }} kpl</p>
-{% wizard_buttons phase %}
-</form>
-{% endblock %}
+{% endblock helptext %}
+{% block form_content %}
+<table>
+  <tr>
+    <th>Tuote</th>
+    <th>Kappalehinta</th>
+    <th>Määrä</th>
+  </tr>
+  <tr>
+    <td>Ennakkolippu ja T-paita</td>
+    <td>18,00 €</td>
+    <td>{{ form.tickets_tshirts }}</td>
+  </tr>
+  <tr>
+    <td>Ennakkolippu, T-paita ja lattiamajoitus</td>
+    <td>25,00 €</td>
+    <td>{{ form.tickets_tshirts_accommodation}}</td>
+  </tr>
+</table>
+<p>TODO:</p>
+<p>Ennakkolippu ja lattiamajoitus {{ form.tickets_accommodation }} kpl</p>
+<p>Pelkkä ennakkolippu {{ form.tickets }} kpl</p>
+</table>
+{% endblock form_content %}

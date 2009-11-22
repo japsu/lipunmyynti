@@ -1,14 +1,20 @@
+{% comment %}
+vim: shiftwidth=2 expandtab
+encoding: utf-8
+{% endcomment %}
 {% load wizard_ui %}
-<ul>
-{% for the_phase, available, current in phases %}
-  {% if available %}
-    {% if current %}
-      <li class="progress_current"><a href="{% url_ptr the_phase.name %}">{{ forloop.counter }}. {{ the_phase.friendly_name }}</a></li>
+<div id="breadcrumb">
+  <ul>
+  {% for the_phase, available, current in phases %}
+    {% if available %}
+      {% if current %}
+        <li class="selected">{{ forloop.counter }}. {{ the_phase.friendly_name }}</li>
+      {% else %}
+        <li><a href="{% url_ptr the_phase.name %}">{{ forloop.counter }}. {{ the_phase.friendly_name }}</a></li>
+      {% endif %}
     {% else %}
-      <li class="progress_available"><a href="{% url_ptr the_phase.name %}">{{ forloop.counter }}. {{ the_phase.friendly_name }}</a></li>
+      <li>{{ forloop.counter }}. {{ the_phase.friendly_name }}</li>
     {% endif %}
-  {% else %}
-    <li class="progress_unavailable">{{ forloop.counter }}. {{ the_phase.friendly_name }}</li>
-  {% endif %}
-{% endfor %}
-</ul>
+  {% endfor %}
+  </ul>
+</div>

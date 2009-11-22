@@ -1,53 +1,58 @@
-<h2>Liput</h2>
+{% comment %}
+vim: shiftwidth=2 expandtab
+encoding: utf-8
+{% endcomment %}
+<div id="left">
+  <h2>Liput</h2>
 
-<dl>
-{# XXX ugly copypastah #}
-{% with order.product_info.tickets_tshirts_accommodation as n %}
-  {% if n %}
-    <dt>tickets tshirts accommodation</dt>
-    <dd>{{ n }}</dd>
-  {% endif %}
-{% endwith %} 
-{% with order.product_info.tickets_accommodation as n %}
-  {% if n %}
-    <dt>tickets accommodation</dt>
-    <dd>{{ n }}</dd>
-  {% endif %}
-{% endwith %} 
-{% with order.product_info.tickets_tshirts as n %}
-  {% if n %}
-    <dt>tickets tshirts</dt>
-    <dd>{{ n }}</dd>
-  {% endif %}
-{% endwith %} 
-{% with order.product_info.tickets as n %}
-  {% if n %}
-    <dt>tickets</dt>
-    <dd>{{ n }}</dd>
-  {% endif %}
-{% endwith %} 
-</dl>
+  <dl>
+  {# XXX ugly copypastah #}
+  {% with order.product_info.tickets_tshirts_accommodation as n %}
+    {% if n %}
+      <dt>tickets tshirts accommodation</dt>
+      <dd>{{ n }}</dd>
+    {% endif %}
+  {% endwith %} 
+  {% with order.product_info.tickets_accommodation as n %}
+    {% if n %}
+      <dt>tickets accommodation</dt>
+      <dd>{{ n }}</dd>
+    {% endif %}
+  {% endwith %} 
+  {% with order.product_info.tickets_tshirts as n %}
+    {% if n %}
+      <dt>tickets tshirts</dt>
+      <dd>{{ n }}</dd>
+    {% endif %}
+  {% endwith %} 
+  {% with order.product_info.tickets as n %}
+    {% if n %}
+      <dt>tickets</dt>
+      <dd>{{ n }}</dd>
+    {% endif %}
+  {% endwith %} 
+  </dl>
 
-<h2>Paidat</h2>
+  <h2>Paidat</h2>
 
-<dl>
-  {% for shirt in shirts %}
-    <dt>{{ shirt.size }}</dt>
-    <dd>{{ shirt.count }}</dd>
-  {% endfor %}
-</dl>
+  <dl>
+    {% for shirt in shirts %}
+      <dt>{{ shirt.size }}</dt>
+      <dd>{{ shirt.count }}</dd>
+    {% endfor %}
+  </dl>
+</div>
 
-<h2>Toimitusosoite</h2>
+<div id="right">
+  <h2>Toimitusosoite</h2>
 
-<dl>
-<dt>Nimi</dt>
-<dd>{{ order.customer.name }}</dd>
-<dt>Sähköpostiosoite</dt>
-<dd>{{ order.customer.email }}</dd>
-<dt>Osoite</dt>
-<dd>{{ order.customer.address }}</dd>
-<dt>Postinumero ja -toimipaikka</dt>
-<dd>{{ order.customer.zip_code }} {{ order.customer.city }}</dd>
-<dt>Puhelinnumero</dt>
-<dd>{{ order.customer.phone_number }}</dd>
-</dl>
+  <p>
+    {{ order.customer.name }}<br/>
+    {{ order.customer.address }}<br/>
+    {{ order.customer.zip_code }} {{ order.customer.city }}
+  </p>
+  <p>
+    {{ order.customer.email }}<br/>
+    {{ order.customer.phone_number }}
+  </p>
+</div>

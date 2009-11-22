@@ -4,13 +4,10 @@
 encoding: utf-8
 vim: shiftwidth=2 expandtab
 {% endcomment %}
-{% block content %}
-{% progress_bar request phase %}
+{% block helptext %}
 <h1>Kiitos tilauksesta!</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-
-{% include "ticket_sales/order_statement.html" %}
-
-<p><a href="http://2010.tracon.fi">Takaisin Tracon V:n kotisivuille</a></p>
-
 {% endblock %}
+{% block form_content %}
+{% include "ticket_sales/order_statement.html" %}
+{% endblock form_content %}

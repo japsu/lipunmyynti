@@ -4,12 +4,11 @@
 encoding: utf-8
 vim: shiftwidth=2 expandtab
 {% endcomment %}
-{% block content %}
-{% progress_bar request phase %}
-{% show_errors errors %}
+{% block helptext %}
 <h1>Ilmoita paitojen koot</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-<form method="post" action="{% url shirts_phase %}">
+{% endblock helptext %}
+{% block form_content %}
   <table>
     <tr>
       <th>Paitoja yhteensä</th>
@@ -45,6 +44,4 @@ vim: shiftwidth=2 expandtab
       {% endfor %}
     </tr>
   </table>
-{% wizard_buttons phase %}
-</form>
-{% endblock %}
+{% endblock form_content %}

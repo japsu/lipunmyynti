@@ -1,14 +1,20 @@
 To: Ahto Simakuutio <ahto.simakuutio@noksu.fi>
 From: Tracon V -lipunmyynti <lipunmyynti10@tracon.fi>
-Subject: Tracon V: Tilausvahvistus
+Subject: Tracon V: Tilausvahvistus (#000001)
 X-Tracon-Order-ID: {{ order.pk }}
 
 Hyvä vastaanottaja,
 
-Kiitos Tracon V -ennakkolipputilauksestanne! Vahvistamme tilatuiksi seuraavat
-lipputuotteet:
+Kiitos Tracon V -ennakkolipputilauksestanne! Tilauksenne numero on {{ order.pk }}.
 
-1 kpl	Foo
+Vahvistamme tilatuiksi seuraavat lipputuotteet:
+
+1 kpl		Ennakkolippu, T-paita ja majoitus		25,00 €
+
+Paitakoot:
+
+Tavallinen	3x M
+Ladyfit		3x S
 
 Liput toimitetaan seuraavaan osoitteeseen:
 
@@ -20,11 +26,11 @@ Ikuisenteekkarinkatu 7 N 300
 ahto.simakuutio@noksu.fi
 
 Mikäli ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
-yhteyttä lipunmyyntiin sähköpostitse osoitteella lipunmyynti10@tracon.fi
-tai puhelimitse numeroon +358 45 555 5555.
+yhteyttä lipunmyyntiin joko vastaamalla tähän viestiin tai lähettämällä
+sähköpostia osoitteella lipunmyynti10@tracon.fi. Voitte myös soittaa
+numeroon +358 45 555 5555.
 
-Jos ylläolevat tiedot ovat oikein, voitte maksaa tilauksenne allaolevilla
-tiedoilla:
+Jos ylläolevat tiedot ovat oikein, maksakaa tilaus seuraavilla tiedoilla:
 
 Saajan tilinumero	555555-123456
 Saaja			Tracon ry
@@ -32,8 +38,21 @@ Viitenumero		0 12345 67890
 Summa			20,00 EUR
 Eräpäivä		16.11.2009
 
-Saatte erillisen vahvistusviestin, kun maksu näkyy tilillämme ja kun
-lippunne on postitettu.
+Vastaanotetut maksut käsitellään viikoittain. Kun maksunne on käsitelty,
+saatte tästä erillisen vahvistusviestin.
+
+Lippujen postitus aloitetaan 1. kesäkuuta 2010.
+
+{% if order.product_info.tshirts %}
+Paidat voi noutaa tapahtumapaikalta lippujen yhteydessä toimitettavaa
+paitakuponkia vastaan.
+{% endif %}
+
+{% if order.product_info.accommodation %}
+Lippujen yhteydessä toimitetaan majoituskuponki, joka tulee esittää
+majoituspaikan henkilökunnalle yhdessä rannekkeen kanssa. Majoituksen
+yksityiskohdista lähetetään sähköpostitse lisätietoa ennen tapahtumaa.
+{% endif %}
 
 Ystävällisin terveisin
 -- 

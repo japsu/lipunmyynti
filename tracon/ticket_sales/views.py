@@ -31,7 +31,7 @@ class Phase(object):
     template = "ticket_sales/dummy.html"
     prev_phase = None
     next_phase = None
-    next_text = "Seuraava"
+    next_text = "Seuraava &raquo;"
     can_cancel = True
 
     def __call__(self, request):
@@ -342,7 +342,7 @@ class ConfirmPhase(Phase):
     template = "ticket_sales/confirm.html"
     prev_phase = "address_phase"
     next_phase = "thanks_phase"
-    next_text = "Vahvista"
+    next_text = "Vahvista &#10003;"
 
     def vars(self, request, form):
         order = get_order(request)

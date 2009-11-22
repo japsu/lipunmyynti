@@ -1,17 +1,23 @@
-{% if phase.prev_phase %}
-  <button type="submit" name="action" value="prev">Edellinen</button>
-{% else %}
-  <button type="submit" name="action" value="prev" disabled="disabled">Edellinen</button>
-{% endif %}
+{% comment %}
+vim: shiftwidth=2 expandtab
+encoding: utf-8
+{% endcomment %}
+<div id="navi">
+  {% if phase.can_cancel %}
+    <button class="abort" type="submit" name="action" value="cancel">&times; Keskeytä</button>
+  {% else %}
+    <button class="abort" type="submit" name="action" value="cancel" disabled="disabled">&times; Keskeytä</button>
+  {% endif %}
 
-{% if phase.can_cancel %}
-  <button type="submit" name="action" value="cancel">Keskeytä</button>
-{% else %}
-  <button type="submit" name="action" value="cancel" disabled="disabled">Keskeytä</button>
-{% endif %}
+  {% if phase.prev_phase %}
+    <button type="submit" name="action" value="prev">&laquo; Edellinen</button>
+  {% else %}
+    <button type="submit" name="action" value="prev" disabled="disabled">&laquo; Edellinen</button>
+  {% endif %}
 
-{% if phase.next_phase %}
-  <button type="submit" name="action" value="next">{{ phase.next_text }}</button>
-{% else %}
-  <button type="submit" name="action" value="next" disabled="disabled">{{ phase.next_text }}</button>
-{% endif %}
+  {% if phase.next_phase %}
+    <button type="submit" name="action" value="next">{{ phase.next_text|safe }}</button>
+  {% else %}
+    <button type="submit" name="action" value="next" disabled="disabled">{{ phase.next_text|safe }}</button>
+  {% endif %}
+</div>

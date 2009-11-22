@@ -4,17 +4,14 @@
 encoding: utf-8
 vim: shiftwidth=2 expandtab
 {% endcomment %}
-{% block content %}
-{% progress_bar request phase %}
-{% show_errors errors %}
+{% block helptext %}
 <h1>Syötä toimitusosoite</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-<form method="post" action="{% url address_phase %}">
+{% endblock helptext %}
+{% block form_content %}
 <p>Nimi: {{ form.name }}</p>
 <p>Sähköpostiosoite: {{ form.email }}</p>
 <p>Osoite: {{ form.address }}</p>
 <p>Postinumero ja -toimipaikka: {{ form.zip_code }} {{ form.city }}</p>
 <p>Puhelinnumero: {{ form.phone_number }}</p>
-{% wizard_buttons phase %}
-</form>
-{% endblock %}
+{% endblock form_content %}

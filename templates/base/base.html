@@ -1,18 +1,36 @@
 {% comment %}
 encoding: utf-8
 vim: shiftwidth=2 expandtab
-{% endcomment %}<?xml version="1.0" encoding="UTF-8"?>
+{% endcomment %}{% load wizard_ui %}<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html 
    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fi" lang="fi">
   <head>
     <title>Tracon V: Lippukauppa</title>
-    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/tickets.css" />
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/style.css" />
   </head>
   <body>
-    {% block content %}
-      <p>Sisältö tulee tähän.</p>
-    {% endblock %}
+    <div id="main">
+      {% progress_bar request phase %}
+      <div id="header">
+        {% block helptext %}
+          <p>Sisältö tulee tähän.</p>
+        {% endblock %}
+      </div>
+      {% block form %}
+      <form method="post" action="{% url_ptr phase.name %}">
+        <div id="content_2col">
+          {% block form_content %}
+            <p>Lomakkeen sisältö tulee tähän.</p>
+          {% endblock %}
+        </div>
+        {% wizard_buttons phase %}
+      </form>
+      {% endblock %}
+    </div>
+    <div id="footer">
+      <p>Tracon ry 2009 &middot; lipunmyynti10 ät tracon piste fi</p>
+    </div>
   </body>
 </html>
