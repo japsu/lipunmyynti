@@ -14,20 +14,25 @@ vim: shiftwidth=2 expandtab
     <div id="main">
       {% progress_bar request phase %}
       <div id="header">
-        {% block helptext %}
+        {% block body_text %}
           <p>Sisältö tulee tähän.</p>
-        {% endblock %}
+        {% endblock body_text %}
+        <div id="kupla">
+          {% block mascot_text %}
+            <p>Frullen jutut tulee tähän.</p>
+          {% endblock mascot_text %}
+        </div>
       </div>
       {% block form %}
       <form method="post" action="{% url_ptr phase.name %}">
         <div id="content_2col">
           {% block form_content %}
             <p>Lomakkeen sisältö tulee tähän.</p>
-          {% endblock %}
+          {% endblock form_content %}
         </div>
         {% wizard_buttons phase %}
       </form>
-      {% endblock %}
+      {% endblock form %}
     </div>
     <div id="footer">
       <p>Tracon ry 2009 &middot; lipunmyynti10 ät tracon piste fi</p>

@@ -30,5 +30,28 @@ def show_errors(errors):
     return error_template.render(context)
 
 @register.simple_tag
+def field_error_class(errors):
+    if errors:
+        return u'"class="erroneus"'
+    else:
+        return u''
+
+@register.simple_tag
 def url_ptr(name):
     return reverse(name)
+
+# From http://code.djangoproject.com/ticket/10427 (simplified)
+@register.filter(name='field_value')
+def field_value(field):
+    """ 
+    Returns the value for this BoundField, as rendered in widgets. 
+    """ 
+    if not field.form.is_bound: 
+        val = field.form.initial.get(field.name, field.field.initial) 
+        if callable(val): 
+            val = val() 
+    else: 
+        val = field.data 
+    if val is None: 
+        val = '' 
+    return val
