@@ -18,7 +18,7 @@ vim: shiftwidth=2 expandtab
   <tr>
     <td>Ennakkolippu ja T-paita</td>
     <td>18,00 €</td>
-    <td><input type="text" name="tickets_tshirts" id="id_tickets_tshirts" size="2" {% field_error_class form.tickets_tshirts.errors %} value="{{ form.tickets_tshirts|field_value }}"></td>
+    <td>{{ form.tickets_tshirts }}</td>
   </tr>
   <tr>
     <td>Ennakkolippu, T-paita ja lattiamajoitus</td>

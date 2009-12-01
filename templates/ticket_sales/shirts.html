@@ -4,10 +4,10 @@
 encoding: utf-8
 vim: shiftwidth=2 expandtab
 {% endcomment %}
-{% block helptext %}
-<h1>Ilmoita paitojen koot</h1>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-{% endblock helptext %}
+{% block body_text %}
+<h1>Paitojen koot</h1>
+<p>Syötä koot tilattaville paidoille.</p>
+{% endblock body_text %}
 {% block form_content %}
   <table>
     <tr>
@@ -45,3 +45,6 @@ vim: shiftwidth=2 expandtab
     </tr>
   </table>
 {% endblock form_content %}
+{% block mascot_text %}
+<p>Olet valinnut paitoja tilaukseesi. Meidän tarvitsee vielä tietää paitojen koot. Tarkistathan myös, että olet antanut oikean määrän paitoja. Paidat voi noutaa tapahtumasta postissa tulevaa lipuketta vastaan.</p>
+{% endblock mascot_text %}

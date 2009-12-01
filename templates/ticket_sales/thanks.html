@@ -4,10 +4,13 @@
 encoding: utf-8
 vim: shiftwidth=2 expandtab
 {% endcomment %}
-{% block helptext %}
+{% block body_text %}
 <h1>Kiitos tilauksesta!</h1>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-{% endblock %}
+<p>Tilauksesi tiedot:</p>
+{% endblock body_text %}
 {% block form_content %}
 {% include "ticket_sales/order_statement.html" %}
 {% endblock form_content %}
+{% block mascot_text %}
+<p>Onneksi olkoon, tilauksesi on valmis! Kiitos kun saatoit minut valmiiksi tilaamalla ennakkolippuja. Liput maksetaan yllä näkyvälle tilille. Samat tiedot ja tilausvahvistus on lähetetty antamaasi sähköpostiosoitteeseen. Nähdään Traconissa!</p>
+{% endblock mascot_text %}
