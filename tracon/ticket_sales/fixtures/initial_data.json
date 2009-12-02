@@ -1,5 +1,50 @@
 [
     {
+        "pk": 1,
+        "model": "ticket_sales.product", 
+        "fields": {
+            "available": true, 
+            "includes_accommodation": false, 
+            "includes_tshirt": true, 
+            "name": "Ennakkolippu ja T-paita", 
+            "price_cents": 2200
+        }
+    }, 
+    {
+        "pk": 2,
+        "model": "ticket_sales.product", 
+        "fields": {
+            "available": true, 
+            "includes_accommodation": true, 
+            "includes_tshirt": true, 
+            "name": "Ennakkolippu, T-paita ja lattiamajoitus", 
+            "price_cents": 3200
+        }
+    }, 
+    {
+        "pk": 3,
+        "model": "ticket_sales.product", 
+        "fields": {
+            "available": true, 
+            "includes_accommodation": true, 
+            "includes_tshirt": false, 
+            "name": "Ennakkolippu ja lattiamajoitus", 
+            "price_cents": 1900
+        }
+    }, 
+    {
+        "pk": 4,
+        "model": "ticket_sales.product", 
+        "fields": {
+            "available": true, 
+            "includes_accommodation": false, 
+            "includes_tshirt": false, 
+            "name": "Pelkk\u00c3\u00a4 ennakkolippu", 
+            "price_cents": 900
+        }
+    },
+
+    {
         "pk": 1, 
         "model": "ticket_sales.shirtsize", 
         "fields": {

@@ -158,28 +158,34 @@ class TicketsPhase(Phase):
 
     def make_form(self, request):
         order = get_order(request)
-        return init_form(ProductInfoForm, request, instance=order.product_info)
 
-    def validate(self, request, form):
-        if not form.is_valid():
-            return ["syntax"]
-        elif sum(form.cleaned_data[i] for i in PRODUCT_NAMES) <= 0:
-            return ["zero"]
-        else:
-            return []
+        for product in Product.objects.order_by("id"):
+            OrderProduct.objects.get_or_create(
+                order=order,
+                product=product
+            )
+
+        queryset = OrderProduct.objects.filter(order=order)
+        formset = init_formset(OrderProductFormset, request, queryset=queryset)
+
+        # XXX I feel dirty returning a formset instead of a form.
+        return formset
 
     def save(self, request, form):
-        order = get_order(request)
+        # It's actually a formset.
+        formset = form
 
-        product_info = form.save()
-
-        order.product_info = product_info
-        order.save()
+        # There's no point in leaving OrderProducts with count=0 lying around.
+        for order_product in formset.save(commit=False):
+            if order_product.count > 0:
+                order_product.save()
+            else:
+                order_product.delete()
 
     def next(self, request):
         order = get_order(request)
 
-        if order.product_info.tshirts > 0:
+        if order.tshirts > 0:
             # The user is ordering T-shirts. Ask for shirt sizes.
             set_completed(request, self.index)
             next_phase = "shirts_phase"
@@ -217,7 +223,7 @@ class ShirtsPhase(Phase):
     def vars(self, request, form):
         order = get_order(request)
         ladyfit_sizes, normal_sizes = list(), list()
-        num_shirts = order.product_info.tshirts
+        num_shirts = order.tshirts
 
         for container, ladyfit in ((normal_sizes, False), (ladyfit_sizes, True)):
             for size in self.__get_sizes(ladyfit=ladyfit):
@@ -267,7 +273,7 @@ class ShirtsPhase(Phase):
 
         # Make sure the number of shirt ordered matches the number of ticket
         # products that include a shirt.
-        if num_shirts != order.product_info.tshirts:
+        if num_shirts != order.tshirts:
             errors.add("num_shirts")
 
         return list(errors)
@@ -312,7 +318,7 @@ class ShirtsPhase(Phase):
         if not sup_available:
             return False
 
-        return order.product_info.tshirts > 0
+        return order.tshirts > 0
 
 shirts_view = ShirtsPhase()
 
@@ -331,7 +337,7 @@ class AddressPhase(Phase):
     def prev(self, request):
         order = get_order(request)
 
-        if order.product_info.tshirts:
+        if order.tshirts:
             return redirect("shirts_phase")
         else:
             return redirect("tickets_phase")

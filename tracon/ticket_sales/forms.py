@@ -6,6 +6,13 @@ from django.contrib.localflavor.fi.forms import FIZipCodeField
 
 from tracon.ticket_sales.models import *
 
+__all__ = [
+    "NullForm",
+    "WelcomeForm",
+    "OrderProductFormset",
+    "CustomerForm",
+]
+
 class NullForm(forms.Form):
     pass
 
@@ -14,36 +21,15 @@ class WelcomeForm(forms.ModelForm):
         fields = []
         model = Order
 
-class DiscountCodeField(forms.Field):
-    widget = forms.TextInput
+OrderProductFormset = forms.models.modelformset_factory(
+    OrderProduct,
+    fields=("count")
+)
 
-    def clean(self, value):
-        if not value:
-            if self.required:
-                raise forms.ValidationError([u"required"])
-            else:
-                return None
-
-        try:
-            discount_code = DiscountCode.objects.get(code=value)
-        except DiscountCode.DoesNotExist:
-            raise forms.ValidationError([u"invalid"])
-
-        users = Order.objects.filter(
-            product_info__discount_code__exact=discount_code,
-            confirm_time__isnull=False
-        )
-
-        if users.exists():
-            raise forms.ValidationError([u"used"])
-
-        return discount_code
-
-class ProductInfoForm(forms.ModelForm):
-    discount_code = DiscountCodeField(required=False)
-
-    class Meta:
-        model = ProductInfo
+ShirtOrderFormset = forms.models.modelformset_factory(
+    ShirtOrder,
+    fields=("count")
+)
 
 class CustomerForm(forms.ModelForm):
     zip_code = FIZipCodeField()
