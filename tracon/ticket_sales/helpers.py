@@ -4,7 +4,7 @@
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
-from tracon.ticket_sales.models import Order, ShirtOrder
+from tracon.ticket_sales.models import Order, ShirtOrder, OrderProduct
 
 __all__ = [
     "redirect",
@@ -16,6 +16,7 @@ __all__ = [
     "get_completed",
     "clear_completed",
     "init_form",
+    "init_formset",
 ]
 
 ORDER_KEY = "tracon.ticket_sales.order_id"
@@ -44,8 +45,8 @@ def clear_order(request):
 def destroy_order(request):
     order = get_order(request)
     
-    if order.product_info:
-        order.product_info.delete()
+    for order_product in OrderProduct.objects.filter(order=order):
+        order_product.delete()
 
     for shirt in ShirtOrder.objects.filter(order=order):
         shirt.delete()
@@ -75,3 +76,17 @@ def init_form(form_class, request, instance=None):
         kwargs = {}
 
     return form_class(*args, **kwargs)
+
+def init_formset(formset_class, request, queryset=None):
+    if request.method == "POST":
+        args = [request.POST]
+    else:
+        args = []
+
+    if queryset is not None:
+        kwargs = dict(queryset=queryset)
+    else:
+        kwargs = {}
+
+    return formset_class(*args, **kwargs)
+

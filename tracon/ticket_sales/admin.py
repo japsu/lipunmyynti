@@ -4,5 +4,5 @@
 from tracon.ticket_sales.models import *
 from django.contrib import admin
 
-for cls in (ProductInfo, Customer, ShirtSize, ShirtOrder, Order):
+for cls in (Batch, Product, Customer, ShirtSize, ShirtOrder, Order, OrderProduct):
     admin.site.register(cls)

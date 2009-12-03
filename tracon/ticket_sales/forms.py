@@ -10,6 +10,7 @@ __all__ = [
     "NullForm",
     "WelcomeForm",
     "OrderProductFormset",
+    "OrderProductInlineFormset",
     "CustomerForm",
 ]
 
@@ -21,14 +22,24 @@ class WelcomeForm(forms.ModelForm):
         fields = []
         model = Order
 
+OrderProductInlineFormset = forms.models.inlineformset_factory(
+    Order,
+    OrderProduct,
+    fields=("count",),
+    extra=0,
+    can_delete=False
+)
+
 OrderProductFormset = forms.models.modelformset_factory(
     OrderProduct,
-    fields=("count")
+    exclude=("order", "product"),
+    extra=0
 )
 
 ShirtOrderFormset = forms.models.modelformset_factory(
     ShirtOrder,
-    fields=("count")
+    exclude=("order", "product"),
+    extra=0
 )
 
 class CustomerForm(forms.ModelForm):

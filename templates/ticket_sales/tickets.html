@@ -9,31 +9,21 @@ vim: shiftwidth=2 expandtab
 <p>Syötä tilattavat tuotteet.</p>
 {% endblock body_text %}
 {% block form_content %}
+{{ form.management_form }}
 <table>
   <tr>
     <th>Tuote</th>
     <th>Kappalehinta</th>
     <th>Määrä</th>
   </tr>
-  <tr>
-    <td>Ennakkolippu ja T-paita</td>
-    <td>18,00 €</td>
-    <td>{{ form.tickets_tshirts }}</td>
-  </tr>
-  <tr>
-    <td>Ennakkolippu, T-paita ja lattiamajoitus</td>
-    <td>25,00 €</td>
-    <td>{{ form.tickets_tshirts_accommodation }}</td>
-  </tr>
-  <tr>
-    <td>Ennakkolippu ja lattiamajoitus</td>
-    <td>18,00 €</td>
-    <td>{{ form.tickets_accommodation }}</td>
-  <tr>
-    <td>Pelkkä ennakkolippu</td>
-    <td>10,00 €</td>
-    <td>{{ form.tickets }}</td>
-  </tr>
+  {% for iform in form.forms %}
+    {{ iform.id }}
+    <tr>
+      <td>{{ iform.instance.product.name }}</td>
+      <td>{{ iform.instance.product.formatted_price }}</td>
+      <td>{{ iform.count }}</td>
+    </tr>
+  {% endfor %}
 </table>
 {% endblock form_content %}
 {% block mascot_text %}

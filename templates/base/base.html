@@ -17,6 +17,11 @@ vim: shiftwidth=2 expandtab
         {% block body_text %}
           <p>Sisältö tulee tähän.</p>
         {% endblock body_text %}
+        <ul>
+          {% for error in errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
         <div id="kupla">
           {% block mascot_text %}
             <p>Frullen jutut tulee tähän.</p>

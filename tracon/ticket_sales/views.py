@@ -23,7 +23,6 @@ __all__ = [
 FIRST_PHASE = "welcome_phase"
 LAST_PHASE = "thanks_phase"
 EXIT_URL = "http://2010.tracon.fi"
-PRODUCT_NAMES = ("tickets", "tickets_tshirts", "tickets_tshirts_accommodation", "tickets_accommodation")
 
 class Phase(object):
     name = "XXX_fill_me_in"
@@ -165,7 +164,7 @@ class TicketsPhase(Phase):
                 product=product
             )
 
-        queryset = OrderProduct.objects.filter(order=order)
+        queryset = OrderProduct.objects.filter(order=order).order_by("id")
         formset = init_formset(OrderProductFormset, request, queryset=queryset)
 
         # XXX I feel dirty returning a formset instead of a form.
@@ -191,7 +190,7 @@ class TicketsPhase(Phase):
             next_phase = "shirts_phase"
         else:
             # The user is not ordering T-shirts. Skip the shirt size phase.
-            set_completed(request, shirts_phase.index)
+            set_completed(request, shirts_view.index)
             next_phase = "address_phase"
 
         return redirect(next_phase)
@@ -208,108 +207,31 @@ class ShirtsPhase(Phase):
     def __get_sizes(self, **kwargs):
         return ShirtSize.objects.filter(**kwargs).order_by("id")
 
-    def __get_count(self, request, size):
-        # Try to extract the number of shirts of a size from the POST
-        # form data.
-        data = int(request.POST.get("s%d" % size.pk, None))
-        if data is None:
-            return 0
-
-        try:
-            return int(data)
-        except ValueError:
-            raise
-
     def vars(self, request, form):
-        order = get_order(request)
-        ladyfit_sizes, normal_sizes = list(), list()
         num_shirts = order.tshirts
+        return dict(num_shirts=num_shirts)
 
-        for container, ladyfit in ((normal_sizes, False), (ladyfit_sizes, True)):
-            for size in self.__get_sizes(ladyfit=ladyfit):
-                # TODO Retain user input even if it's faulty
-
-                try:
-                    shirt_order = ShirtOrder.objects.get(
-                        order=order,
-                        size=size
-                    )
-                    count = shirt_order.count
-                except ShirtOrder.DoesNotExist:
-                    count = 0
-
-                container.append((size, count))
-
-        return dict(normal_sizes=normal_sizes, ladyfit_sizes=ladyfit_sizes, num_shirts=num_shirts)
-
-    def validate(self, request, form):
+    def make_form(self, request):
         order = get_order(request)
-        errors = set()
+        sizes = __get_sizes()
+        
+        for size in sizes:
+            ShirtOrder.objects.get_or_create(order=order, size=size)
 
-        num_shirts = 0
+        queryset = ShirtOrder.objects.filter(order=order).order_by(
+            "order__size__ladyfit", "order__size__name")
+        formset = init_formset(ShirtOrderFormset, request, queryset=queryset)
 
-        for size in self.__get_sizes():
-            # Some shirt sizes are not available, but they are shown for
-            # symmetry.
-            available = size.available
-
-            try:
-                count = self.__get_count(request, size)
-            except ValueError:
-                # Non-integral data                
-                errors.add("syntax")
-
-            if count < 0:
-                # Negative amounts of shirts are not tolerated.
-                errors.add("negative")
-                continue
-            elif count > 0 and not available:
-                # Ordering shirts of unavailable sizes though POST data
-                # manipulation is not tolerated.
-                errors.add("hax")
-                continue
-
-            num_shirts += count
-
-        # Make sure the number of shirt ordered matches the number of ticket
-        # products that include a shirt.
-        if num_shirts != order.tshirts:
-            errors.add("num_shirts")
-
-        return list(errors)
+        return formset
 
     def save(self, request, form):
-        order = get_order(request)
-        for size in self.__get_sizes():
-            count = self.__get_count(request, size)
+        formset = form
 
-            # Now check if we're modifying an existing order and a shirt
-            # order for this size already exists.
-            try:
-                shirt_order = ShirtOrder.objects.get(
-                    order=order,
-                    size=size
-                )
-            except ShirtOrder.DoesNotExist:
-                shirt_order = None
-
-            if shirt_order is None and count > 0:
-                # Create a new shirt order.
-                shirt_order = ShirtOrder(
-                    order=order,
-                    size=size,
-                    count=count
-                )
+        for shirt_order in formset.save(commit=False):
+            if shirt_order.count > 0:
                 shirt_order.save()
-            elif shirt_order is not None and count > 0:
-                # Update an existing shirt order.
-                shirt_order.count = count
-                shirt_order.save()
-            elif shirt_order is not None and count == 0:
-                # This shirt order was zeroed, so delete it.
+            else:
                 shirt_order.delete()
-     
-            # do nothing on shirt_order None and count 0
 
     def available(self, request):
         order = get_order(request)

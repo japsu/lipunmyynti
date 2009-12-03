@@ -151,7 +151,7 @@ class Order(models.Model):
 class OrderProduct(models.Model):
     order = models.ForeignKey(Order, related_name="order_product_set")
     product = models.ForeignKey(Product, related_name="order_product_set")
-    count = models.IntegerField()
+    count = models.IntegerField(default=0)
 
 class ShirtSize(models.Model):
     # REVERSE: shirt_order_set = ForeignKeyFrom(ShirtOrder)
