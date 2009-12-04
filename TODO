@@ -1,6 +1,14 @@
 Toiminnalliset puutteet
 =======================
 
+* Koekäyttövaroitukset ainakin kolmessa paikassa:
+
+	tracon/ticket_sales/views.py
+	templates/ticket_sales/welcome.html
+	templates/email/confirm_order.eml
+
+  Poistettava ennen käyttöönottoa.
+
 * Käyttäjävirheistä ilmoittaminen, korjauskehotukset
 * Paitamäärien täsmättävä tilattuihin paitoihin
 * General sanity check @ .confirm
