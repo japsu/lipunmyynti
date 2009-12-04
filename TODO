@@ -1,6 +1,7 @@
 Toiminnalliset puutteet
 =======================
 
+* Käyttäjävirheistä ilmoittaminen, korjauskehotukset
 * Paitamäärien täsmättävä tilattuihin paitoihin
 * General sanity check @ .confirm
 * Se pahan kurjen edistymispalkin toiminta
