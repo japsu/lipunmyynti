@@ -1,5 +1,7 @@
 Hyvä vastaanottaja,
 
+!!! KOEKÄYTÖSSÄ !!! Tämä ei ole oikea Tracon V:n tilausvahvistus!
+
 Kiitos Tracon V -ennakkolipputilauksestanne! Tilauksenne numero on {{ order.pk|stringformat:"04d" }}.
 
 Vahvistamme tilatuiksi seuraavat lipputuotteet:

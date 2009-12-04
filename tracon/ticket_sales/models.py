@@ -185,7 +185,7 @@ class Order(models.Model):
     def send_order_confirmation_message(self):
         # TODO encap this, and don't fail silently, warn admins instead
         EmailMessage(
-            subject="Tracon V: Tilausvahvistus (#%04d)" % self.pk,
+            subject="Tracon V: Tilausvahvistus (#%04d) KOEKÄYTÖSSÄ" % self.pk,
             body=self.order_confirmation_message,
             to=(self.customer.name_and_email,),
             bcc=(TICKET_SPAM_ADDRESS,)
