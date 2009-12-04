@@ -13,9 +13,9 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'postgresql' # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'tracon_dev'   # Or path to database file if using sqlite3.
-DATABASE_USER = 'tracon_dev'   # Not used with sqlite3.
-DATABASE_PASSWORD = 'secretary' # Not used with sqlite3.
+DATABASE_NAME = ''   # Or path to database file if using sqlite3.
+DATABASE_USER = ''   # Not used with sqlite3.
+DATABASE_PASSWORD = '' # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
@@ -38,20 +38,20 @@ USE_I18N = False
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/home/japsu/Work/lipunmyynti/media/'
+MEDIA_ROOT = '/path/to/media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = 'http://pajukanta.fi/tracon_dev/media/'
+MEDIA_URL = 'http://example.com/path(to/media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/tracon_dev/media/admin/'
+ADMIN_MEDIA_PREFIX = '/media/admin/'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'TODO create something with apg here'
+SECRET_KEY = 'TODO Fill me in'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -69,7 +69,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'tracon.urls'
 
 TEMPLATE_DIRS = (
-    '/home/japsu/Work/lipunmyynti/templates'
+    '/path/to/templates'
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -90,3 +90,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
 )
 
+EMAIL_HOST="mail.example.com"
+DATE_FORMAT="d.m.Y"
+DEFAULT_FROM_EMAIL="Webmaster <webmaster@localhost>"

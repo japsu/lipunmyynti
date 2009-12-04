@@ -10,7 +10,7 @@ __all__ = [
     "NullForm",
     "WelcomeForm",
     "OrderProductFormset",
-    "OrderProductInlineFormset",
+    "ShirtOrderFormset",
     "CustomerForm",
 ]
 
@@ -22,24 +22,37 @@ class WelcomeForm(forms.ModelForm):
         fields = []
         model = Order
 
-OrderProductInlineFormset = forms.models.inlineformset_factory(
-    Order,
-    OrderProduct,
-    fields=("count",),
-    extra=0,
-    can_delete=False
-)
+class OrderProductForm(forms.ModelForm):
+    count = forms.IntegerField(min_value=0)
+
+    class Meta:
+        exclude = ("order", "product")
+        model = OrderProduct
+        
 
 OrderProductFormset = forms.models.modelformset_factory(
     OrderProduct,
+    form=OrderProductForm,
     exclude=("order", "product"),
-    extra=0
+    extra=0,
+    can_order=False,
+    can_delete=False
 )
+
+class ShirtOrderForm(forms.ModelForm):
+    count = forms.IntegerField(min_value=0)
+
+    class Meta:
+        exclude = ("order", "size")
+        model = ShirtOrder
 
 ShirtOrderFormset = forms.models.modelformset_factory(
     ShirtOrder,
-    exclude=("order", "product"),
-    extra=0
+    form=ShirtOrderForm,
+    exclude=("order", "size"),
+    extra=0,
+    can_order=False,
+    can_delete=False
 )
 
 class CustomerForm(forms.ModelForm):

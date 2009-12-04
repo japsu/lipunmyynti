@@ -17,8 +17,8 @@ vim: shiftwidth=2 expandtab
     <th>Määrä</th>
   </tr>
   {% for iform in form.forms %}
-    {{ iform.id }}
     <tr>
+      {{ iform.id }}
       <td>{{ iform.instance.product.name }}</td>
       <td>{{ iform.instance.product.formatted_price }}</td>
       <td>{{ iform.count }}</td>

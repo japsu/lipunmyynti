@@ -5,42 +5,19 @@ encoding: utf-8
 <div id="left">
   <h2>Liput</h2>
 
-  <dl>
-  {# XXX ugly copypastah #}
-  {% with order.product_info.tickets_tshirts_accommodation as n %}
-    {% if n %}
-      <dt>tickets tshirts accommodation</dt>
-      <dd>{{ n }}</dd>
-    {% endif %}
-  {% endwith %} 
-  {% with order.product_info.tickets_accommodation as n %}
-    {% if n %}
-      <dt>tickets accommodation</dt>
-      <dd>{{ n }}</dd>
-    {% endif %}
-  {% endwith %} 
-  {% with order.product_info.tickets_tshirts as n %}
-    {% if n %}
-      <dt>tickets tshirts</dt>
-      <dd>{{ n }}</dd>
-    {% endif %}
-  {% endwith %} 
-  {% with order.product_info.tickets as n %}
-    {% if n %}
-      <dt>tickets</dt>
-      <dd>{{ n }}</dd>
-    {% endif %}
-  {% endwith %} 
-  </dl>
+  <ul>
+    {% for product in products %}
+      <li>{{ product.count }}&times; {{ product.product.name }}</li>
+    {% endfor %}
+  </ul>
 
   <h2>Paidat</h2>
 
-  <dl>
+  <ul>
     {% for shirt in shirts %}
-      <dt>{{ shirt.size }}</dt>
-      <dd>{{ shirt.count }}</dd>
+      <li>{{ shirt.count }}&times; {{ shirt.size.readable_name }}</li>
     {% endfor %}
-  </dl>
+  </ul>
 </div>
 
 <div id="right">

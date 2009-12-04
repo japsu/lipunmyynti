@@ -1,13 +1,13 @@
 Toiminnalliset puutteet
 =======================
 
-* Hintojen esittäminen ja käsittely
-* Tarkista lippu- ja paitatilausvaiheissa että lukumäärät ovat järkeviä (0 < x < N?)
-* CAPTCHA
+* Paitamäärien täsmättävä tilattuihin paitoihin
+* General sanity check @ .confirm
+* Se pahan kurjen edistymispalkin toiminta
+* Viitenumerojen generointi
 * Enterin painallus vie seuraavaan
 
-* Sähköpostivahvistus tilaajalle tilauksesta
-* Sähköposti-ilmoitus sopivalle conitean osajoukolle tilauksista
+* CAPTCHA
 * Sähköposti-ilmoitus odottamattomista virhetilanteista
 
 * Tilausten täyttäjän käyttöliittymä

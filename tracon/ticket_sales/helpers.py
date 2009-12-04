@@ -45,11 +45,11 @@ def clear_order(request):
 def destroy_order(request):
     order = get_order(request)
     
-    for order_product in OrderProduct.objects.filter(order=order):
-        order_product.delete()
+    order.order_product_set.all().delete()
+    order.shirt_order_set.all().delete()
 
-    for shirt in ShirtOrder.objects.filter(order=order):
-        shirt.delete()
+    if order.customer:
+        order.customer.delete()
 
     order.delete()
     clear_order(request)

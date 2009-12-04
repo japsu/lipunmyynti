@@ -9,41 +9,36 @@ vim: shiftwidth=2 expandtab
 <p>Syötä koot tilattaville paidoille.</p>
 {% endblock body_text %}
 {% block form_content %}
-  <table>
-    <tr>
-      <th>Paitoja yhteensä</th>
-      <td>{{ num_shirts }} kpl</td>
-    </tr>
+{{ form.management_form }}
+<table>
+  <tr>
+    <th>Paitoja yhteensä</th>
+    <td>{{ num_shirts }} kpl</td>
+  </tr>
 
-    {# XXX ugly copypastah #}
+  {% for ladyfit, description in ladyfit_hack %}
     <tr>
-      <th rowspan="2">Tavallinen paita</th>
-      {% for size, count in normal_sizes %}
-        <td>{{ size.name }}</td>
+      <th rowspan="2">{{ description }}</th>
+      {% for iform in form.forms %}
+        {% with iform.instance.size as size %}
+          {% ifequal size.ladyfit ladyfit %}
+            <td>{{ iform.instance.size.name }}</td>
+          {% endifequal %}
+        {% endwith %}
       {% endfor %}
     </tr>
     <tr>
-      {% for size, count in normal_sizes %}
-        <td>
-          <input type="text" size="2" name="s{{ size.pk }}" value="{{ count }}" />
-        </td>
+      {% for iform in form.forms %}
+        {% with iform.instance.size as size %}
+          {% ifequal size.ladyfit ladyfit %}
+            {{ iform.id }}
+            <td>{{ iform.count }}</td>
+          {% endifequal %}
+        {% endwith %}
       {% endfor %}
     </tr>
-
-    <tr>
-      <th rowspan="2">Ladyfit-paita</th>
-      {% for size, count in ladyfit_sizes %}
-        <td>{{ size.name }}</td>
-      {% endfor %}
-    </tr>
-    <tr>
-      {% for size, count in ladyfit_sizes %}
-        <td>
-          <input type="text" size="2" name="s{{ size.pk }}" value="{{ count }}" />
-        </td>
-      {% endfor %}
-    </tr>
-  </table>
+  {% endfor %}
+</table>
 {% endblock form_content %}
 {% block mascot_text %}
 <p>Olet valinnut paitoja tilaukseesi. Meidän tarvitsee vielä tietää paitojen koot. Tarkistathan myös, että olet antanut oikean määrän paitoja. Paidat voi noutaa tapahtumasta postissa tulevaa lipuketta vastaan.</p>

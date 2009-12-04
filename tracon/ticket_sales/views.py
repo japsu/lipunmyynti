@@ -170,17 +170,6 @@ class TicketsPhase(Phase):
         # XXX I feel dirty returning a formset instead of a form.
         return formset
 
-    def save(self, request, form):
-        # It's actually a formset.
-        formset = form
-
-        # There's no point in leaving OrderProducts with count=0 lying around.
-        for order_product in formset.save(commit=False):
-            if order_product.count > 0:
-                order_product.save()
-            else:
-                order_product.delete()
-
     def next(self, request):
         order = get_order(request)
 
@@ -208,30 +197,22 @@ class ShirtsPhase(Phase):
         return ShirtSize.objects.filter(**kwargs).order_by("id")
 
     def vars(self, request, form):
+        order = get_order(request)
         num_shirts = order.tshirts
-        return dict(num_shirts=num_shirts)
+        ladyfit_hack = [(False, "Tavallinen paita"), (True, "Ladyfit-paita")]
+        return dict(num_shirts=num_shirts, ladyfit_hack=ladyfit_hack)
 
     def make_form(self, request):
         order = get_order(request)
-        sizes = __get_sizes()
+        sizes = self.__get_sizes()
         
         for size in sizes:
             ShirtOrder.objects.get_or_create(order=order, size=size)
 
-        queryset = ShirtOrder.objects.filter(order=order).order_by(
-            "order__size__ladyfit", "order__size__name")
+        queryset = order.shirt_order_set.order_by("size__id")
         formset = init_formset(ShirtOrderFormset, request, queryset=queryset)
 
         return formset
-
-    def save(self, request, form):
-        formset = form
-
-        for shirt_order in formset.save(commit=False):
-            if shirt_order.count > 0:
-                shirt_order.save()
-            else:
-                shirt_order.delete()
 
     def available(self, request):
         order = get_order(request)
@@ -283,9 +264,10 @@ class ConfirmPhase(Phase):
 
     def vars(self, request, form):
         order = get_order(request)
-        shirts = ShirtOrder.objects.filter(order=order)
+        shirts = ShirtOrder.objects.filter(order=order, count__gt=0)
+        products = OrderProduct.objects.filter(order=order, count__gt=0)
 
-        return dict(shirts=shirts)
+        return dict(shirts=shirts, products=products)
 
     def save(self, request, form):
         order = get_order(request)
@@ -310,8 +292,9 @@ class ThanksPhase(Phase):
     def vars(self, request, form):
         order = get_order(request)
         shirts = ShirtOrder.objects.filter(order=order)
+        products = OrderProduct.objects.filter(order=order)
 
-        return dict(shirts=shirts)
+        return dict(shirts=shirts, products=products)
 
     def save(self, request, form):
         pass
