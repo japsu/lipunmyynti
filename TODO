@@ -1,5 +1,7 @@
-Toiminnalliset puutteet
-=======================
+Ei-toiminnalliset puutteet
+==========================
+
+* Ulkoasu.
 
 * Koekäyttövaroitukset ainakin kolmessa paikassa:
 
@@ -9,8 +11,12 @@ Toiminnalliset puutteet
 
   Poistettava ennen käyttöönottoa.
 
-* Ihme bugi Kirveellä.
+Toiminnalliset puutteet
+=======================
 
+* Ihme bugi Kirveellä?
+
+* Tyhjä kenttä nollana lukumäärissä
 * Käyttäjävirheistä ilmoittaminen, korjauskehotukset
 * General sanity check @ .confirm
 * Se pahan kurjen edistymispalkin toiminta
