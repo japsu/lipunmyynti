@@ -12,15 +12,11 @@ __all__ = [
     "get_order",
     "clear_order",
     "destroy_order",
-    "set_completed",
-    "get_completed",
-    "clear_completed",
     "init_form",
     "init_formset",
 ]
 
 ORDER_KEY = "tracon.ticket_sales.order_id"
-COMPLETED_KEY = "tracon.ticket_sales.completed_index"
 PRIOR_KEY = "tracon.ticket_sales.prior_orders"
 
 def redirect(view_name, **kwargs):
@@ -53,16 +49,6 @@ def destroy_order(request):
 
     order.delete()
     clear_order(request)
-
-def set_completed(request, index): 
-    request.session[COMPLETED_KEY] = index
-
-def get_completed(request):
-    return request.session.get(COMPLETED_KEY, -1)
-
-def clear_completed(request):
-    if request.session.has_key(COMPLETED_KEY):
-        del request.session[COMPLETED_KEY]
 
 def init_form(form_class, request, instance=None):
     if request.method == "POST":

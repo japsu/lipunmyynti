@@ -39,14 +39,6 @@ class Phase(object):
         if request.method not in self.methods:
             return HttpResponseNotAllowed(self.methods)
 
-        # Check phase proconditions
-        order = get_order(request)
-        if not self.available(request):
-            if order.is_confirmed:
-                return redirect(LAST_PHASE)
-            else:
-                return redirect(FIRST_PHASE)
-
         form = self.make_form(request)
         
         if request.method == "POST":
@@ -68,8 +60,6 @@ class Phase(object):
             if not errors:    
                 self.save(request, form)
 
-                set_completed(request, self.index)
-
                 # The "Next" button should only proceed with valid data.
                 if action == "next":
                     return self.next(request)
@@ -84,12 +74,6 @@ class Phase(object):
 
         # POST with invalid data and GET are handled the same.
         return self.get(request, form, errors)
-
-    def available(self, request):
-        order = get_order(request)
-        completed = get_completed(request)
-
-        return self.index <= completed + 1 and not order.is_confirmed
 
     def validate(self, request, form):
         if not form.is_valid():
@@ -118,7 +102,6 @@ class Phase(object):
 
     def cancel(self, request):
         destroy_order(request)
-        clear_completed(request)
         return HttpResponseRedirect(EXIT_URL)
 
     def vars(self, request, form):
@@ -175,11 +158,9 @@ class TicketsPhase(Phase):
 
         if order.tshirts > 0:
             # The user is ordering T-shirts. Ask for shirt sizes.
-            set_completed(request, self.index)
             next_phase = "shirts_phase"
         else:
             # The user is not ordering T-shirts. Skip the shirt size phase.
-            set_completed(request, shirts_view.index)
             next_phase = "address_phase"
 
         return redirect(next_phase)
@@ -302,7 +283,6 @@ class ThanksPhase(Phase):
     def next(self, request):
         # Start a new order
         clear_order(request)
-        clear_completed(request)
 
         return redirect(self.next_phase)
 
@@ -311,9 +291,3 @@ thanks_view = ThanksPhase()
 ALL_PHASES = [welcome_view, tickets_view, shirts_view, address_view, confirm_view, thanks_view]
 for num, phase in enumerate(ALL_PHASES):
     phase.index = num
-
-def redirect_view(self, request):
-    completed = get_completed(request)
-    next = completed + 1
-    view = ALL_PHASES[next]
-    return redirect(view.name)
