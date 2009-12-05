@@ -9,10 +9,9 @@ Toiminnalliset puutteet
 
   Poistettava ennen käyttöönottoa.
 
-* Tilausvahvistus- ja Kiitos!-sivuilta puuttuu hinnat.
+* Ihme bugi Kirveellä.
+
 * Käyttäjävirheistä ilmoittaminen, korjauskehotukset
-* Estettävä nollan tuotteen tilaaminen.
-* Estettävä epätäsmäävän paitamäärän tilaaminen.
 * General sanity check @ .confirm
 * Se pahan kurjen edistymispalkin toiminta
 * Viitenumerojen generointi
