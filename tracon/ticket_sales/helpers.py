@@ -13,7 +13,6 @@ __all__ = [
     "clear_order",
     "destroy_order",
     "init_form",
-    "init_formset",
 ]
 
 ORDER_KEY = "tracon.ticket_sales.order_id"
@@ -50,29 +49,8 @@ def destroy_order(request):
     order.delete()
     clear_order(request)
 
-def init_form(form_class, request, instance=None):
+def init_form(form_class, request, instance=None, prefix=None):
     if request.method == "POST":
-        args = [request.POST]
+        return form_class(request.POST, request.FILES, instance=instance, prefix=prefix)
     else:
-        args = []
-
-    if instance is not None:
-        kwargs = dict(instance=instance)
-    else:
-        kwargs = {}
-
-    return form_class(*args, **kwargs)
-
-def init_formset(formset_class, request, queryset=None):
-    if request.method == "POST":
-        args = [request.POST]
-    else:
-        args = []
-
-    if queryset is not None:
-        kwargs = dict(queryset=queryset)
-    else:
-        kwargs = {}
-
-    return formset_class(*args, **kwargs)
-
+        return form_class(instance=instance, prefix=prefix)

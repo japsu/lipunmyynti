@@ -9,7 +9,6 @@ vim: shiftwidth=2 expandtab
 <p>Syötä koot tilattaville paidoille.</p>
 {% endblock body_text %}
 {% block form_content %}
-{{ form.management_form }}
 <table>
   <tr>
     <th>Paitoja yhteensä</th>
@@ -19,19 +18,18 @@ vim: shiftwidth=2 expandtab
   {% for ladyfit, description in ladyfit_hack %}
     <tr>
       <th rowspan="2">{{ description }}</th>
-      {% for iform in form.forms %}
+      {% for iform in form %}
         {% with iform.instance.size as size %}
           {% ifequal size.ladyfit ladyfit %}
-            <td>{{ iform.instance.size.name }}</td>
+            <td>{{ size.name }}</td>
           {% endifequal %}
         {% endwith %}
       {% endfor %}
     </tr>
     <tr>
-      {% for iform in form.forms %}
+      {% for iform in form %}
         {% with iform.instance.size as size %}
           {% ifequal size.ladyfit ladyfit %}
-            {{ iform.id }}
             <td>{{ iform.count }}</td>
           {% endifequal %}
         {% endwith %}

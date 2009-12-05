@@ -9,16 +9,15 @@ vim: shiftwidth=2 expandtab
 <p>Syötä tilattavat tuotteet.</p>
 {% endblock body_text %}
 {% block form_content %}
-{{ form.management_form }}
 <table>
   <tr>
     <th>Tuote</th>
     <th>Kappalehinta</th>
     <th>Määrä</th>
   </tr>
-  {% for iform in form.forms %}
+  {% for iform in form %}
+{% comment %}    {{ iform }}{% endcomment %}
     <tr>
-      {{ iform.id }}
       <td>{{ iform.instance.product.name }}</td>
       <td>{{ iform.instance.product.formatted_price }}</td>
       <td>{{ iform.count }}</td>

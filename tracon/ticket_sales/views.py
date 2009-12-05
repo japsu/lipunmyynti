@@ -24,6 +24,12 @@ FIRST_PHASE = "welcome_phase"
 LAST_PHASE = "thanks_phase"
 EXIT_URL = "http://2010.tracon.fi"
 
+def multiform_validate(forms):
+    return [] if all(i.is_valid() for i in forms) else ["syntax"]
+
+def multiform_save(forms):
+    return [i.save() for i in forms]
+
 class Phase(object):
     name = "XXX_fill_me_in"
     friendly_name = "XXX Fill Me In"
@@ -140,18 +146,20 @@ class TicketsPhase(Phase):
 
     def make_form(self, request):
         order = get_order(request)
+        forms = []
 
         for product in Product.objects.order_by("id"):
-            OrderProduct.objects.get_or_create(
-                order=order,
-                product=product
-            )
+            order_product, created = OrderProduct.objects.get_or_create(order=order, product=product)
+            form = init_form(OrderProductForm, request, instance=order_product, prefix="o%d" % order_product.pk)
+            forms.append(form)
 
-        queryset = OrderProduct.objects.filter(order=order).order_by("id")
-        formset = init_formset(OrderProductFormset, request, queryset=queryset)
+        return forms
 
-        # XXX I feel dirty returning a formset instead of a form.
-        return formset
+    def validate(self, request, form):
+        return multiform_validate(form)
+
+    def save(self, request, form):
+        multiform_save(form)
 
     def next(self, request):
         order = get_order(request)
@@ -186,14 +194,20 @@ class ShirtsPhase(Phase):
     def make_form(self, request):
         order = get_order(request)
         sizes = self.__get_sizes()
+        forms = []
         
         for size in sizes:
-            ShirtOrder.objects.get_or_create(order=order, size=size)
+            shirt_order, created = ShirtOrder.objects.get_or_create(order=order, size=size)
+            form = init_form(ShirtOrderForm, request, instance=shirt_order, prefix="s%d" % shirt_order.pk)
+            forms.append(form)
 
-        queryset = order.shirt_order_set.order_by("size__id")
-        formset = init_formset(ShirtOrderFormset, request, queryset=queryset)
+        return forms
 
-        return formset
+    def validate(self, request, form):
+        return multiform_validate(form)
+
+    def save(self, request, form):
+        multiform_save(form)
 
     def available(self, request):
         order = get_order(request)
