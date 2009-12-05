@@ -9,6 +9,7 @@ Toiminnalliset puutteet
 
   Poistettava ennen käyttöönottoa.
 
+* Tilausvahvistus- ja Kiitos!-sivuilta puuttuu hinnat.
 * Käyttäjävirheistä ilmoittaminen, korjauskehotukset
 * Paitamäärien täsmättävä tilattuihin paitoihin
 * General sanity check @ .confirm
