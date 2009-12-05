@@ -156,7 +156,16 @@ class TicketsPhase(Phase):
         return forms
 
     def validate(self, request, form):
-        return multiform_validate(form)
+        errors = multiform_validate(form)
+
+        # If the above step failed, not all forms have cleaned_data.
+        if errors:
+            return errors
+
+        if sum(i.cleaned_data["count"] for i in form) <= 0:
+            errors.append("zero")
+
+        return errors
 
     def save(self, request, form):
         multiform_save(form)
@@ -204,7 +213,16 @@ class ShirtsPhase(Phase):
         return forms
 
     def validate(self, request, form):
-        return multiform_validate(form)
+        order = get_order(request)
+        errors = multiform_validate(form)
+
+        if errors:
+            return errors
+
+        if sum(i.cleaned_data["count"] for i in form) != order.tshirts:
+            errors.append("num_tshirts")
+
+        return errors
 
     def save(self, request, form):
         multiform_save(form)

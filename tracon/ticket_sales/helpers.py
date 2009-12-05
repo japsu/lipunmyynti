@@ -50,7 +50,14 @@ def destroy_order(request):
     clear_order(request)
 
 def init_form(form_class, request, instance=None, prefix=None):
+    args = []
+    kwargs = {}
+
     if request.method == "POST":
-        return form_class(request.POST, request.FILES, instance=instance, prefix=prefix)
-    else:
-        return form_class(instance=instance, prefix=prefix)
+        args.append(request.POST)
+    if instance is not None:
+        kwargs["instance"] = instance
+    if prefix is not None:
+        kwargs["prefix"] = prefix
+
+    return form_class(*args, **kwargs)
