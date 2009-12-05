@@ -16,7 +16,7 @@ def wizard_buttons(phase):
 
 @register.simple_tag
 def progress_bar(request, current_phase):
-    phases = [(phase, phase.index < current_phase.index, phase is current_phase) for phase in ALL_PHASES]
+    phases = [(phase, phase.index <= current_phase.index, phase is current_phase) for phase in ALL_PHASES]
 
     progress_bar_template = template.loader.get_template(
         "wizard_ui/progress.html")
