@@ -11,7 +11,8 @@ Toiminnalliset puutteet
 
 * Tilausvahvistus- ja Kiitos!-sivuilta puuttuu hinnat.
 * Käyttäjävirheistä ilmoittaminen, korjauskehotukset
-* Paitamäärien täsmättävä tilattuihin paitoihin
+* Estettävä nollan tuotteen tilaaminen.
+* Estettävä epätäsmäävän paitamäärän tilaaminen.
 * General sanity check @ .confirm
 * Se pahan kurjen edistymispalkin toiminta
 * Viitenumerojen generointi
