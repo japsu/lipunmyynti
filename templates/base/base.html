@@ -48,11 +48,6 @@ vim: shiftwidth=2 expandtab
             {% endifequal %}
           {% endfor %}
         </div>
-        <div id="kupla">
-          {% block mascot_text %}
-            <p>Frullen jutut tulee tähän.</p>
-          {% endblock mascot_text %}
-        </div>
       </div>
       <form method="post" action="{% url_ptr phase.name %}">
         <div id="content_2col">
@@ -60,33 +55,46 @@ vim: shiftwidth=2 expandtab
             <p>Lomakkeen sisältö tulee tähän.</p>
           {% endblock form_content %}
         </div>
-        <div id="navi">
-          {% comment %}
-            Implementation of pink mascot.
-            Use block pink_mascot in templates for file name.
-          {% endcomment %}
-          <img class="mascot" src="{{ MEDIA_URL }}/pm{{ phase.index|add:1 }}.png" alt="" />
 
-          {% comment %}
-            Implementation of navigation buttons.
-          {% endcomment %}
-          {% if phase.can_cancel %}
-            <button class="abort" type="submit" name="action" value="cancel">&times; Keskeytä</button>
-          {% else %}
-            <button class="abort" type="submit" name="action" value="cancel" disabled="disabled">&times; Keskeytä</button>
-          {% endif %}
+        <div id="bottom">
+          <div id="b_left">
+            {% comment %}
+              Implementation of pink mascot.
+              Use block pink_mascot in templates for file name.
+            {% endcomment %}
+            <img class="mascot" src="{{ MEDIA_URL }}/pm{{ phase.index|add:1 }}.png" alt="Frulle" />
+          </div>
 
-          {% if phase.prev_phase %}
-            <button type="submit" name="action" value="prev">&laquo; Edellinen</button>
-          {% else %}
-            <button type="submit" name="action" value="prev" disabled="disabled">&laquo; Edellinen</button>
-          {% endif %}
+          <div id="b_right">
+            <div id="bubble">
+              {% block mascot_text %}
+                <p>Frullen jutut tulee tähän.</p>
+              {% endblock mascot_text %}
+            </div>
+           
+            <div id="navi">
+              {% comment %}
+                Implementation of navigation buttons.
+              {% endcomment %}
+              {% if phase.can_cancel %}
+                <button class="abort" type="submit" name="action" value="cancel">&times; Keskeytä</button>
+              {% else %}
+                <button class="abort" type="submit" name="action" value="cancel" disabled="disabled">&times; Keskeytä</button>
+              {% endif %}
 
-          {% if phase.next_phase %}
-            <button type="submit" name="action" value="next">{{ phase.next_text|safe }}</button>
-          {% else %}
-            <button type="submit" name="action" value="next" disabled="disabled">{{ phase.next_text|safe }}</button>
-          {% endif %}
+              {% if phase.prev_phase %}
+                <button type="submit" name="action" value="prev">&laquo; Edellinen</button>
+              {% else %}
+                <button type="submit" name="action" value="prev" disabled="disabled">&laquo; Edellinen</button>
+              {% endif %}
+
+              {% if phase.next_phase %}
+                <button type="submit" name="action" value="next">{{ phase.next_text|safe }}</button>
+              {% else %}
+              <button type="submit" name="action" value="next" disabled="disabled">{{ phase.next_text|safe }}</button>
+              {% endif %}
+            </div>
+          </div>
         </div>
       </form>
     </div>
