@@ -35,7 +35,7 @@ Jos ylläolevat tiedot ovat oikein, maksakaa tilaus seuraavilla tiedoilla:
 
 Saajan tilinumero	555555-123456
 Saaja			Tracon ry
-Viitenumero		0 12345 67890
+Viitenumero		{{ order.formatted_reference_number }}
 Summa			{{ order.formatted_price }}
 Eräpäivä	 	{{ order.due_date|date }}
 
