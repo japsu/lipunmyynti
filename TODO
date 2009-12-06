@@ -1,5 +1,7 @@
-Toiminnalliset puutteet
-=======================
+Ei-toiminnalliset puutteet
+==========================
+
+* Ulkoasu.
 
 * Koekäyttövaroitukset ainakin kolmessa paikassa:
 
@@ -9,16 +11,28 @@ Toiminnalliset puutteet
 
   Poistettava ennen käyttöönottoa.
 
-* Ihme bugi Kirveellä.
+Toiminnalliset puutteet
+=======================
 
-* Käyttäjävirheistä ilmoittaminen, korjauskehotukset
-* General sanity check @ .confirm
-* Se pahan kurjen edistymispalkin toiminta
-* Viitenumerojen generointi
-* Enterin painallus vie seuraavaan
+* Ihme bugi Kirveellä?
+* Vahvistussivun edellinen-nappi
+
+1. Käyttäjävirheistä ilmoittaminen, korjauskehotukset
+2. Se pahan kurjen edistymispalkin toiminta, vaiherajoitus
+3. Tyhjä kenttä nollana lukumäärissä
+4. Viitenumerojen generointi
+5. General sanity check @ .confirm
+
+* Enterin painallus vie seuraavaan (JavaScript, mieltsi)
 
 * CAPTCHA
 * Sähköposti-ilmoitus odottamattomista virhetilanteista
 
 * Tilausten täyttäjän käyttöliittymä
 * Ylläpitäjän käyttöliittymä
+
+Sisällön puutteet
+=================
+
+* Puhelinnumeron ei-pakollisuus selväksi
+* Majoituskäytäntöjä pitää alleviivata _jossain_
