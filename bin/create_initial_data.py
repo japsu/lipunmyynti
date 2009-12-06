@@ -23,15 +23,20 @@ def create_shirt_sizes():
 	obj.save()
 
 PRODUCTS = [
-    ("Ennakkolippu ja T-paita", 2200),
-    ("Ennakkolippu, T-paita ja lattiamajoitus", 3200),
-    ("Ennakkolippu ja lattiamajoitus", 1900),
-    ("Pelkkä ennakkolippu", 900),
+    ("Ennakkolippu ja T-paita", 2200, True, False),
+    ("Ennakkolippu, T-paita ja lattiamajoitus", 3200, True, True),
+    ("Ennakkolippu ja lattiamajoitus", 1900, False, True),
+    ("Pelkkä ennakkolippu", 900, False, False),
 ]
 
 def create_products():
-    for name, price_cents in PRODUCTS:
-        obj = Product(name=name, price_cents=price_cents)
+    for name, price_cents, tshirt, accom in PRODUCTS:
+        obj = Product(
+            name=name,
+            price_cents=price_cents,
+            includes_tshirt=tshirt,
+            includes_accommodation=accom
+        )
         obj.save()
 
 if __name__ == "__main__":
