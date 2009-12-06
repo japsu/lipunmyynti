@@ -17,6 +17,7 @@ __all__ = [
 ]
 
 TICKET_SPAM_ADDRESS = "Tracon V -lipputarkkailu <lipunmyyntispam10@tracon.fi>"
+SHIPPING_AND_HANDLING_CENTS = 100
 
 def format_price(cents):
     return u"%d,%02d €" % divmod(cents, 100)
@@ -124,7 +125,7 @@ class Order(models.Model):
     @property
     def price_cents(self):
         # TODO Port to Django DB reduction functions if possible
-        return sum(op.price_cents for op in self.order_product_set.all())
+        return sum(op.price_cents for op in self.order_product_set.all()) + SHIPPING_AND_HANDLING_CENTS
     
     @property
     def formatted_price(self):

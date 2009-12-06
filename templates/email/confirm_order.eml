@@ -9,6 +9,8 @@ Vahvistamme tilatuiksi seuraavat lipputuotteet:
 {% for product in products %}{{ product.count }} kpl	{{ product.product.name }}
 	{{ product.count }} x {{ product.product.formatted_price }} = {{ product.formatted_price }}
 {% endfor %}
+Toimituskulut: 1,00 €
+
 Yhteensä: {{ order.formatted_price }} (ALV 0%)
 
 {% if order.tshirts %}Paitakoot:
