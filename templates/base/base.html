@@ -31,29 +31,36 @@ vim: shiftwidth=2 expandtab
         </ul>
       </div>
 
-      <div id="header">
-        {% block body_text %}
-          <p>Sisältö tulee tähän.</p>
-        {% endblock body_text %}
-        <div id="errors">
-          {% for error in errors %}
-            {% ifequal error "syntax" %}
-              <p>Tarkista kenttien sisältö.</p>
-            {% endifequal %}
-            {% ifequal error "zero" %}
-              <p>Et ole tilannut yhtään tuotetta.</p>
-            {% endifequal %}
-            {% ifequal error "num_tshirts" %}
-              <p>Tarkista T-paitojen lukumäärä.</p>
-            {% endifequal %}
-          {% endfor %}
-        </div>
-      </div>
       <form method="post" action="{% url_ptr phase.name %}">
-        <div id="content_2col">
-          {% block form_content %}
-            <p>Lomakkeen sisältö tulee tähän.</p>
-          {% endblock form_content %}
+        <div id="top">
+          <div id="t_left">
+            <div id="header">
+              {% block body_text %}
+                <p>Sisältö tulee tähän.</p>
+              {% endblock body_text %}
+              <div id="errors">
+                {% for error in errors %}
+                  {% ifequal error "syntax" %}
+                    <p>Tarkista kenttien sisältö.</p>
+                  {% endifequal %}
+                  {% ifequal error "zero" %}
+                    <p>Et ole valinnut yhtään tuotetta.</p>
+                  {% endifequal %}
+                  {% ifequal error "num_tshirts" %}
+                    <p>Tarkista T-paitojen lukumäärä.</p>
+                  {% endifequal %}
+                {% endfor %}
+              </div>
+            </div>
+            <div id="content">
+              {% block form_content %}
+                <p>Lomakkeen sisältö tulee tähän.</p>
+              {% endblock form_content %}
+            </div>
+          </div>
+          <div id="t_right">
+            <img class="mascot" src="{{ MEDIA_URL }}/gm{{ phase.index|add:1 }}.png" alt="Ernest" />
+          </div>
         </div>
 
         <div id="bottom">

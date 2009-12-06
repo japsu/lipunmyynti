@@ -11,8 +11,8 @@ vim: shiftwidth=2 expandtab
 {% block form_content %}
 <table>
   <tr>
-    <th>Paitoja yhteensä</th>
-    <td>{{ num_shirts }} kpl</td>
+    <th class="count">Paitoja yhteensä</th>
+    <td class="count">{{ num_shirts }} kpl</td>
   </tr>
 
   {% for ladyfit, description in ladyfit_hack %}
@@ -30,7 +30,7 @@ vim: shiftwidth=2 expandtab
       {% for iform in form %}
         {% with iform.instance.size as size %}
           {% ifequal size.ladyfit ladyfit %}
-            <td>{{ iform.count }}</td>
+            <td class="input">{{ iform.count }}</td>
           {% endifequal %}
         {% endwith %}
       {% endfor %}
