@@ -17,11 +17,19 @@ vim: shiftwidth=2 expandtab
         {% block body_text %}
           <p>Sisältö tulee tähän.</p>
         {% endblock body_text %}
-        <ul>
+        <div id="errors">
           {% for error in errors %}
-            <li>{{ error }}</li>
+            {% ifequal error "syntax" %}
+              <p>Tarkista kenttien sisältö.</p>
+            {% endifequal %}
+            {% ifequal error "zero" %}
+              <p>Et ole tilannut yhtään tuotetta.</p>
+            {% endifequal %}
+            {% ifequal error "num_tshirts" %}
+              <p>Tarkista T-paitojen lukumäärä.</p>
+            {% endifequal %}
           {% endfor %}
-        </ul>
+        </div>
         <div id="kupla">
           {% block mascot_text %}
             <p>Frullen jutut tulee tähän.</p>
