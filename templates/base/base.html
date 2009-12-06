@@ -12,7 +12,25 @@ vim: shiftwidth=2 expandtab
   </head>
   <body>
     <div id="main">
-      {% progress_bar request phase %}
+      {% comment %}
+        Progress bar.
+      {% endcomment %}
+      <div id="breadcrumb">
+        <ul>
+        {% for the_phase, available, current in phases %}
+          {% if available %}
+            {% if current %}
+              <li class="selected">{{ forloop.counter }}. {{ the_phase.friendly_name }}</li>
+            {% else %}
+              <li><a href="{% url_ptr the_phase.name %}">{{ forloop.counter }}. {{ the_phase.friendly_name }}</a></li>
+            {% endif %}
+          {% else %}
+            <li>{{ forloop.counter }}. {{ the_phase.friendly_name }}</li>
+          {% endif %}
+        {% endfor %}
+        </ul>
+      </div>
+
       <div id="header">
         {% block body_text %}
           <p>Sisältö tulee tähän.</p>
@@ -36,16 +54,41 @@ vim: shiftwidth=2 expandtab
           {% endblock mascot_text %}
         </div>
       </div>
-      {% block form %}
       <form method="post" action="{% url_ptr phase.name %}">
         <div id="content_2col">
           {% block form_content %}
             <p>Lomakkeen sisältö tulee tähän.</p>
           {% endblock form_content %}
         </div>
-        {% wizard_buttons phase %}
+        <div id="navi">
+          {% comment %}
+            Implementation of pink mascot.
+            Use block pink_mascot in templates for file name.
+          {% endcomment %}
+          <img class="mascot" src="{{ MEDIA_URL }}/pm{{ phase.index|add:1 }}.png" alt="" />
+
+          {% comment %}
+            Implementation of navigation buttons.
+          {% endcomment %}
+          {% if phase.can_cancel %}
+            <button class="abort" type="submit" name="action" value="cancel">&times; Keskeytä</button>
+          {% else %}
+            <button class="abort" type="submit" name="action" value="cancel" disabled="disabled">&times; Keskeytä</button>
+          {% endif %}
+
+          {% if phase.prev_phase %}
+            <button type="submit" name="action" value="prev">&laquo; Edellinen</button>
+          {% else %}
+            <button type="submit" name="action" value="prev" disabled="disabled">&laquo; Edellinen</button>
+          {% endif %}
+
+          {% if phase.next_phase %}
+            <button type="submit" name="action" value="next">{{ phase.next_text|safe }}</button>
+          {% else %}
+            <button type="submit" name="action" value="next" disabled="disabled">{{ phase.next_text|safe }}</button>
+          {% endif %}
+        </div>
       </form>
-      {% endblock form %}
     </div>
     <div id="footer">
       <p>Tracon ry 2009 &middot; lipunmyynti10 ät tracon piste fi</p>
