@@ -151,6 +151,19 @@ class Order(models.Model):
         return sum(op.count for op in
             self.order_product_set.filter(product__includes_tshirt = True))
 
+    @property
+    def reference_number_base(self):
+        return "2010%04d" % self.pk
+
+    @property
+    def reference_number(self):
+        s = self.reference_number_base
+        return s + str(-sum(int(x)*[7,3,1][i%3] for i, x in enumerate(s[::-1])) % 10)
+
+    @property
+    def formatted_reference_number(self):
+        return "".join((i if (n+1) % 5 else i+" ") for (n, i) in enumerate(self.reference_number[::-1]))[::-1]
+
     def confirm(self):
         assert self.customer is not None
         assert self.confirm_time is None

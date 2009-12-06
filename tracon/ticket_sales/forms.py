@@ -23,14 +23,14 @@ class WelcomeForm(forms.ModelForm):
         model = Order
 
 class OrderProductForm(forms.ModelForm):
-    count = forms.IntegerField(min_value=0)
+    count = forms.IntegerField(min_value=0, widget=forms.TextInput(attrs=dict(size=2)))
 
     class Meta:
         exclude = ("order", "product")
         model = OrderProduct
         
 class ShirtOrderForm(forms.ModelForm):
-    count = forms.IntegerField(min_value=0)
+    count = forms.IntegerField(min_value=0, widget=forms.TextInput(attrs=dict(size=2)))
 
     class Meta:
         exclude = ("order", "size")
