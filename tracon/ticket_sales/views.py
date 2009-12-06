@@ -91,7 +91,8 @@ class Phase(object):
         order = get_order(request)
 
         context = RequestContext(request, {})
-        vars = dict(self.vars(request, form), form=form, errors=errors, order=order, phase=self)
+        phases = [(phase, phase.index <= self.index, phase is self) for phase in ALL_PHASES]
+        vars = dict(self.vars(request, form), form=form, errors=errors, order=order, phase=self, phases=phases)
         return render_to_response(self.template, vars, context_instance=context)
 
     def make_form(self, request):
