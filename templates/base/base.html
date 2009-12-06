@@ -19,13 +19,13 @@ vim: shiftwidth=2 expandtab
         <ul>
         {% for the_phase, available, current in phases %}
           {% if available %}
+            <li><a href="{% url_ptr the_phase.name %}">{{ forloop.counter }}. {{ the_phase.friendly_name }}</a></li>
+          {% else %}
             {% if current %}
               <li class="selected">{{ forloop.counter }}. {{ the_phase.friendly_name }}</li>
             {% else %}
-              <li><a href="{% url_ptr the_phase.name %}">{{ forloop.counter }}. {{ the_phase.friendly_name }}</a></li>
+              <li>{{ forloop.counter }}. {{ the_phase.friendly_name }}</li>
             {% endif %}
-          {% else %}
-            <li>{{ forloop.counter }}. {{ the_phase.friendly_name }}</li>
           {% endif %}
         {% endfor %}
         </ul>

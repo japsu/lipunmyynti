@@ -46,6 +46,13 @@ class Phase(object):
             return HttpResponseNotAllowed(self.methods)
 
         form = self.make_form(request)
+        order = get_order(request)
+
+        if not self.available(request):
+            if order.is_confirmed:
+                return redirect(LAST_PHASE)
+            else:
+                return redirect(FIRST_PHASE)
         
         if request.method == "POST":
             # Which button was clicked?
@@ -81,6 +88,10 @@ class Phase(object):
         # POST with invalid data and GET are handled the same.
         return self.get(request, form, errors)
 
+    def available(self, request):
+        order = get_order(request)
+        return not order.is_confirmed
+
     def validate(self, request, form):
         if not form.is_valid():
             return ["syntax"]
@@ -91,7 +102,7 @@ class Phase(object):
         order = get_order(request)
 
         context = RequestContext(request, {})
-        phases = [(phase, phase.index <= self.index, phase is self) for phase in ALL_PHASES]
+        phases = [(phase, phase.index < self.index and not order.is_confirmed, phase is self) for phase in ALL_PHASES]
         vars = dict(self.vars(request, form), form=form, errors=errors, order=order, phase=self, phases=phases)
         return render_to_response(self.template, vars, context_instance=context)
 
