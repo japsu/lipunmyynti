@@ -284,9 +284,14 @@ class ConfirmPhase(Phase):
         return dict(shirts=shirts, products=products)
 
     def save(self, request, form):
+        pass
+
+    def next(self, request):
         order = get_order(request)
         order.confirm()
         order.save()
+        
+        return super(ConfirmPhase, self).next(request)
 
 confirm_view = ConfirmPhase()
 
