@@ -25,7 +25,10 @@ LAST_PHASE = "thanks_phase"
 EXIT_URL = "http://2010.tracon.fi"
 
 def multiform_validate(forms):
-    return [] if all(i.is_valid() for i in forms) else ["syntax"]
+    return ["syntax"] if not all(
+        i.is_valid() and (i.instance.target.available or i.cleaned_data["count"] == 0)
+        for i in forms
+    ) else []
 
 def multiform_save(forms):
     return [i.save() for i in forms]

@@ -218,6 +218,10 @@ class OrderProduct(models.Model):
     count = models.IntegerField(default=0)
 
     @property
+    def target(self):
+        return self.product
+
+    @property
     def price_cents(self):
         return self.count * self.product.price_cents
 
@@ -252,6 +256,10 @@ class ShirtOrder(models.Model):
     order = models.ForeignKey(Order, related_name="shirt_order_set")
     size = models.ForeignKey(ShirtSize, related_name="shirt_order_set")
     count = models.IntegerField(default=0)
+
+    @property
+    def target(self):
+        return self.size
 
     def __unicode__(self):
         return u"%dx%s" % (

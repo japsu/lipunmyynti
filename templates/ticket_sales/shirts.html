@@ -21,7 +21,11 @@ vim: shiftwidth=2 expandtab
       {% for iform in form %}
         {% with iform.instance.size as size %}
           {% ifequal size.ladyfit ladyfit %}
-            <td>{{ size.name }}</td>
+            {% if size.available %}
+                <td>{{ size.name }}</td>
+            {% else %}
+                <td></td>
+            {% endif %}
           {% endifequal %}
         {% endwith %}
       {% endfor %}
@@ -30,7 +34,11 @@ vim: shiftwidth=2 expandtab
       {% for iform in form %}
         {% with iform.instance.size as size %}
           {% ifequal size.ladyfit ladyfit %}
-            <td class="input">{{ iform.count }}</td>
+            {% if size.available %}
+              <td class="input">{{ iform.count }}</td>
+            {% else %}
+              <td class="input"></td>
+            {% endif %}
           {% endifequal %}
         {% endwith %}
       {% endfor %}

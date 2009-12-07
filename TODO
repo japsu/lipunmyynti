@@ -1,7 +1,8 @@
 Ei-toiminnalliset puutteet
 ==========================
 
-* Ulkoasu.
+* Kenttien muotoilu? Halutaanko sille vielä tehdä jotain?
+* Tilausvahvistuksen muotoilu.
 
 * Koekäyttövaroitukset ainakin kolmessa paikassa:
 
@@ -16,14 +17,10 @@ Toiminnalliset puutteet
 
 * Ihme bugi Kirveellä?
 
-2. Se pahan kurjen edistymispalkin toiminta, vaiherajoitus
-3. Tyhjä kenttä nollana lukumäärissä
-4. Viitenumerojen generointi
-5. General sanity check @ .confirm
+1. Paitavaiheen ohitus molempiin suuntiin ja hyppiessä luotettavasti
+2. Enterin painallus vie seuraavaan (JavaScript/purkka, mieltsi?)
+3. General sanity check @ .confirm
 
-* Enterin painallus vie seuraavaan (JavaScript, mieltsi)
-
-* CAPTCHA
 * Sähköposti-ilmoitus odottamattomista virhetilanteista
 
 * Tilausten täyttäjän käyttöliittymä
@@ -32,5 +29,9 @@ Toiminnalliset puutteet
 Sisällön puutteet
 =================
 
-* Puhelinnumeron ei-pakollisuus selväksi
-* Majoituskäytäntöjä pitää alleviivata _jossain_
+* Liput-vaiheeseen vielä linkki sinne mestoille jossa selitetään enemmän lipputuotteista.
+
+Jos tarvetta esiintyy
+=====================
+
+* CAPTCHA (mä en ihan oikeasti usko että sille on tarvetta, mutta lisään jos tulee spämmiä)

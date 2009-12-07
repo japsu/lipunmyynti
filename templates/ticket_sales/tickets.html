@@ -20,7 +20,11 @@ vim: shiftwidth=2 expandtab
     <tr>
       <td>{{ iform.instance.product.name }}</td>
       <td>{{ iform.instance.product.formatted_price }}</td>
-      <td>{{ iform.count }}</td>
+      {% if iform.instance.product.available %}
+        <td>{{ iform.count }}</td>
+      {% else %}
+        <td>Ei saatavilla</td>
+      {% endif %}
     </tr>
   {% endfor %}
 </table>
