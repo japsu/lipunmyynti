@@ -83,20 +83,28 @@ vim: shiftwidth=2 expandtab
               {% comment %}
                 Implementation of navigation buttons.
               {% endcomment %}
+              
+              {% if phase.next_phase %}
+                {% comment %}
+                  This button is removed from view using CSS.
+                {% endcomment %}
+                <button class="enterhack" type="submit" name="action" value="next">{{ phase.next_text|safe }}</button>
+              {% endif %}
+
               {% if phase.can_cancel %}
-                <button class="abort" type="submit" name="action" value="cancel">&times; Keskeytä</button>
+                <button class="abort" type="submit" name="action" value="cancel" tabindex="300">&times; Keskeytä</button>
               {% else %}
                 <button class="abort" type="submit" name="action" value="cancel" disabled="disabled">&times; Keskeytä</button>
               {% endif %}
 
               {% if phase.prev_phase %}
-                <button type="submit" name="action" value="prev">&laquo; Edellinen</button>
+                <button type="submit" name="action" value="prev" tabindex="200">&laquo; Edellinen</button>
               {% else %}
                 <button type="submit" name="action" value="prev" disabled="disabled">&laquo; Edellinen</button>
               {% endif %}
 
               {% if phase.next_phase %}
-                <button type="submit" name="action" value="next">{{ phase.next_text|safe }}</button>
+                <button type="submit" name="action" value="next" tabindex="100">{{ phase.next_text|safe }}</button>
               {% else %}
               <button type="submit" name="action" value="next" disabled="disabled">{{ phase.next_text|safe }}</button>
               {% endif %}
