@@ -294,7 +294,7 @@ address_view = AddressPhase()
 
 class ConfirmPhase(Phase):
     name = "confirm_phase"
-    friendly_name = "Tilausvahvistus"
+    friendly_name = "Vahvistaminen"
     template = "ticket_sales/confirm.html"
     prev_phase = "address_phase"
     next_phase = "thanks_phase"
