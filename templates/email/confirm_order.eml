@@ -26,14 +26,13 @@ Yhteensä: {{ order.formatted_price }} (ALV 0%)
 {{ order.customer.phone_number }}
 {{ order.customer.email }}
 
-Mikäli ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
+Jos ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
 yhteyttä lipunmyyntiin joko vastaamalla tähän viestiin tai lähettämällä
-sähköpostia osoitteella lipunmyynti10@tracon.fi. Voitte myös soittaa
-numeroon +358 45 555 5555.
+sähköpostia osoitteella lipunmyynti10@tracon.fi.
 
 Jos ylläolevat tiedot ovat oikein, maksakaa tilaus seuraavilla tiedoilla:
 
-Saajan tilinumero	555555-123456
+Saajan tilinumero	451077-236912
 Saaja			Tracon ry
 Viitenumero		{{ order.formatted_reference_number }}
 Summa			{{ order.formatted_price }}

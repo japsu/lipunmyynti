@@ -16,9 +16,11 @@ encoding: utf-8
 
   <p><em>Yhteensä: {{ order.formatted_price }}</em></p>
 
-  <h2>Paidat</h2>
+  {% if shirts %}
+    <h2>Paidat</h2>
 
-  <p>{% for shirt in shirts %}{{ shirt.count }}&times; {{ shirt.size.readable_name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+    <p>{% for shirt in shirts %}{{ shirt.count }}&times; {{ shirt.size.readable_name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+  {% endif %}
 </div>
 
 <div id="right">

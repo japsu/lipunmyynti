@@ -200,6 +200,11 @@ class TicketsPhase(Phase):
             # The user is not ordering T-shirts. Skip the shirt size phase.
             next_phase = "address_phase"
 
+            # If the user has first selected some T-shirts and given sizes for 'em,
+            # and then removes the products with T-shirts, we need to make sure the
+            # T-shirt orders don't stay.
+            order.shirt_order_set.all().delete()
+
         return redirect(next_phase)
 
 tickets_view = TicketsPhase()
