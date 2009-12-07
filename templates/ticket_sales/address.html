@@ -11,10 +11,10 @@ vim: shiftwidth=2 expandtab
 {% block form_content %}
 <fieldset>
 <div class="req"><label for="id_name">Nimi</label>{{ form.name }}</div>
-<div class="req"><label for="id_email">Sähköpostiosoite</label>{{ form.email }}</div>
 <div class="req"><label for="id_address">Osoite</label>{{ form.address }}</div>
 <div class="req"><label for="id_zip_code">Postinumero</label>{{ form.zip_code }}</div>
 <div class="req"><label for="id_city">Postitoimipaikka</label>{{ form.city }}</div>
+<div class="req"><label for="id_email">Sähköpostiosoite</label>{{ form.email }}</div>
 <div class="opt"><label for="id_phone_number">Puhelinnumero</label>{{ form.phone_number }}</div>
 </fieldset>
 {% endblock form_content %}

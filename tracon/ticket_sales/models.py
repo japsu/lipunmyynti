@@ -149,7 +149,12 @@ class Order(models.Model):
     def tshirts(self):
         # TODO Port to Django DB reduction functions if possible
         return sum(op.count for op in
-            self.order_product_set.filter(product__includes_tshirt = True))
+            self.order_product_set.filter(product__includes_tshirt=True))
+
+    @property
+    def accommodation(self):
+        return sum(op.count for op in
+            self.order_product_set.filter(product__includes_accommodation=True))
 
     @property
     def reference_number_base(self):

@@ -13,7 +13,7 @@ vim: shiftwidth=2 expandtab
   <tr>
     <th>Tuote</th>
     <th>Kappalehinta</th>
-    <th>Määrä</th>
+    <th class="input">Määrä</th>
   </tr>
   {% for iform in form %}
 {% comment %}    {{ iform }}{% endcomment %}
@@ -21,9 +21,9 @@ vim: shiftwidth=2 expandtab
       <td>{{ iform.instance.product.name }}</td>
       <td>{{ iform.instance.product.formatted_price }}</td>
       {% if iform.instance.product.available %}
-        <td>{{ iform.count }}</td>
+        <td class="tcount">{{ iform.count }}</td>
       {% else %}
-        <td>Ei saatavilla</td>
+        <td class="tcount">Ei saatavilla</td>
       {% endif %}
     </tr>
   {% endfor %}
