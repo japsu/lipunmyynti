@@ -17,7 +17,6 @@ Toiminnalliset puutteet
 
 * Ihme bugi Kirveellä?
 
-1. Paitavaiheen ohitus molempiin suuntiin ja hyppiessä luotettavasti
 2. Enterin painallus vie seuraavaan (JavaScript/purkka, mieltsi?)
 3. General sanity check @ .confirm
 

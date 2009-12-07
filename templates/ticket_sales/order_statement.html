@@ -11,10 +11,10 @@ encoding: utf-8
         {{ product.count }}&times; {{ product.product.name }} à {{ product.product.formatted_price }} = {{ product.formatted_price }}
       </li>
     {% endfor %}
-      <li>Toimituskulut 1,00 €</li>
+      <li>Toimituskulut: 1,00 €</li>
   </ul>
 
-  <p>Yhteensä: {{ order.formatted_price }}</p>
+  <p><em>Yhteensä: {{ order.formatted_price }}</em></p>
 
   <h2>Paidat</h2>
 

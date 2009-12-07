@@ -158,7 +158,7 @@ class Order(models.Model):
 
     @property
     def reference_number_base(self):
-        return "2010%04d" % self.pk
+        return "5%04d" % self.pk
 
     @property
     def reference_number(self):
