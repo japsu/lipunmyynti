@@ -135,15 +135,9 @@ class WelcomePhase(Phase):
     prev_phase = None
     next_phase = "tickets_phase"
 
-    def make_form(self, request):
-        order = get_order(request)
-        return init_form(WelcomeForm, request, instance=order)
-
     def save(self, request, form):
-        order = form.save()
-        order.ip_address = request.META.get("REMOTE_ADDR")
+        order = get_order(request)
         order.save()
-
         set_order(request, order)
 
     def available(self, request):

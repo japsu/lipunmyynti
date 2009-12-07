@@ -8,7 +8,6 @@ from tracon.ticket_sales.models import *
 
 __all__ = [
     "NullForm",
-    "WelcomeForm",
     "OrderProductForm",
     "ShirtOrderForm",
     "CustomerForm",
@@ -33,11 +32,6 @@ class HappyIntegerField(forms.IntegerField):
 
 class NullForm(forms.Form):
     pass
-
-class WelcomeForm(forms.ModelForm):
-    class Meta:
-        fields = []
-        model = Order
 
 class OrderProductForm(forms.ModelForm):
     count = HappyIntegerField(2)

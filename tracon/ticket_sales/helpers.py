@@ -25,13 +25,14 @@ def set_order(request, order):
     request.session[ORDER_KEY] = order.pk
 
 def get_order(request):
-    order_id = request.session.get(ORDER_KEY, None)
+    order_id = request.session.get(ORDER_KEY)
+
     if order_id is not None:
+        # There is an order in the session; return it
         return Order.objects.get(id=order_id)
     else:
-        o = Order.objects.create()
-        set_order(request, o)
-        return o
+        # No order in the session; return an unsaved order
+        return Order(ip_address=request.META.get("REMOTE_ADDR"))
 
 def clear_order(request):
     if request.session.has_key(ORDER_KEY):
