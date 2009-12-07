@@ -40,6 +40,8 @@ def clear_order(request):
 
 def destroy_order(request):
     order = get_order(request)
+    if order.pk is None:
+        return
     
     order.order_product_set.all().delete()
     order.shirt_order_set.all().delete()

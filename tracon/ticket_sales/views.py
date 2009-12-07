@@ -105,7 +105,18 @@ class Phase(object):
         order = get_order(request)
 
         context = RequestContext(request, {})
-        phases = [(phase, phase.index < self.index and not order.is_confirmed, phase is self) for phase in ALL_PHASES]
+        phases = []
+
+        for phase in ALL_PHASES:
+            available = phase.index < self.index and not order.is_confirmed
+
+            if phase is shirts_view:
+                available = available and order.tshirts > 0
+
+            current = phase is self
+
+            phases.append((phase, available, current))
+
         vars = dict(self.vars(request, form), form=form, errors=errors, order=order, phase=self, phases=phases)
         return render_to_response(self.template, vars, context_instance=context)
 
