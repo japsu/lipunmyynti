@@ -8,8 +8,7 @@ encoding: utf-8
   <ul>
     {% for product in products %}
       <li>
-        {{ product.count }} kpl {{ product.product.name }}<br/>
-        {{ product.count }} &times; {{ product.product.formatted_price }} = {{ product.formatted_price }}
+        {{ product.count }}&times; {{ product.product.name }} à {{ product.product.formatted_price }} = {{ product.formatted_price }}
       </li>
     {% endfor %}
       <li>Toimituskulut 1,00 €</li>
@@ -19,11 +18,7 @@ encoding: utf-8
 
   <h2>Paidat</h2>
 
-  <ul>
-    {% for shirt in shirts %}
-      <li>{{ shirt.count }}&times; {{ shirt.size.readable_name }}</li>
-    {% endfor %}
-  </ul>
+  <p>{% for shirt in shirts %}{{ shirt.count }}&times; {{ shirt.size.readable_name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
 </div>
 
 <div id="right">

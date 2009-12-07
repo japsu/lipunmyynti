@@ -18,7 +18,7 @@ class HappyIntegerField(forms.IntegerField):
         max_value = 10 ** size - 1
 
         super(HappyIntegerField, self).__init__(
-            widget=forms.TextInput(attrs=dict(size=size, maxlength=size)),
+            widget=forms.TextInput(attrs=dict(size=2, maxlength=size)),
             min_value=0,
             max_value=max_value
         )
