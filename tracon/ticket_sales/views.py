@@ -17,7 +17,8 @@ __all__ = [
     "address_view",
     "confirm_view",
     "thanks_view",
-    "ALL_PHASES"
+    "ALL_PHASES",
+    "stats_view"
 ]    
 
 FIRST_PHASE = "welcome_phase"
@@ -353,3 +354,17 @@ thanks_view = ThanksPhase()
 ALL_PHASES = [welcome_view, tickets_view, shirts_view, address_view, confirm_view, thanks_view]
 for num, phase in enumerate(ALL_PHASES):
     phase.index = num
+
+def stats_view(request):
+    all_sold_products = OrderProduct.objects.filter(order__confirm_time__isnull=False)
+    num_tickets = sum(op.count for op in all_sold_products)
+
+    with_tshirts = all_sold_products.filter(product__includes_tshirt=True)
+    num_tshirts = sum(op.count for op in with_tshirts)
+
+    with_accommodation = all_sold_products.filter(product__includes_accommodation=True)
+    num_accommodation = sum(op.count for op in with_accommodation)
+
+    vars = dict(num_tickets=num_tickets, num_tshirts=num_tshirts, num_accommodation=num_accommodation)
+    context = RequestContext(request, {})
+    return render_to_response("ticket_admin/stats.html", vars, context_instance=context)

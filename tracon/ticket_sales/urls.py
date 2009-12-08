@@ -14,5 +14,7 @@ urlpatterns = patterns('',
     url(r'vahvistus/$', confirm_view, name="confirm_phase"),
     url(r'kiitos/$', thanks_view, name="thanks_phase"),
 
+    url(r'stats/$', stats_view, name="stats_view"),
+
     url(r'$', redirect_to, dict(url='/tervetuloa/'), name="empty_url"),
 )
