@@ -1,28 +1,32 @@
-To: Ahto Simakuutio <ahto.simakuutio@noksu.fi>
-From: Tracon V -lipunmyynti <lipunmyynti10@tracon.fi>
-Subject: Tracon V: Tilausvahvistus
-X-Tracon-Order-ID: {{ order.pk }}
-
 Hyvä vastaanottaja,
 
-Olemme vastaanottaneet maksunne seuraavista lipputuotteista
+Olemme vastaanottaneet {{ order.payment_date|date }} maksun Tracon V
+-ennakkolipputilauksestanne numero {{ order.pk|stringformat:"04d" }}.
 
-1 kpl	Foo
+Vahvistamme maksetuiksi seuraavat lipputuotteet:
+
+{% for product in products %}{{ product.count }} kpl	{{ product.product.name }}
+	{{ product.count }} x {{ product.product.formatted_price }} = {{ product.formatted_price }}
+{% endfor %}
+Toimituskulut: 1,00 €
+
+Yhteensä: {{ order.formatted_price }} (ALV 0%)
 
 Liput toimitetaan seuraavaan osoitteeseen:
 
-Ahto Simakuutio
-Ikuisenteekkarinkatu 7 N 300
-33720 HERWOOD
+{{ order.customer.name }}
+{{ order.customer.address }}
+{{ order.customer.zip_code }} {{ order.customer.city }}
 
-+358 50 555 1234
-ahto.simakuutio@noksu.fi
+{{ order.customer.phone_number }}
+{{ order.customer.email }}
 
-Mikäli ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
-yhteyttä lipunmyyntiin sähköpostitse osoitteella lipunmyynti10@tracon.fi
-tai puhelimitse numeroon +358 45 555 5555.
+Jos ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
+yhteyttä lipunmyyntiin joko vastaamalla tähän viestiin tai lähettämällä
+sähköpostia osoitteella lipunmyynti10@tracon.fi.
 
-Saatte erillisen vahvistusviestin, kun lippunne on postitettu.
+Lippujen postitus aloitetaan 1. kesäkuuta 2010. Saatte erillisen
+vahvistusviestin, kun lippunne on postitettu.
 
 Ystävällisin terveisin
 -- 

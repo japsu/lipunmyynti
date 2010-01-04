@@ -3,7 +3,8 @@
 
 from django.db import models
 from django.template.loader import render_to_string
-from datetime import datetime, timedelta, date, time
+from datetime import datetime, timedelta, date
+from datetime import time as dtime
 from django.core.mail import EmailMessage
 
 __all__ = [
@@ -22,11 +23,11 @@ SHIPPING_AND_HANDLING_CENTS = 100
 def format_price(cents):
     return u"%d,%02d €" % divmod(cents, 100)
 
-def format_date(datetime):
-    return datetime.strftime("%Y-%m-%d")
+def format_date(dt):
+    return dt.strftime("%Y-%m-%d")
 
-def format_datetime(datetime):
-    return datetime.strftime("%Y-%m-%d %H:%M:%S")
+def format_datetime(dt):
+    return dt.strftime("%Y-%m-%d %H:%M:%S")
 
 class Batch(models.Model):
     create_time = models.DateTimeField(auto_now=True)
@@ -169,33 +170,66 @@ class Order(models.Model):
     def formatted_reference_number(self):
         return "".join((i if (n+1) % 5 else i+" ") for (n, i) in enumerate(self.reference_number[::-1]))[::-1]
 
-    def confirm(self):
+    # XXX hack: Curse me for making payment_time a DateTimeField instead of a DateField.
+    # Not gonna change the schema of our installed production database for this.
+    def _get_payment_date(self):
+        return self.payment_time.date()
+    def _set_payment_date(self, value):
+        if value is None:
+            self.payment_time = None
+        else:
+            self.payment_time = datetime.combine(value, dtime(0,0))
+    payment_date = property(_get_payment_date, _set_payment_date)
+
+    def confirm_order(self):
         assert self.customer is not None
-        assert self.confirm_time is None
+        assert not self.is_confirmed
 
         self.shirt_order_set.filter(count__lte=0).delete()
         self.order_product_set.filter(count__lte=0).delete()
 
         self.confirm_time = datetime.now()
 
+        self.save()
         self.send_order_confirmation_message()
 
+    def confirm_payment(self, payment_date=None):
+        assert self.is_confirmed
+        
+        if payment_date is None:
+            payment_date = date.today()
+
+        self.payment_date = payment_date
+
+        self.save()        
+        self.send_payment_confirmation_message()
+
+    def confirm_delivery(self):
+        # TODO stub
+        pass
+
     @property
-    def order_confirmation_message(self):
-        vars = dict(
+    def email_vars(self):
+        return dict(
             order=self,
             products=self.order_product_set.all(),
             shirts=self.shirt_order_set.all()
         )
 
-        return render_to_string("email/confirm_order.eml", vars)
+    @property
+    def order_confirmation_message(self):
+        return render_to_string("email/confirm_order.eml", self.email_vars)
+
+    @property
+    def payment_confirmation_message(self):
+        return render_to_string("email/confirm_payment.eml", self.email_vars)
 
     @property
     def due_date(self):
         if not self.confirm_time:
             return None
 
-        return datetime.combine((self.confirm_time + timedelta(days=14)).date(), time(23, 59, 59))
+        return datetime.combine((self.confirm_time + timedelta(days=14)).date(), dtime(23, 59, 59))
 
     @property
     def formatted_due_date(self):
@@ -206,6 +240,15 @@ class Order(models.Model):
         EmailMessage(
             subject="Tracon V: Tilausvahvistus (#%04d)" % self.pk,
             body=self.order_confirmation_message,
+            to=(self.customer.name_and_email,),
+            bcc=(TICKET_SPAM_ADDRESS,)
+        ).send(fail_silently=True)
+
+    def send_payment_confirmation_message(self):
+        # TODO see above
+        EmailMessage(
+            subject="Tracon V: Maksuvahvistus (#%04d)" % self.pk,
+            body=self.payment_confirmation_message,
             to=(self.customer.name_and_email,),
             bcc=(TICKET_SPAM_ADDRESS,)
         ).send(fail_silently=True)

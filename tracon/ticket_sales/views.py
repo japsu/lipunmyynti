@@ -313,8 +313,9 @@ class ConfirmPhase(Phase):
 
     def next(self, request):
         order = get_order(request)
-        order.confirm()
-        order.save()
+
+        # .confirm_* call .save
+        order.confirm_order()
         
         return super(ConfirmPhase, self).next(request)
 
@@ -355,6 +356,7 @@ ALL_PHASES = [welcome_view, tickets_view, shirts_view, address_view, confirm_vie
 for num, phase in enumerate(ALL_PHASES):
     phase.index = num
 
+@login_required
 def stats_view(request):
     all_sold_products = OrderProduct.objects.filter(order__confirm_time__isnull=False)
     num_tickets = sum(op.count for op in all_sold_products)
@@ -368,3 +370,20 @@ def stats_view(request):
     vars = dict(num_tickets=num_tickets, num_tshirts=num_tshirts, num_accommodation=num_accommodation)
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/stats.html", vars, context_instance=context)
+
+@login_required
+@require_GET
+def payment_admin_view(request):
+    vars = dict()
+    context = RequestContext(request, {})
+    return render_to_response("ticket_admin/payments.html", vars, context_instance=context)
+
+@login_required
+@require_POST
+def process_single_payment_view(request):
+    pass
+
+@login_required
+@require_POST
+def process_payment_dump_view(request):
+    pass

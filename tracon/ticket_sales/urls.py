@@ -14,7 +14,15 @@ urlpatterns = patterns('',
     url(r'vahvistus/$', confirm_view, name="confirm_phase"),
     url(r'kiitos/$', thanks_view, name="thanks_phase"),
 
-    url(r'stats/$', stats_view, name="stats_view"),
+    url(r'stats/$', redirect_to, dict(url='/hallinta/tiedot/'), name="old_stats_url"),
+
+    url(r'hallinta/$', manage_view, name="manage_view"),
+
+    url(r'hallinta/maksut/$', payments_view, name="payments_view"),
+    url(r'hallinta/maksut/yksi/$', process_single_payment_view, name="process_single_payment_view"),
+    url(r'hallinta/maksut/monta/$', process_payment_dump_view, name="process_payment_dump_view"),
+
+    url(r'hallinta/tiedot/$', stats_view, name="stats_view"),
 
     url(r'$', redirect_to, dict(url='/tervetuloa/'), name="empty_url"),
 )
