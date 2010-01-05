@@ -57,7 +57,7 @@ def parse_payment(line):
     ref = match.group("ref")
     try:
         order = get_order_by_ref(ref)
-    except Order.NotFound:
+    except Order.DoesNotExist:
         return line, ParseResult.ORDER_NOT_FOUND, payment_date, None
 
     # Test #3: The order has been confirmed
@@ -84,12 +84,12 @@ def normalize_ref(ref):
 def get_order_by_ref(ref):
     """get_order_by_ref(ref) -> Order
 
-    Raises Order.NotFound on failature."""
+    Raises Order.DoesNotExist on failature."""
     ref = normalize_ref(ref)
     
     # XXX hard-coded format in here and models.Order.reference_number_base
     if not ref.startswith("5"):
-        raise Order.NotFound
+        raise Order.DoesNotExist
 
     # Lose the prefix and checksum
     id = int(ref[1:-1])
