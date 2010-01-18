@@ -379,11 +379,19 @@ def stats_view(request):
     with_accommodation = all_sold_products.filter(product__includes_accommodation=True)
     num_accommodation = sum(op.count for op in with_accommodation)
 
-    total_cents = sum(o.price_cents for o in Order.objects.filter(confirm_time__isnull=False))
+    confirmed_orders = Order.objects.filter(confirm_time__isnull=False)
+    num_orders = confirmed_orders.count()
+    total_cents = sum(o.price_cents for o in confirmed_orders)
     # XXX encap
     total = "%d,%02d €" % divmod(total_cents, 100)
 
-    vars = dict(num_tickets=num_tickets, num_tshirts=num_tshirts, num_accommodation=num_accommodation, total=total)
+    vars = dict(
+        num_orders=num_orders,
+        num_tickets=num_tickets,
+        num_tshirts=num_tshirts,
+        num_accommodation=num_accommodation,
+        total=total
+    )
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/stats.html", vars, context_instance=context)
 
