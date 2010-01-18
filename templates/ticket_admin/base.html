@@ -13,5 +13,7 @@ encoding: utf-8
       <h1>Mui.</h1>
       <p>Sisältö tulee tähän.</p>
     {% endblock content %}
+    <hr />
+    <p><a href="{% url manage_view %}">Hallinnan etusivulle</a> | <a href="{% url logout_page %}">Kirjaudu ulos</a></p>
   </body>
 </html>

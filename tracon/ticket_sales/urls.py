@@ -24,5 +24,8 @@ urlpatterns = patterns('',
 
     url(r'hallinta/tiedot/$', stats_view, name="stats_view"),
 
+    url(r'kirjaudu/$', 'django.contrib.auth.views.login', dict(template_name="ticket_admin/login.html"), name="login_page"),
+    url(r'kirjaudu/ulos/$', 'django.contrib.auth.views.logout', dict(template_name="ticket_admin/logged_out.html"), name="logout_page"),
+
     url(r'$', redirect_to, dict(url='/tervetuloa/'), name="empty_url"),
 )

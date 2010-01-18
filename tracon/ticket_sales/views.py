@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponseNotAllowed
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.http import require_POST, require_GET
 
 from tracon.ticket_sales.models import *
@@ -364,7 +364,9 @@ for num, phase in enumerate(ALL_PHASES):
 
 @login_required
 def manage_view(request):
-    pass
+    vars = dict()
+    context = RequestContext(request, {})
+    return render_to_response("ticket_admin/manage.html", vars, context_instance=context)
 
 @login_required
 def stats_view(request):
@@ -381,19 +383,19 @@ def stats_view(request):
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/stats.html", vars, context_instance=context)
 
-@login_required
+@permission_required("ticket_sales.can_manage_payments")
 @require_GET
 def payments_view(request):
     vars = dict()
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/payments.html", vars, context_instance=context)
 
-@login_required
+@permission_required("ticket_sales.can_manage_payments")
 @require_POST
 def process_single_payment_view(request):
     pass
 
-@login_required
+@permission_required("ticket_sales.can_manage_payments")
 @require_POST
 def process_multiple_payments_view(request):
     pass

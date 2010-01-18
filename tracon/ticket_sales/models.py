@@ -64,6 +64,9 @@ class Batch(models.Model):
             self.readable_state
         )
 
+    class Meta:
+        verbose_name_plural = "batches"
+
 class Product(models.Model):
     name = models.CharField(max_length=100)
     price_cents = models.IntegerField()
@@ -259,6 +262,9 @@ class Order(models.Model):
             self.formatted_price,
             self.readable_state
         )
+
+    class Meta:
+        permissions = (("can_manage_payments", "Can manage payments"),)
 
 class OrderProduct(models.Model):
     order = models.ForeignKey(Order, related_name="order_product_set")
