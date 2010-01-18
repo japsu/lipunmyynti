@@ -1,0 +1,30 @@
+{% extends "ticket_admin/base.html" %}
+{% comment %}
+vim: shiftwidth=2 expandtab
+encoding: utf-8
+{% endcomment %}
+{% block content %}
+<h1>Lipunmyynnin hallinta</h1>
+<p>Tervemenoa, {{ user }}! <a href="{% url logout_page %}">Kirjaudu ulos</a></p>
+
+<h2>Tiedot</h2>
+<ul>
+  <li><a href="{% url stats_view %}">Lipunmyynnin raportti</a></li>
+</ul>
+
+{% if perms.order.can_manage_payments %}
+  <h2>Maksut</h2>
+  <ul>
+    <li><a href="{% url payments_view %}">Merkitse tilauksia maksetuiksi</a></li>
+  </ul>
+{% endif %}
+
+{% if user.is_staff %}
+  <h2>Djangon hallinta</h2>
+  <ul>
+    {% comment %}XXX hardcoded{% endcomment %}
+    <li><a href="/admin/">Djangon hallintapaneeli</a></li>
+  </ul>
+{% endif %}
+
+{% endblock content %}
