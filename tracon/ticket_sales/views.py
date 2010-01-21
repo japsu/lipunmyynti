@@ -439,19 +439,43 @@ def confirm_single_payment_view(request):
     order = get_object_or_404(Order, id=form.cleaned_data["order_id"])
     order.confirm_payment(date.today())
 
-    vars = dict()
+    vars = dict(order=order)
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/single_payment_ok.html", vars, context_instance=context)
 
 @permission_required("order.can_manage_payments")
 @require_POST
 def process_multiple_payments_view(request):
-    pass
+    form = MultiplePaymentsForm(request.POST)
+    if not form.is_valid():
+        return admin_error_page(request, u"Älä pliis jätä sitä pastee tähän -kenttää tyhjäks.")
+
+    dump = form.cleaned_data["dump"]
+    lines = dump.split("\n")
+    payments = list(parse_payments(lines))
+
+    vars = dict(payments=payments, dump=dump)
+    context = RequestContext(request, {})
+    return render_to_response("ticket_admin/review_multiple.html", vars, context_instance=context)
 
 @permission_required("order.can_manage_payments")
 @require_POST
 def confirm_multiple_payments_view(request):
-    pass
+    form = MultiplePaymentsForm(request.POST)
+    if not form.is_valid():
+        return admin_error_page(request, u"Jotain hämärää yritetty!")
+
+    dump = form.cleaned_data["dump"]
+    lines = dump.split("\n")
+    payments = list(parse_payments(lines))
+
+    for line, result, date, order in payments:
+        if result == ParseResult.OK:
+            order.confirm_payment(date)
+
+    vars = dict(payments=payments)
+    context = RequestContext(request, {})
+    return render_to_response("ticket_admin/multiple_payments_ok.html", vars, context_instance=context)
 
 def admin_error_page(request, error):
     vars = dict(error=error)
