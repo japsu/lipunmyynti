@@ -399,7 +399,7 @@ def stats_view(request):
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/stats.html", vars, context_instance=context)
 
-@permission_required("order.can_manage_payments")
+@permission_required("ticket_sales.can_manage_payments")
 @require_GET
 def payments_view(request):
     vars = dict(
@@ -409,7 +409,7 @@ def payments_view(request):
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/payments.html", vars, context_instance=context)
 
-@permission_required("order.can_manage_payments")
+@permission_required("ticket_sales.can_manage_payments")
 @require_POST
 def process_single_payment_view(request):
     form = SinglePaymentForm(request.POST)
@@ -429,7 +429,7 @@ def process_single_payment_view(request):
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/review_single.html", vars, context_instance=context)
 
-@permission_required("order.can_manage_payments")
+@permission_required("ticket_sales.can_manage_payments")
 @require_POST
 def confirm_single_payment_view(request):
     form = ConfirmSinglePaymentForm(request.POST)
@@ -443,7 +443,7 @@ def confirm_single_payment_view(request):
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/single_payment_ok.html", vars, context_instance=context)
 
-@permission_required("order.can_manage_payments")
+@permission_required("ticket_sales.can_manage_payments")
 @require_POST
 def process_multiple_payments_view(request):
     form = MultiplePaymentsForm(request.POST)
@@ -458,7 +458,7 @@ def process_multiple_payments_view(request):
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/review_multiple.html", vars, context_instance=context)
 
-@permission_required("order.can_manage_payments")
+@permission_required("ticket_sales.can_manage_payments")
 @require_POST
 def confirm_multiple_payments_view(request):
     form = MultiplePaymentsForm(request.POST)
