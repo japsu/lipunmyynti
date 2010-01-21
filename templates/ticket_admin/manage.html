@@ -12,7 +12,7 @@ encoding: utf-8
   <li><a href="{% url stats_view %}">Lipunmyynnin raportti</a></li>
 </ul>
 
-{% if perms.order.can_manage_payments %}
+{% if perms.ticket_sales.can_manage_payments %}
   <h2>Maksut</h2>
   <ul>
     <li><a href="{% url payments_view %}">Merkitse tilauksia maksetuiksi</a></li>
