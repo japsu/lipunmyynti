@@ -20,6 +20,7 @@ urlpatterns = patterns('',
 
     url(r'hallinta/maksut/$', payments_view, name="payments_view"),
     url(r'hallinta/maksut/yksi/$', process_single_payment_view, name="process_single_payment_view"),
+    url(r'hallinta/maksut/yksi/vahvista/$', confirm_single_payment_view, name="confirm_single_payment_view"),
     url(r'hallinta/maksut/monta/$', process_multiple_payments_view, name="process_multiple_payments_view"),
 
     url(r'hallinta/tiedot/$', stats_view, name="stats_view"),

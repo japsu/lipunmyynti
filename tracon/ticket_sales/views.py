@@ -2,7 +2,7 @@
 # vim: shiftwidth=4 expandtab
 
 from django.http import HttpResponseRedirect, HttpResponseNotAllowed
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, permission_required
@@ -11,6 +11,8 @@ from django.views.decorators.http import require_POST, require_GET
 from tracon.ticket_sales.models import *
 from tracon.ticket_sales.forms import *
 from tracon.ticket_sales.helpers import *
+from tracon.ticket_sales.utils import *
+from tracon.ticket_sales.format import *
 
 __all__ = [
     "welcome_view",
@@ -24,7 +26,9 @@ __all__ = [
     "stats_view",
     "payments_view",
     "process_single_payment_view",
+    "confirm_single_payment_view",
     "process_multiple_payments_view",
+    "confirm_multiple_payments_view",
 ]    
 
 FIRST_PHASE = "welcome_phase"
@@ -395,19 +399,61 @@ def stats_view(request):
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/stats.html", vars, context_instance=context)
 
-@permission_required("ticket_sales.can_manage_payments")
+@permission_required("order.can_manage_payments")
 @require_GET
 def payments_view(request):
-    vars = dict()
+    vars = dict(
+        single_form=SinglePaymentForm(),
+        multiple_form=MultiplePaymentsForm()
+    )
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/payments.html", vars, context_instance=context)
 
-@permission_required("ticket_sales.can_manage_payments")
+@permission_required("order.can_manage_payments")
 @require_POST
 def process_single_payment_view(request):
-    pass
+    form = SinglePaymentForm(request.POST)
+    if not form.is_valid():
+        return admin_error_page(request, u"Tarkista syöte.")    
 
-@permission_required("ticket_sales.can_manage_payments")
+    try:
+        order = get_order_by_ref(form.cleaned_data["ref_number"])
+    except Order.DoesNotExist:
+        return admin_error_page(request, u"Annetulla viitenumerolla ei löydy tilausta.")
+    if not order.is_confirmed:
+        return admin_error_page(request, u"Viitenumeroa vastaavaa tilausta ei ole vahvistettu.")
+    if order.is_paid:
+        return admin_error_page(request, u"Tilaus on jo merkitty maksetuksi %s." % format_date(order.payment_date))
+
+    vars = dict(order=order)
+    context = RequestContext(request, {})
+    return render_to_response("ticket_admin/review_single.html", vars, context_instance=context)
+
+@permission_required("order.can_manage_payments")
+@require_POST
+def confirm_single_payment_view(request):
+    form = ConfirmSinglePaymentForm(request.POST)
+    if not form.is_valid():
+        return admin_error_page(request, u"Jotain hämärää yritetty!")
+
+    order = get_object_or_404(Order, id=form.cleaned_data["order_id"])
+    order.confirm_payment(date.today())
+
+    vars = dict()
+    context = RequestContext(request, {})
+    return render_to_response("ticket_admin/single_payment_ok.html", vars, context_instance=context)
+
+@permission_required("order.can_manage_payments")
 @require_POST
 def process_multiple_payments_view(request):
     pass
+
+@permission_required("order.can_manage_payments")
+@require_POST
+def confirm_multiple_payments_view(request):
+    pass
+
+def admin_error_page(request, error):
+    vars = dict(error=error)
+    context = RequestContext(request, {})
+    return render_to_response("ticket_admin/error.html", vars, context_instance=context)

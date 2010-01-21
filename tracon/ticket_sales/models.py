@@ -7,6 +7,8 @@ from datetime import datetime, timedelta, date
 from datetime import time as dtime
 from django.core.mail import EmailMessage
 
+from tracon.ticket_sales.format import format_date, format_datetime, format_price
+
 __all__ = [
     "Batch",
     "Product",
@@ -19,15 +21,6 @@ __all__ = [
 
 TICKET_SPAM_ADDRESS = "Tracon V -lipputarkkailu <lipunmyyntispam10@tracon.fi>"
 SHIPPING_AND_HANDLING_CENTS = 100
-
-def format_price(cents):
-    return u"%d,%02d €" % divmod(cents, 100)
-
-def format_date(dt):
-    return dt.strftime("%Y-%m-%d")
-
-def format_datetime(dt):
-    return dt.strftime("%Y-%m-%d %H:%M:%S")
 
 class Batch(models.Model):
     create_time = models.DateTimeField(auto_now=True)

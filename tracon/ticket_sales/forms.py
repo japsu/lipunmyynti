@@ -11,6 +11,9 @@ __all__ = [
     "OrderProductForm",
     "ShirtOrderForm",
     "CustomerForm",
+    "SinglePaymentForm",
+    "ConfirmSinglePaymentForm",
+    "MultiplePaymentsForm",
 ]
 
 class HappyIntegerField(forms.IntegerField):
@@ -52,3 +55,12 @@ class CustomerForm(forms.ModelForm):
 
     class Meta:
         model = Customer
+
+class SinglePaymentForm(forms.Form):
+    ref_number = forms.CharField(max_length=19, label=u"Viitenumero")
+
+class ConfirmSinglePaymentForm(forms.Form):
+    order_id = forms.IntegerField()
+
+class MultiplePaymentsForm(forms.Form):
+    dump = forms.CharField(widget=forms.Textarea, label=u"Pastee tähän")
