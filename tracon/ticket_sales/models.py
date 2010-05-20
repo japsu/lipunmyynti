@@ -21,6 +21,7 @@ __all__ = [
 
 TICKET_SPAM_ADDRESS = "Tracon V -lipputarkkailu <lipunmyyntispam10@tracon.fi>"
 SHIPPING_AND_HANDLING_CENTS = 100
+DUE_DAYS = 7
 
 class Batch(models.Model):
     create_time = models.DateTimeField(auto_now=True)
@@ -229,7 +230,7 @@ class Order(models.Model):
         if not self.confirm_time:
             return None
 
-        return datetime.combine((self.confirm_time + timedelta(days=14)).date(), dtime(23, 59, 59))
+        return datetime.combine((self.confirm_time + timedelta(days=DUE_DAYS)).date(), dtime(23, 59, 59))
 
     @property
     def formatted_due_date(self):
