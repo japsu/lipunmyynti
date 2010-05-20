@@ -154,6 +154,10 @@ class Order(models.Model):
             self.order_product_set.filter(product__includes_accommodation=True))
 
     @property
+    def tickets(self):
+        return sum(op.count for op in self.order_product_set.all())
+
+    @property
     def reference_number_base(self):
         return "5%04d" % self.pk
 
