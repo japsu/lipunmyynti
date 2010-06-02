@@ -2,7 +2,7 @@
 # vim: shiftwidth=4 expandtab
 # encoding: utf-8
 
-from tracon.shirt_control.pdf import interleave
+from tracon.control_slips.pdf import interleave
 import sys
 
 def main(args):
