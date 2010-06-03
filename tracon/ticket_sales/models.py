@@ -47,6 +47,10 @@ class Batch(models.Model):
         return self.delivery_time is not None
 
     @property
+    def delivery_date(self):
+        return self.delivery_time.date()
+
+    @property
     def readable_state(self):
         if self.is_delivered:
             return u"Delivered at %s" % format_date(self.delivery_time)

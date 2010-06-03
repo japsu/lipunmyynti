@@ -1,6 +1,6 @@
 Hyvä vastaanottaja,
 
-Olemme {{ order.payment_date|date }} postittaneet Tracon V-ennakkolipputilauksenne
+Olemme {{ order.batch.delivery_date|date }} postittaneet Tracon V-ennakkolipputilauksenne
 numero {{ order.pk|stringformat:"04d" }}.
 
 Vahvistamme postitetuiksi seuraavat lipputuotteet:
