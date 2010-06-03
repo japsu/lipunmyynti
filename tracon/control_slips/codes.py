@@ -3,7 +3,11 @@
 
 from random import randint
 
-NUM_LENGTH=6
+NUM_LENGTH = 6
+CODE_FORMAT = u"%06d"
 
 def generate_code():
     return str(randint(10**(NUM_LENGTH-1), 10**NUM_LENGTH-1))
+
+def format_code(code):
+    return CODE_FORMAT % code

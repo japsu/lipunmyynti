@@ -23,6 +23,10 @@ urlpatterns = patterns('',
     url(r'hallinta/maksut/yksi/vahvista/$', confirm_single_payment_view, name="confirm_single_payment_view"),
     url(r'hallinta/maksut/monta/$', process_multiple_payments_view, name="process_multiple_payments_view"),
     url(r'hallinta/maksut/monta/vahvista/$', confirm_multiple_payments_view, name="confirm_multiple_payments_view"),
+    url(r'hallinta/erat/uusi/$', create_batch_view, name="create_batch_view"),
+    url(r'hallinta/erat/(?P<batch_id>\d+)/$', render_batch_view, name="render_batch_view"),
+    url(r'hallinta/erat/(?P<batch_id>\d+)/peru/$', cancel_batch_view, name="cancel_batch_view"),
+    url(r'hallinta/erat/(?P<batch_id>\d+)/vahvista/$', deliver_batch_view, name="deliver_batch_view"),
 
     url(r'hallinta/tiedot/$', stats_view, name="stats_view"),
 

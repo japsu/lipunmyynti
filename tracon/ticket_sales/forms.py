@@ -14,6 +14,7 @@ __all__ = [
     "SinglePaymentForm",
     "ConfirmSinglePaymentForm",
     "MultiplePaymentsForm",
+    "CreateBatchForm",
 ]
 
 class HappyIntegerField(forms.IntegerField):
@@ -64,3 +65,6 @@ class ConfirmSinglePaymentForm(forms.Form):
 
 class MultiplePaymentsForm(forms.Form):
     dump = forms.CharField(widget=forms.Textarea, label=u"Pastee tähän")
+
+class CreateBatchForm(forms.Form):
+    max_orders = forms.IntegerField(label=u"Kuinka monta tilausta (enintään)?")

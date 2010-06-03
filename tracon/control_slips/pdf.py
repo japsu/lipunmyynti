@@ -17,7 +17,7 @@ from subprocess import check_call
 import sys, os, glob
 
 from tracon.control_slips.codes import generate_code
-from tracon.pdf import render_logo
+from tracon.pdf import render_logo, state_saved
 
 PDFTK="/usr/bin/pdftk"
 DEFAULT_FILENAME="paitalipukkeet.pdf"
@@ -36,14 +36,6 @@ SLIP_HEIGHT = (PAPER_HEIGHT - (2 * SLIP_ROWS + 2 - 1) * MARGIN) / SLIP_ROWS
 SLIP_XDISP = SLIP_WIDTH + 2 * MARGIN
 SLIP_YDISP = SLIP_HEIGHT + 2 * MARGIN
 
-@contextmanager
-def state_saved(canvas):
-    try:
-        canvas.saveState()
-        yield canvas
-    finally:
-        canvas.restoreState()
-
 def split_into_groups(iterable, group_size=8):
     y = []
     for i in iterable:
@@ -53,6 +45,10 @@ def split_into_groups(iterable, group_size=8):
             y = []
     if y:
         yield y
+
+def render_codes(shirt_codes, accommodation_codes, c):
+    slips = [ShirtSlip(i) for i in shirt_codes] + [AccommodationSlip(i) for i in accommodation_codes]
+    render_slip_sheets(slips, c)
 
 def generate_slip_sheets(slips, filename):
     c = canvas.Canvas(filename)
@@ -76,22 +72,15 @@ class Slip(object):
     def render(self, c):
         c.rect(0, 0, SLIP_WIDTH, SLIP_HEIGHT)
 
-        barcode = code128.Code128(self.code, barHeight=10*mm, barWidth=0.4*mm)
+        code_str = str(self.code)
+
+        barcode = code128.Code128(code_str, barHeight=10*mm, barWidth=0.4*mm)
         barcode.drawOn(c, 0, 10*mm)
 
         render_logo(6*mm, 49*mm, c)
 
         c.setFont("Helvetica", 10)
-        c.drawString(14*mm, 5*mm, self.code)
-
-    def randomize(self):
-        self.code = generate_code()
-
-    @classmethod
-    def create_random_slip(cls):
-        s = cls()
-        s.randomize()
-        return s
+        c.drawString(14*mm, 5*mm, code_str)
 
 class ShirtSlip(Slip):
     def render(self, c):
@@ -99,11 +88,24 @@ class ShirtSlip(Slip):
 
         c.setFont("Helvetica", 12)
         c.drawString(6*mm, 44*mm, u"Paitalipuke")
-        c.drawString(6*mm, 35*mm, "Koko: ______")
+
+        if self.code.shirt_order is not None:
+            c.drawString(6*mm, 35*mm, "Koko: %s" % self.code.shirt_order.size.name)
+        else:
+            c.drawString(6*mm, 35*mm, "Koko: ______")
 
         c.setFont("Helvetica", 10)
         c.drawString(12*mm, 28.5*mm, "Ladyfit")
         c.drawString(12*mm, 24.5*mm, "Tavallinen")
+
+        if self.code.shirt_order is not None:
+            y0 = (28*mm) if self.code.shirt_order.size.ladyfit else (24*mm)
+            y1 = y0 + 4*mm
+            x0 = 6.5*mm
+            x1 = 6.5*mm + 4*mm
+
+            c.line(x0, y0, x1, y1)
+            c.line(x0, y1, x1, y0)
 
         c.rect(6.5*mm, 28*mm, 4*mm, 4*mm)
         c.rect(6.5*mm, 24*mm, 4*mm, 4*mm)

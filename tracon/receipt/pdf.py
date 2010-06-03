@@ -31,15 +31,15 @@ def render_receipt(order, c):
 
     ypos -= 15*mm
     
-    if order.shirts > 0:
-        c.drawString(BASE_INDENT, ypos, u"%d kpl" % order.shirts)
+    if order.tshirts > 0:
+        c.drawString(BASE_INDENT, ypos, u"%d kpl" % order.tshirts)
         c.drawString(DEEP_INDENT, ypos, u"T-paitalipuke")
         c.drawString(DEEP_INDENT, ypos - 5*mm, u"T-paidan saa tapahtumasta lipuketta vastaan.")
 
         ypos -= 15*mm
 
-    if order.accommodations > 0:
-        c.drawString(BASE_INDENT, ypos, u"%d kpl" % order.accommodations)
+    if order.accommodation > 0:
+        c.drawString(BASE_INDENT, ypos, u"%d kpl" % order.accommodation)
         c.drawString(DEEP_INDENT, ypos, u"Majoituslipuke")
         c.drawString(DEEP_INDENT, ypos - 5*mm, u"Esitetään majoitukseen saavuttaessa majoituksen valvojalle.")
 
@@ -78,8 +78,8 @@ def test():
         customer = DummyCustomer()
 
         tickets = 3
-        shirts = 0
-        accommodations = 1
+        tshirts = 0
+        accommodation = 1
 
     order = DummyOrder()
 

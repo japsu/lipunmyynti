@@ -1,12 +1,14 @@
 # encoding: utf-8
 # vim: shiftwidth=4 expandtab
 
-from django.http import HttpResponseRedirect, HttpResponseNotAllowed
+from reportlab.pdfgen import canvas
+
+from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, permission_required
-from django.views.decorators.http import require_POST, require_GET
+from django.views.decorators.http import require_POST, require_GET, require_http_methods
 
 from tracon.ticket_sales.models import *
 from tracon.ticket_sales.forms import *
@@ -29,6 +31,10 @@ __all__ = [
     "confirm_single_payment_view",
     "process_multiple_payments_view",
     "confirm_multiple_payments_view",
+    "create_batch_view",
+    "render_batch_view",
+    "cancel_batch_view",
+    "deliver_batch_view",
 ]    
 
 FIRST_PHASE = "welcome_phase"
@@ -368,7 +374,9 @@ for num, phase in enumerate(ALL_PHASES):
 
 @login_required
 def manage_view(request):
-    vars = dict()
+    batches = Batch.objects.all()
+
+    vars = dict(batches=batches)
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/manage.html", vars, context_instance=context)
 
@@ -485,6 +493,73 @@ def confirm_multiple_payments_view(request):
     vars = dict(payments=payments)
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/multiple_payments_ok.html", vars, context_instance=context)
+
+@permission_required("ticket_sales.can_manage_batches")
+@require_http_methods(["POST", "GET"])
+def create_batch_view(request):
+    if request.method == "POST":
+        form = CreateBatchForm(request.POST)
+        if form.is_valid():
+            batch = Batch.create(max_orders=form.cleaned_data["max_orders"])
+
+            vars = dict(batch=batch)
+            context = RequestContext(request, {})
+            return render_to_response("ticket_admin/create_batch_ok.html", vars, context_instance=context)
+    else:
+        form = CreateBatchForm()
+
+    vars = dict(form=form)
+    context = RequestContext(request, {})
+    return render_to_response("ticket_admin/create_batch.html", vars, context_instance=context)
+
+@permission_required("ticket_sales.can_manage_batches")
+@require_GET
+def render_batch_view(request, batch_id):
+    batch = get_object_or_404(Batch, id=int(batch_id))
+
+    response = HttpResponse(mimetype="application/pdf")
+    response["Content-Disposition"] = 'filename=batch%03d.pdf' % batch.id
+    c = canvas.Canvas(response)
+    batch.render(c)
+    c.save()
+
+    return response
+
+@permission_required("ticket_sales.can_manage_batches")
+@require_http_methods(["POST", "GET"])
+def cancel_batch_view(request, batch_id):
+    batch = get_object_or_404(Batch, id=int(batch_id))
+
+    if request.method == "POST":
+        batch.cancel()
+
+        vars = dict()
+        context = RequestContext(request, {})
+        return render_to_response("ticket_admin/cancel_batch_ok.html", vars, context_instance=context)
+
+    else:
+        vars = dict(batch=batch)
+        context = RequestContext(request, {})
+        return render_to_response("ticket_admin/cancel_batch.html", vars, context_instance=context)
+
+@permission_required("ticket_sales.can_manage_batches")
+@require_http_methods(["POST", "GET"])
+def deliver_batch_view(request, batch_id):
+    batch = get_object_or_404(Batch, id=int(batch_id))
+
+    if batch.is_delivered:
+        return admin_error_page(request, "Already delivered")
+
+    vars = dict(batch=batch)
+    context = RequestContext(request, {})
+
+    if request.method == "POST":
+        batch.confirm_delivery()
+
+        return render_to_response("ticket_admin/deliver_batch_ok.html", vars, context_instance=context)
+
+    else:
+        return render_to_response("ticket_admin/deliver_batch.html", vars, context_instance=context)
 
 def admin_error_page(request, error):
     vars = dict(error=error)

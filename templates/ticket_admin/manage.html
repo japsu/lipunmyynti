@@ -19,6 +19,30 @@ encoding: utf-8
   </ul>
 {% endif %}
 
+{% if perms.ticket_sales.can_manage_batches %}
+  <h2>Toimituserät</h2>
+
+  <ul>
+    {% for batch in batches %}
+      <li>
+        <a href="{% url render_batch_view batch_id=batch.id %}">Erä {{ batch.id }}</a>
+        {% if batch.is_delivered %}
+          (toimitettu)
+        {% else %}
+          (odottaa toimitusta)
+          <ul>
+            {% if not batch.is_delivered %}
+              <li><a href="{% url deliver_batch_view batch_id=batch.id %}">Merkitse toimitetuksi</a></li>
+              <li><a href="{% url cancel_batch_view batch_id=batch.id %}">Peruuta toimituserä</a></li>
+            {% endif %}
+          </ul>
+        {% endif %}
+      </li>
+    {% endfor %}
+    <li><a href="{% url create_batch_view %}">Uusi toimituserä</a></li>
+  </ul>
+{% endif %}
+
 {% if user.is_staff %}
   <h2>Djangon hallinta</h2>
   <ul>

@@ -1,13 +1,16 @@
 # encoding: utf-8
 # vim: shiftwidth=4 expandtab
 
-from django.db import models
+from django.db import models, IntegrityError
 from django.template.loader import render_to_string
 from datetime import datetime, timedelta, date
 from datetime import time as dtime
 from django.core.mail import EmailMessage
 
 from tracon.ticket_sales.format import format_date, format_datetime, format_price
+from tracon.receipt.pdf import render_receipt
+from tracon.control_slips.pdf import render_codes
+from tracon.control_slips.codes import generate_code, format_code
 
 __all__ = [
     "Batch",
@@ -16,7 +19,9 @@ __all__ = [
     "Order",
     "OrderProduct",
     "ShirtSize",
-    "ShirtOrder"
+    "ShirtOrder",
+    "ShirtCode",
+    "AccommodationCode",
 ]
 
 TICKET_SPAM_ADDRESS = "Tracon V -lipputarkkailu <lipunmyyntispam10@tracon.fi>"
@@ -52,6 +57,55 @@ class Batch(models.Model):
         else:
             return u"Awaiting print"
 
+    @classmethod
+    def create(cls, max_orders=100):
+        # XXX concurrency disaster waiting to happen
+        # solution: only I do the botching^Wbatching
+
+        batch = cls()
+        batch.save()
+
+        orders = Order.objects.filter(
+            # Order is confirmed
+            confirm_time__isnull=False,
+
+            # Order is paid
+            payment_time__isnull=False,
+
+            # Order has not yet been allocated into a Batch
+            batch__isnull=True
+        ).order_by("confirm_time")[:max_orders]
+
+        for order in orders:
+            order.batch = batch
+            order.create_codes()
+            order.save()
+
+        return batch
+
+    def render(self, c):
+        for order in self.order_set.all():
+            order.render(c)
+
+    def cancel(self):
+        for order in self.order_set.all():
+            order.batch = None
+            order.save()
+
+        self.delete()
+
+    def confirm_delivery(self, delivery_time=None):
+        if delivery_time is None:
+            delivery_time = datetime.now()
+
+        self.delivery_time = delivery_time
+        self.save()
+        self.send_delivery_confirmation_messages()
+
+    def send_delivery_confirmation_messages(self):
+        for order in self.order_set.all():
+            order.send_delivery_confirmation_message()
+
     def __unicode__(self):
         return u"#%d (%s)" % (
             self.pk,
@@ -60,6 +114,10 @@ class Batch(models.Model):
 
     class Meta:
         verbose_name_plural = "batches"
+
+        permissions = (
+            ("can_manage_batches", "Can manage batches"),
+        )
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
@@ -119,6 +177,10 @@ class Order(models.Model):
     @property
     def is_batched(self):
         return self.batch is not None
+
+    @property
+    def is_delivered(self):
+        return self.is_batched and self.batch.is_delivered
 
     @property
     def price_cents(self):
@@ -205,10 +267,6 @@ class Order(models.Model):
         self.save()        
         self.send_payment_confirmation_message()
 
-    def confirm_delivery(self):
-        # TODO stub
-        pass
-
     @property
     def email_vars(self):
         return dict(
@@ -224,6 +282,10 @@ class Order(models.Model):
     @property
     def payment_confirmation_message(self):
         return render_to_string("email/confirm_payment.eml", self.email_vars)
+
+    @property
+    def delivery_confirmation_message(self):
+        return render_to_string("email/confirm_delivery.eml", self.email_vars)
 
     @property
     def due_date(self):
@@ -253,6 +315,50 @@ class Order(models.Model):
             to=(self.customer.name_and_email,),
             bcc=(TICKET_SPAM_ADDRESS,)
         ).send(fail_silently=True)
+
+    def send_delivery_confirmation_message(self):
+        # TODO see above
+        EmailMessage(
+            subject="Tracon V: Toimitusvahvistus (#%04d)" % self.pk,
+            body=self.delivery_confirmation_message,
+            to=(self.customer.name_and_email,),
+            bcc=(TICKET_SPAM_ADDRESS,)
+        ).send(fail_silently=True)
+
+    @property
+    def is_there_shirt_codes(self):
+        return bool(ShirtCode.objects.filter(shirt_order__order=self))
+
+    @property
+    def is_there_accommodation_codes(self):
+        return bool(self.accommodation_code_set.all())
+
+    def create_codes(self):
+        self.create_shirt_codes()
+        self.create_accommodation_codes()
+
+    def create_shirt_codes(self):
+        if self.is_there_shirt_codes:
+            return
+
+        for shirt_order in self.shirt_order_set.all():
+            for i in xrange(shirt_order.count):
+                ShirtCode.create_random(shirt_order=shirt_order)
+
+    def create_accommodation_codes(self):
+        if self.is_there_accommodation_codes:
+            return
+
+        for i in xrange(self.accommodation):
+            AccommodationCode.create_random(order=self)
+
+    def render(self, c):
+        render_receipt(self, c)
+        render_codes(
+            shirt_codes=ShirtCode.objects.filter(shirt_order__order=self),
+            accommodation_codes=self.accommodation_code_set.all(),
+            c=c
+        )
 
     def __unicode__(self):
         return u"#%s %s (%s)" % (
@@ -318,3 +424,35 @@ class ShirtOrder(models.Model):
             self.count,
             self.size
         )
+
+def create_random_code(cls, **kwargs):
+    while True:
+        try:
+            c = cls(id=generate_code(), **kwargs)
+            c.save()
+            break
+        except IntegrityError:
+            pass
+
+    return c
+
+class ShirtCode(models.Model):
+    shirt_order = models.ForeignKey(ShirtOrder, null=True, blank=True, related_name="shirt_code_set")
+    
+    @classmethod
+    def create_random(cls, **kwargs):
+        return create_random_code(cls, **kwargs)
+
+    def __unicode__(self):
+        return format_code(self.id)
+
+class AccommodationCode(models.Model):
+    order = models.ForeignKey(Order, null=True, blank=True, related_name="accommodation_code_set")
+
+    @classmethod
+    def create_random(cls, **kwargs):
+        return create_random_code(cls, **kwargs)
+
+    def __unicode__(self):
+        return format_code(self.id)
+
