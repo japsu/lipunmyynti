@@ -320,7 +320,12 @@ class Order(models.Model):
         if not self.confirm_time:
             return None
 
-        return datetime.combine((self.confirm_time + timedelta(days=DUE_DAYS)).date(), dtime(23, 59, 59))
+        # Accom bookings are due IMMEDIATELY.
+        elif not self.requires_shipping:
+            return self.confirm_time
+
+        else:
+            return datetime.combine((self.confirm_time + timedelta(days=DUE_DAYS)).date(), dtime(23, 59, 59))
 
     @property
     def formatted_due_date(self):
