@@ -52,7 +52,8 @@ class ShirtOrderForm(forms.ModelForm):
         model = ShirtOrder
 
 class CustomerForm(forms.ModelForm):
-    zip_code = FIZipCodeField()
+    #XXX hackily commented out
+    #zip_code = FIZipCodeField()
 
     class Meta:
         model = Customer

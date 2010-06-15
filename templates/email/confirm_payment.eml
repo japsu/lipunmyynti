@@ -1,4 +1,4 @@
-Hyvä vastaanottaja,
+H{% endif %}yvä vastaanottaja,
 
 Olemme vastaanottaneet {{ order.payment_date|date }} maksun Tracon V
 -ennakkolipputilauksestanne numero {{ order.pk|stringformat:"04d" }}.
@@ -12,7 +12,7 @@ Toimituskulut: {{ order.formatted_shipping_and_handling}}
 
 Yhteensä: {{ order.formatted_price }} (ALV 0%)
 
-Liput toimitetaan seuraavaan osoitteeseen:
+{% if order.requires_shipping %}Liput toimitetaan seuraavaan osoitteeseen:{% else %}Antamanne yhteystiedot:{% endif %}
 
 {{ order.customer.name }}
 {{ order.customer.address }}
@@ -25,9 +25,9 @@ Jos ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
 yhteyttä lipunmyyntiin joko vastaamalla tähän viestiin tai lähettämällä
 sähköpostia osoitteella lipunmyynti10@tracon.fi.
 
-Lippujen postitus aloitetaan 1. kesäkuuta 2010. Saatte erillisen
+{% if order.requires_shipping %}Lippujen postitus aloitetaan 1. kesäkuuta 2010. Saatte erillisen
 vahvistusviestin, kun lippunne on postitettu.
 
-Ystävällisin terveisin
+{% endif %}Ystävällisin terveisin
 -- 
 Tracon V -lipunmyynti <lipunmyynti10@tracon.fi>

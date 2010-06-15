@@ -15,7 +15,7 @@ Yhteensä: {{ order.formatted_price }} (ALV 0%)
 
 {% for shirt in shirts %}{{ shirt.count }} kpl	{{ shirt.size.readable_name }}
 {% endfor %}
-{% endif %}Liput toimitetaan seuraavaan osoitteeseen:
+{% endif %}{% if order.requires_shipping %}Liput toimitetaan seuraavaan osoitteeseen:{% else %}Antamanne yhteystiedot:{% endif %}
 
 {{ order.customer.name }}
 {{ order.customer.address }}
@@ -41,7 +41,7 @@ Viitenumeroa on ehdottomasti käytettävä maksettaessa!
 Vastaanotetut maksut käsitellään viikoittain. Kun maksunne on käsitelty,
 saatte tästä erillisen vahvistusviestin.
 
-Lippujen postitus aloitetaan 1. kesäkuuta 2010.
+{% if order.requires_shipping %}Lippujen postitus aloitetaan 1. kesäkuuta 2010.
 
 {% if order.tshirts %}Paidat voi noutaa tapahtumapaikalta lippujen yhteydessä toimitettavaa
 paitakuponkia vastaan.
@@ -49,6 +49,10 @@ paitakuponkia vastaan.
 {% endif %}{% if order.accommodation %}Lippujen yhteydessä toimitetaan majoituskuponki, joka tulee esittää
 majoituspaikan henkilökunnalle yhdessä rannekkeen kanssa. Majoituksen
 yksityiskohdista lähetetään sähköpostitse lisätietoa ennen tapahtumaa.
+
+{% endif %}{% else %}Ilmoittakaa tilauksen tekijän nimi (yllä) majoituspaikan valvojalle
+saapuessanne majoitukseen. Lisää tietoa majoituksesta toimitetaan lähempänä
+tapahtumaa erillisessä majoitusinfoviestissä.
 
 {% endif %}Ystävällisin terveisin
 -- 
