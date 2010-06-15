@@ -78,12 +78,23 @@ class Batch(models.Model):
 
             # Order has not yet been allocated into a Batch
             batch__isnull=True
-        ).order_by("confirm_time")[:max_orders]
+        ).order_by("confirm_time")
+
+        accepted = 0
 
         for order in orders:
+            # TODO do this in the database
+            # Some orders need not be shipped.
+            if not order.requires_shipping:
+                continue
+
             order.batch = batch
             order.create_codes()
             order.save()
+
+            accepted += 1
+            if accepted >= max_orders:
+                break
 
         return batch
 
@@ -126,8 +137,10 @@ class Batch(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=100)
     price_cents = models.IntegerField()
+    includes_ticket = models.BooleanField(default=False)
     includes_tshirt = models.BooleanField(default=False)
     includes_accommodation = models.BooleanField(default=False)
+    requires_shipping = models.BooleanField(default=True)
     available = models.BooleanField(default=True)
 
     @property
@@ -189,7 +202,20 @@ class Order(models.Model):
     @property
     def price_cents(self):
         # TODO Port to Django DB reduction functions if possible
-        return sum(op.price_cents for op in self.order_product_set.all()) + SHIPPING_AND_HANDLING_CENTS
+        return sum(op.price_cents for op in self.order_product_set.all()) + self.shipping_and_handling_cents
+
+    @property
+    def shipping_and_handling_cents(self):
+        return SHIPPING_AND_HANDLING_CENTS if self.requires_shipping else 0
+
+    @property
+    def formatted_shipping_and_handling(self):
+        return format_price(self.shipping_and_handling_cents)
+
+    @property
+    def requires_shipping(self):
+        # TODO do this in the database, too
+        return any(op.product.requires_shipping for op in self.order_product_set.filter(count__gt=0))
     
     @property
     def formatted_price(self):
