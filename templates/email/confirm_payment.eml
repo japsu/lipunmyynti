@@ -1,4 +1,4 @@
-H{% endif %}yvä vastaanottaja,
+Hyvä vastaanottaja,
 
 Olemme vastaanottaneet {{ order.payment_date|date }} maksun Tracon V
 -ennakkolipputilauksestanne numero {{ order.pk|stringformat:"04d" }}.
