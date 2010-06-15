@@ -137,7 +137,7 @@ class Batch(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=100)
     price_cents = models.IntegerField()
-    includes_ticket = models.BooleanField(default=False)
+    includes_ticket = models.BooleanField(default=True)
     includes_tshirt = models.BooleanField(default=False)
     includes_accommodation = models.BooleanField(default=False)
     requires_shipping = models.BooleanField(default=True)
@@ -238,17 +238,15 @@ class Order(models.Model):
     @property
     def tshirts(self):
         # TODO Port to Django DB reduction functions if possible
-        return sum(op.count for op in
-            self.order_product_set.filter(product__includes_tshirt=True))
+        return sum(op.tshirts for op in self.order_product_set.all())
 
     @property
     def accommodation(self):
-        return sum(op.count for op in
-            self.order_product_set.filter(product__includes_accommodation=True))
+        return sum(op.accommodation for op in self.order_product_set.all())
 
     @property
     def tickets(self):
-        return sum(op.count for op in self.order_product_set.all())
+        return sum(op.tickets for op in self.order_product_set.all())
 
     @property
     def reference_number_base(self):
@@ -416,6 +414,18 @@ class OrderProduct(models.Model):
     @property
     def formatted_price(self):
         return format_price(self.price_cents)
+
+    @property
+    def tickets(self):
+        return self.count if self.product.includes_ticket else 0
+
+    @property
+    def tshirts(self):
+        return self.count if self.product.includes_tshirt else 0
+
+    @property
+    def accommodation(self):
+        return self.count if self.product.includes_accommodation else 0
 
     def __unicode__(self):
         return u"%dx %s" % (

@@ -4,6 +4,10 @@
 
 from tracon.ticket_sales.models import Product
 
+for p in Product.objects.all():
+    p.available = False
+    p.save()
+
 Product(
     name="Majoituspaikka",
     includes_ticket=False,

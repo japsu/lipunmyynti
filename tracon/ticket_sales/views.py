@@ -383,13 +383,9 @@ def manage_view(request):
 @login_required
 def stats_view(request):
     all_sold_products = OrderProduct.objects.filter(order__confirm_time__isnull=False)
-    num_tickets = sum(op.count for op in all_sold_products)
-
-    with_tshirts = all_sold_products.filter(product__includes_tshirt=True)
-    num_tshirts = sum(op.count for op in with_tshirts)
-
-    with_accommodation = all_sold_products.filter(product__includes_accommodation=True)
-    num_accommodation = sum(op.count for op in with_accommodation)
+    num_tickets = sum(op.tickets for op in all_sold_products)
+    num_tshirts = sum(op.tshirts for op in all_sold_products)
+    num_accommodation = sum(op.accommodation for op in all_sold_products)
 
     confirmed_orders = Order.objects.filter(confirm_time__isnull=False)
     num_orders = confirmed_orders.count()
