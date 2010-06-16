@@ -200,6 +200,10 @@ class Order(models.Model):
         return self.is_batched and self.batch.is_delivered
 
     @property
+    def is_overdue(self):
+        return self.is_confirmed and self.due_date < datetime.now()
+
+    @property
     def price_cents(self):
         # TODO Port to Django DB reduction functions if possible
         return sum(op.price_cents for op in self.order_product_set.all()) + self.shipping_and_handling_cents
@@ -228,10 +232,10 @@ class Order(models.Model):
         elif self.is_paid:
             return "Paid; awaiting allocation into batch"
         elif self.is_confirmed:
-            if datetime.now() < self.due_date:
-                return "Confirmed; awaiting payment"
-            else:
+            if self.is_overdue:
                 return "Confirmed; payment overdue since %s" % self.formatted_due_date
+            else:
+                return "Confirmed; payment due %s" % self.formatted_due_date
         else:
             return "Unconfirmed"
 
@@ -316,6 +320,10 @@ class Order(models.Model):
         return render_to_string("email/confirm_delivery.eml", self.email_vars)
 
     @property
+    def payment_reminder_message(self):
+        return render_to_string("email/payment_reminder.eml", self.email_vars)
+
+    @property
     def due_date(self):
         if not self.confirm_time:
             return None
@@ -354,6 +362,15 @@ class Order(models.Model):
         EmailMessage(
             subject="Tracon V: Toimitusvahvistus (#%04d)" % self.pk,
             body=self.delivery_confirmation_message,
+            to=(self.customer.name_and_email,),
+            bcc=(TICKET_SPAM_ADDRESS,)
+        ).send(fail_silently=True)
+
+    def send_payment_reminder_message(self):
+        # TODO see above
+        EmailMessage(
+            subject="Tracon V: Maksumuistutus (#%04d)" % self.pk,
+            body=self.payment_reminder_message,
             to=(self.customer.name_and_email,),
             bcc=(TICKET_SPAM_ADDRESS,)
         ).send(fail_silently=True)
