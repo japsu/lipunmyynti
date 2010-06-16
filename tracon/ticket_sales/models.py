@@ -201,7 +201,7 @@ class Order(models.Model):
 
     @property
     def is_overdue(self):
-        return self.is_confirmed and self.due_date < datetime.now()
+        return self.is_confirmed and not self.is_paid and self.due_date < datetime.now()
 
     @property
     def price_cents(self):

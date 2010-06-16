@@ -97,6 +97,3 @@ def get_order_by_ref(ref):
     order = Order.objects.get(id=id)
     assert order.reference_number == ref
     return order
-
-# XXX these should prolly be made instance or class methods of Batch
-
