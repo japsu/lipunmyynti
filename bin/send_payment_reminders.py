@@ -4,7 +4,7 @@
 
 from tracon.ticket_sales.models import Order
 
-DRY_RUN = True
+DRY_RUN = False
 
 def get_overdue_orders():
     # XXX iterates over all orders, baaad
