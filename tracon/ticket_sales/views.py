@@ -393,6 +393,9 @@ def stats_view(request):
     paid_orders = confirmed_orders.filter(payment_time__isnull=False)
     num_paid_orders = paid_orders.count()
 
+    delivered_orders = paid_orders.filter(batch__delivery_time__isnull=False)
+    num_delivered_orders = delivered_orders.count()
+
     total_cents = sum(o.price_cents for o in confirmed_orders)
     # XXX encap
     total = "%d,%02d €" % divmod(total_cents, 100)
@@ -403,6 +406,7 @@ def stats_view(request):
     vars = dict(
         num_orders=num_orders,
         num_paid_orders=num_paid_orders,
+        num_delivered_orders=num_delivered_orders,
         num_tickets=num_tickets,
         num_tshirts=num_tshirts,
         num_accommodation=num_accommodation,
