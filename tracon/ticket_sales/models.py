@@ -324,6 +324,10 @@ class Order(models.Model):
         return render_to_string("email/payment_reminder.eml", self.email_vars)
 
     @property
+    def cancellation_notice_message(self):
+        return render_to_string("email/cancellation_notice.eml", self.email_vars)
+
+    @property
     def due_date(self):
         if not self.confirm_time:
             return None
@@ -371,6 +375,14 @@ class Order(models.Model):
         EmailMessage(
             subject="Tracon V: Maksumuistutus (#%04d)" % self.pk,
             body=self.payment_reminder_message,
+            to=(self.customer.name_and_email,),
+            bcc=(TICKET_SPAM_ADDRESS,)
+        ).send(fail_silently=True)
+
+    def send_cancellation_notice_message(self):
+        EmailMessage(
+            subject="Tracon V: Tilaus peruuntunut (#%04d)" % self.pk,
+            body=self.cancellation_notice_message,
             to=(self.customer.name_and_email,),
             bcc=(TICKET_SPAM_ADDRESS,)
         ).send(fail_silently=True)
