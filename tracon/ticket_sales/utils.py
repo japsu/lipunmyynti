@@ -97,3 +97,17 @@ def get_order_by_ref(ref):
     order = Order.objects.get(id=id)
     assert order.reference_number == ref
     return order
+
+SEARCH_CRITERIA_MAP = dict(
+    id="id",
+    name="customer__name__icontains",
+    email="customer__email__icontains"
+)
+
+def perform_search(**kwargs):
+    criteria = dict((SEARCH_CRITERIA_MAP[k], v)
+        for (k, v) in kwargs.iteritems() if v)
+    return Order.objects.filter(
+        confirm_time__isnull=False,
+        **criteria
+    )

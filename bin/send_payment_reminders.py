@@ -3,13 +3,15 @@
 # vim: shiftwidth=4 expandtab
 
 from tracon.ticket_sales.models import Order
+from datetime import  datetime, timedelta
 
 DRY_RUN = False
+THRESHOLD = datetime.now() - timedelta(days=2)
 
 def get_overdue_orders():
     # XXX iterates over all orders, baaad
     for order in Order.objects.all():
-        if order.is_confirmed and order.requires_shipping and order.is_overdue:
+        if order.is_confirmed and not order.requires_shipping and not order.is_paid and order.due_date < THRESHOLD:
             yield order
 
 def send_payment_reminders():
