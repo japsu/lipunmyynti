@@ -383,12 +383,12 @@ def manage_view(request):
 
 @login_required
 def stats_view(request):
-    all_sold_products = OrderProduct.objects.filter(order__confirm_time__isnull=False)
+    all_sold_products = OrderProduct.objects.filter(order__confirm_time__isnull=False, order__cancellation_time__isnull=True)
     num_tickets = sum(op.tickets for op in all_sold_products)
     num_tshirts = sum(op.tshirts for op in all_sold_products)
     num_accommodation = sum(op.accommodation for op in all_sold_products)
 
-    confirmed_orders = Order.objects.filter(confirm_time__isnull=False)
+    confirmed_orders = Order.objects.filter(confirm_time__isnull=False, cancellation_time__isnull=True)
     num_orders = confirmed_orders.count()
 
     paid_orders = confirmed_orders.filter(payment_time__isnull=False)
@@ -396,6 +396,9 @@ def stats_view(request):
 
     delivered_orders = paid_orders.filter(batch__delivery_time__isnull=False)
     num_delivered_orders = delivered_orders.count()
+
+    cancelled_orders = Order.objects.filter(cancellation_time__isnull=False)
+    num_cancelled_orders = cancelled_orders.count()
 
     total_cents = sum(o.price_cents for o in confirmed_orders)
     # XXX encap
@@ -408,6 +411,7 @@ def stats_view(request):
         num_orders=num_orders,
         num_paid_orders=num_paid_orders,
         num_delivered_orders=num_delivered_orders,
+        num_cancelled_orders=num_cancelled_orders,
         num_tickets=num_tickets,
         num_tshirts=num_tshirts,
         num_accommodation=num_accommodation,

@@ -77,7 +77,10 @@ class Batch(models.Model):
             payment_time__isnull=False,
 
             # Order has not yet been allocated into a Batch
-            batch__isnull=True
+            batch__isnull=True,
+
+            # Order has not been cancelled
+            cancellation_time__isnull=True
         ).order_by("confirm_time")
 
         accepted = 0
@@ -181,7 +184,16 @@ class Order(models.Model):
     confirm_time = models.DateTimeField(null=True, blank=True)
     ip_address = models.CharField(max_length=15, null=True, blank=True)
     payment_time = models.DateTimeField(null=True, blank=True)
+    cancellation_time = models.DateTimeField(null=True, blank=True)
     batch = models.ForeignKey(Batch, null=True, blank=True)
+
+    @property
+    def is_active(self):
+        return self.is_confirmed and not self.is_cancelled
+
+    @property
+    def is_outstanding(self):
+        return self.is_confirmed and self.requires_shipping and not self.is_cancelled
 
     @property
     def is_confirmed(self):
@@ -202,6 +214,10 @@ class Order(models.Model):
     @property
     def is_overdue(self):
         return self.is_confirmed and not self.is_paid and self.due_date < datetime.now()
+
+    @property
+    def is_cancelled(self):
+        return self.cancellation_time is not None
 
     @property
     def price_cents(self):
@@ -298,6 +314,13 @@ class Order(models.Model):
 
         self.save()        
         self.send_payment_confirmation_message()
+
+    def cancel(self):
+        assert self.is_confirmed
+
+        self.cancellation_time = datetime.now()
+        self.save()
+        self.send_cancellation_notice_message()
 
     @property
     def email_vars(self):
