@@ -7,11 +7,23 @@ vim: shiftwidth=2 expandtab
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fi" lang="fi">
   <head>
-    <title>Tracon V: Lippukauppa</title>
+    <title>Tracon VI: Lippukauppa</title>
     <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/style.css" />
   </head>
   <body>
-    <div id="main">
+	<div id="header" class="menu-paavalikko-container">
+	<ul id="topmenu" class="menu">
+		<li id="menu-item-home" class="menu-item current-menu-item page_item current_page_item"><a href="http://2011.tracon.fi/" title="Etusivu"><img id="homeicon" src="http://2011.tracon.fi/wp-content/themes/tracon6_teaser/images/icon-home.png" alt="Etusivu" /> Takaisin</a></li>
+	</ul>
+	</div>
+	<div id="glasspane">
+		<div id="showcase"></div>
+		<div id="glass"></div>
+		<p id="eyecatcher">Tracon VI jälleen Tampere-talossa 3.-4. syyskuuta 2011!</p>	
+	</div>
+    
+    <div id="contentwrapper">
+       <div id="content">
       {% comment %}
         Progress bar.
       {% endcomment %}
@@ -34,7 +46,6 @@ vim: shiftwidth=2 expandtab
       <form method="post" action="{% url_ptr phase.name %}">
         <div id="top">
           <div id="t_left">
-            <div id="header">
               {% block body_text %}
                 <p>Sisältö tulee tähän.</p>
               {% endblock body_text %}
@@ -52,33 +63,12 @@ vim: shiftwidth=2 expandtab
                 {% endfor %}
               </div>
             </div>
-            <div id="content">
               {% block form_content %}
                 <p>Lomakkeen sisältö tulee tähän.</p>
               {% endblock form_content %}
-            </div>
-          </div>
-          <div id="t_right">
-            <img class="mascot" src="{{ MEDIA_URL }}/gm{{ phase.index|add:1 }}.png" alt="Ernest" />
-          </div>
-        </div>
-
-        <div id="bottom">
-          <div id="b_left">
-            {% comment %}
-              Implementation of pink mascot.
-              Use block pink_mascot in templates for file name.
-            {% endcomment %}
-            <img class="mascot" src="{{ MEDIA_URL }}/pm{{ phase.index|add:1 }}.png" alt="Frulle" />
           </div>
 
-          <div id="b_right">
-            <div id="bubble">
-              {% block mascot_text %}
-                <p>Frullen jutut tulee tähän.</p>
-              {% endblock mascot_text %}
-            </div>
-           
+        <div id="bottom">           
             <div id="navi">
               {% comment %}
                 Implementation of navigation buttons.
@@ -88,34 +78,35 @@ vim: shiftwidth=2 expandtab
                 {% comment %}
                   This button is removed from view using CSS.
                 {% endcomment %}
-                <button class="enterhack" type="submit" name="action" value="next">{{ phase.next_text|safe }}</button>
+                <button class="enterhack buttongradient" type="submit" name="action" value="next">{{ phase.next_text|safe }}</button>
               {% endif %}
 
               {% if phase.can_cancel %}
-                <button class="abort" type="submit" name="action" value="cancel" tabindex="300">&times; Keskeytä</button>
+                <button class="abort buttongradient" type="submit" name="action" value="cancel" tabindex="300">&times; Keskeytä</button>
               {% else %}
-                <button class="abort" type="submit" name="action" value="cancel" disabled="disabled">&times; Keskeytä</button>
+                <button class="abort buttongradient btndisabled" type="submit" name="action" value="cancel" disabled="disabled">&times; Keskeytä</button>
               {% endif %}
 
               {% if phase.prev_phase %}
-                <button type="submit" name="action" value="prev" tabindex="200">&laquo; Edellinen</button>
+                <button class="buttongradient" type="submit" name="action" value="prev" tabindex="200">&laquo; Edellinen</button>
               {% else %}
-                <button type="submit" name="action" value="prev" disabled="disabled">&laquo; Edellinen</button>
+                <button class="buttongradient btndisabled" type="submit" name="action" value="prev" disabled="disabled">&laquo; Edellinen</button>
               {% endif %}
 
               {% if phase.next_phase %}
-                <button type="submit" name="action" value="next" tabindex="100">{{ phase.next_text|safe }}</button>
+                <button class="buttongradient" type="submit" name="action" value="next" tabindex="100">{{ phase.next_text|safe }}</button>
               {% else %}
-              <button type="submit" name="action" value="next" disabled="disabled">{{ phase.next_text|safe }}</button>
+              <button class="buttongradient btndisabled" type="submit" name="action" value="next" disabled="disabled">{{ phase.next_text|safe }}</button>
               {% endif %}
             </div>
-          </div>
+        </div>
         </div>
       </form>
+      </div>
     </div>
     <div id="footer">
-      <p>Tracon ry 2009&ndash;2010 &middot; lipunmyynti10 ät tracon piste fi</p>
-      <p id="rekisteriseloste"><a href="http://2010.tracon.fi/lippukaupan-rekisteriseloste" target="_blank">Henkilötietolain (523/99) 10 § mukainen rekisteriseloste</a></p>
+      <p>Tracon ry 2009&ndash;2011 &middot; lipunmyynti11 ät tracon piste fi</p>
+      <p id="rekisteriseloste"><a href="http://2011.tracon.fi/lippukaupan-rekisteriseloste" target="_blank">Henkilötietolain (523/99) 10 § mukainen rekisteriseloste</a></p>
     </div>
   </body>
 </html>

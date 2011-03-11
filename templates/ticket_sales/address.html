@@ -6,10 +6,10 @@ vim: shiftwidth=2 expandtab
 {% endcomment %}
 {% block body_text %}
 <h1>Toimitusosoite</h1>
-<p>Syötä toimitusosoite.</p>
 {% endblock body_text %}
 {% block form_content %}
-<fieldset>
+<fieldset><legend>Syötä toimitusosoite.</legend>
+<p>Tarvitsemme vielä osoitteen, johon lähetämme tilaamasi Tracon-lippupaketit. Tilausvahvistuksen ja maksuohjeet saat sähköpostitse. Puhelinnumeroa käytämme, mikäli ongelmia syntyy. Emme luovuta yhteystietojasi eteenpäin.</p>
 <div class="req"><label for="id_name">Nimi</label>{{ form.name }}</div>
 <div class="req"><label for="id_address">Osoite</label>{{ form.address }}</div>
 <div class="req"><label for="id_zip_code">Postinumero</label>{{ form.zip_code }}</div>
@@ -19,5 +19,4 @@ vim: shiftwidth=2 expandtab
 </fieldset>
 {% endblock form_content %}
 {% block mascot_text %}
-<p>Tarvitsemme vielä osoitteen, johon lähetämme tilaamasi Tracon-lippupaketit. Tilausvahvistuksen ja maksuohjeet saat sähköpostitse. Puhelinnumeroa käytämme, mikäli ongelmia syntyy. Emme luovuta yhteystietojasi eteenpäin.</p>
 {% endblock mascot_text %}

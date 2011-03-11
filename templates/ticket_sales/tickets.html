@@ -6,20 +6,20 @@ vim: shiftwidth=2 expandtab
 {% endcomment %}
 {% block body_text %}
 <h1>Valitse ostettavat ennakkolippupaketit</h1>
-<p>Syötä tilattavat tuotteet.</p>
+<p>Kirjoita kenttiin, montako mitäkin tuotetta haluat. Voit tilata useita tuotteita samalla kertaa. Voit vielä tarkistaa tiedot myöhemmin, ennen kuin vahvistat tilauksen.</p>
 {% endblock body_text %}
 {% block form_content %}
 <table>
   <tr>
     <th>Tuote</th>
-    <th>Kappalehinta</th>
+    <th class="right">Kappalehinta</th>
     <th class="input">Määrä</th>
   </tr>
   {% for iform in form %}
 {% comment %}    {{ iform }}{% endcomment %}
     <tr>
       <td>{{ iform.instance.product.name }}</td>
-      <td>{{ iform.instance.product.formatted_price }}</td>
+      <td class="right">{{ iform.instance.product.formatted_price }}</td>
       {% if iform.instance.product.available %}
         <td class="tcount">{{ iform.count }}</td>
       {% else %}
@@ -31,5 +31,4 @@ vim: shiftwidth=2 expandtab
 <p id="lisatietojalipuista"><a href="http://2010.tracon.fi/liput" target="_blank">Lisätietoja lipuista...</a></p>
 {% endblock form_content %}
 {% block mascot_text %}
-<p>Kirjoita kenttiin, montako mitäkin tuotetta haluat. Voit tilata useita tuotteita samalla kertaa. Voit vielä tarkistaa tiedot myöhemmin, ennen kuin vahvistat tilauksen.</p>
 {% endblock %}
