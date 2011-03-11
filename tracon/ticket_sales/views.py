@@ -19,7 +19,6 @@ from tracon.ticket_sales.format import *
 __all__ = [
     "welcome_view",
     "tickets_view",
-    "shirts_view",
     "address_view",
     "confirm_view",
     "thanks_view",
@@ -126,10 +125,6 @@ class Phase(object):
 
         for phase in ALL_PHASES:
             available = phase.index < self.index and not order.is_confirmed
-
-            if phase is shirts_view:
-                available = available and order.tshirts > 0
-
             current = phase is self
 
             phases.append((phase, available, current))
@@ -179,7 +174,7 @@ class TicketsPhase(Phase):
     friendly_name = "Liput"
     template = "ticket_sales/tickets.html"
     prev_phase = "welcome_phase"
-    next_phase = "shirts_phase"
+    next_phase = "address_phase"
 
     def make_form(self, request):
         order = get_order(request)
@@ -207,98 +202,19 @@ class TicketsPhase(Phase):
     def save(self, request, form):
         multiform_save(form)
 
-    def next(self, request):
-        order = get_order(request)
-
-        if order.tshirts > 0:
-            # The user is ordering T-shirts. Ask for shirt sizes.
-            next_phase = "shirts_phase"
-        else:
-            # The user is not ordering T-shirts. Skip the shirt size phase.
-            next_phase = "address_phase"
-
-            # If the user has first selected some T-shirts and given sizes for 'em,
-            # and then removes the products with T-shirts, we need to make sure the
-            # T-shirt orders don't stay.
-            order.shirt_order_set.all().delete()
-
-        return redirect(next_phase)
-
 tickets_view = TicketsPhase()
-
-class ShirtsPhase(Phase):
-    name = "shirts_phase"
-    friendly_name = "Paidat"
-    template = "ticket_sales/shirts.html"
-    next_phase = "address_phase"
-    prev_phase = "tickets_phase"
-
-    def __get_sizes(self, **kwargs):
-        return ShirtSize.objects.filter(**kwargs).order_by("id")
-
-    def vars(self, request, form):
-        order = get_order(request)
-        num_shirts = order.tshirts
-        ladyfit_hack = [(False, "Tavallinen paita"), (True, "Ladyfit-paita")]
-        return dict(num_shirts=num_shirts, ladyfit_hack=ladyfit_hack)
-
-    def make_form(self, request):
-        order = get_order(request)
-        sizes = self.__get_sizes()
-        forms = []
-        
-        for size in sizes:
-            shirt_order, created = ShirtOrder.objects.get_or_create(order=order, size=size)
-            form = init_form(ShirtOrderForm, request, instance=shirt_order, prefix="s%d" % shirt_order.pk)
-            forms.append(form)
-
-        return forms
-
-    def validate(self, request, form):
-        order = get_order(request)
-        errors = multiform_validate(form)
-
-        if errors:
-            return errors
-
-        if sum(i.cleaned_data["count"] for i in form) != order.tshirts:
-            errors.append("num_tshirts")
-
-        return errors
-
-    def save(self, request, form):
-        multiform_save(form)
-
-    def available(self, request):
-        order = get_order(request)
-        sup_available = super(ShirtsPhase, self).available(request)
-
-        if not sup_available:
-            return False
-
-        return order.tshirts > 0
-
-shirts_view = ShirtsPhase()
 
 class AddressPhase(Phase):
     name = "address_phase"
     friendly_name = "Toimitusosoite"
     template = "ticket_sales/address.html"
-    prev_phase = "shirts_phase"
+    prev_phase = "tickets_phase"
     next_phase = "confirm_phase"
 
     def make_form(self, request):
         order = get_order(request)
 
         return init_form(CustomerForm, request, instance=order.customer)
-
-    def prev(self, request):
-        order = get_order(request)
-
-        if order.tshirts:
-            return redirect("shirts_phase")
-        else:
-            return redirect("tickets_phase")
 
     def save(self, request, form):
         order = get_order(request)
@@ -319,10 +235,9 @@ class ConfirmPhase(Phase):
 
     def vars(self, request, form):
         order = get_order(request)
-        shirts = ShirtOrder.objects.filter(order=order, count__gt=0)
         products = OrderProduct.objects.filter(order=order, count__gt=0)
 
-        return dict(shirts=shirts, products=products)
+        return dict(products=products)
 
     def save(self, request, form):
         pass
@@ -352,10 +267,9 @@ class ThanksPhase(Phase):
 
     def vars(self, request, form):
         order = get_order(request)
-        shirts = ShirtOrder.objects.filter(order=order)
         products = OrderProduct.objects.filter(order=order)
 
-        return dict(shirts=shirts, products=products)
+        return dict(products=products)
 
     def save(self, request, form):
         pass
@@ -368,7 +282,7 @@ class ThanksPhase(Phase):
 
 thanks_view = ThanksPhase()
 
-ALL_PHASES = [welcome_view, tickets_view, shirts_view, address_view, confirm_view, thanks_view]
+ALL_PHASES = [welcome_view, tickets_view, address_view, confirm_view, thanks_view]
 for num, phase in enumerate(ALL_PHASES):
     phase.index = num
 
@@ -382,33 +296,8 @@ def manage_view(request):
 
 @login_required
 def stats_view(request):
-    all_sold_products = OrderProduct.objects.filter(order__confirm_time__isnull=False)
-    num_tickets = sum(op.tickets for op in all_sold_products)
-    num_tshirts = sum(op.tshirts for op in all_sold_products)
-    num_accommodation = sum(op.accommodation for op in all_sold_products)
-
-    confirmed_orders = Order.objects.filter(confirm_time__isnull=False)
-    num_orders = confirmed_orders.count()
-
-    paid_orders = confirmed_orders.filter(payment_time__isnull=False)
-    num_paid_orders = paid_orders.count()
-
-    total_cents = sum(o.price_cents for o in confirmed_orders)
-    # XXX encap
-    total = "%d,%02d €" % divmod(total_cents, 100)
-
-    paid_cents = sum(o.price_cents for o in paid_orders)
-    paid = "%d,%02d €" % divmod(paid_cents, 100)
-
-    vars = dict(
-        num_orders=num_orders,
-        num_paid_orders=num_paid_orders,
-        num_tickets=num_tickets,
-        num_tshirts=num_tshirts,
-        num_accommodation=num_accommodation,
-        total=total,
-        paid=paid
-    )
+    # TODO rewrite me
+    vars = {}
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/stats.html", vars, context_instance=context)
 
