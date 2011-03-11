@@ -152,8 +152,8 @@ class Product(models.Model):
 
 class Customer(models.Model):
     # REVERSE: order = OneToOne(Order)
-
-    name = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
     email = models.EmailField()
     address = models.CharField(max_length=200)
     zip_code = models.CharField(max_length=5)
@@ -162,6 +162,10 @@ class Customer(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def name(self):
+        return u"%s %s" % (self.first_name, self.last_name)
 
     @property
     def sanitized_name(self):
