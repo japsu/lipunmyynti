@@ -8,11 +8,8 @@ for p in Product.objects.all():
     p.available = False
     p.save()
 
+# TODO minä olen poro, lailalalai, vanhentunut poro, lailalalai
 Product(
     name="Majoituspaikka",
-    includes_ticket=False,
-    includes_tshirt=False,
-    includes_accommodation=True,
-    requires_shipping=False,
     price_cents=1000
 ).save()

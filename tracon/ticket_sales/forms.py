@@ -9,7 +9,6 @@ from tracon.ticket_sales.models import *
 __all__ = [
     "NullForm",
     "OrderProductForm",
-    "ShirtOrderForm",
     "CustomerForm",
     "SinglePaymentForm",
     "ConfirmSinglePaymentForm",
@@ -44,13 +43,6 @@ class OrderProductForm(forms.ModelForm):
         exclude = ("order", "product")
         model = OrderProduct
         
-class ShirtOrderForm(forms.ModelForm):
-    count = HappyIntegerField(3)
-
-    class Meta:
-        exclude = ("order", "size")
-        model = ShirtOrder
-
 class CustomerForm(forms.ModelForm):
     zip_code = FIZipCodeField()
 

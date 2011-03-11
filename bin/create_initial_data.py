@@ -4,41 +4,22 @@
 
 from tracon.ticket_sales.models import *
 
-BASE_SIZES = ["XS", "S", "M", "L", "XL", "XXL", "3XL", "4XL", "5XL"]
-
-NORMAL_NOT_AVAILABLE = ["XS"]
-LADYFIT_NOT_AVAILABLE = ["3XL", "4XL", "5XL"]
-
-def create_shirt_sizes():
-    # Create normal sizes
-    for size in BASE_SIZES:
-        available = size not in NORMAL_NOT_AVAILABLE
-        obj = ShirtSize(name=size, ladyfit=False, available=available)
-	obj.save()
-
-    # Create ladyfit sizes
-    for size in BASE_SIZES:
-        available = size not in LADYFIT_NOT_AVAILABLE
-        obj = ShirtSize(name=size, ladyfit=True, available=available)
-	obj.save()
-
 PRODUCTS = [
-    ("Ennakkolippu ja T-paita", 2200, True, False),
-    ("Ennakkolippu, T-paita ja lattiamajoitus", 3200, True, True),
-    ("Ennakkolippu ja lattiamajoitus", 1900, False, True),
-    ("Pelkkä ennakkolippu", 900, False, False),
+    ("Koko viikonlopun lippu", 1500, True),
+    ("Lauantailippu", 1000, True),
+    ("Sunnuntailippu", 1000, True),
+    ("Lattiamajoitus lauantain ja sunnuntain väliseksi yöksi", 700, False),
+    ("Taidekujapöytä", 1500, False)
 ]
 
 def create_products():
-    for name, price_cents, tshirt, accom in PRODUCTS:
+    for name, price_cents, requires_shipping in PRODUCTS:
         obj = Product(
             name=name,
             price_cents=price_cents,
-            includes_tshirt=tshirt,
-            includes_accommodation=accom
+            requires_shipping=requires_shipping
         )
         obj.save()
 
 if __name__ == "__main__":
-    create_shirt_sizes()
     create_products()

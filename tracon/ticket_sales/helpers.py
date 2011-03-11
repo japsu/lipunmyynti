@@ -4,7 +4,7 @@
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
-from tracon.ticket_sales.models import Order, ShirtOrder, OrderProduct
+from tracon.ticket_sales.models import Order, OrderProduct
 
 __all__ = [
     "redirect",
@@ -44,7 +44,6 @@ def destroy_order(request):
         return
     
     order.order_product_set.all().delete()
-    order.shirt_order_set.all().delete()
 
     if order.customer:
         order.customer.delete()

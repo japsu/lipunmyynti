@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
-dropdb -U tracon_dev tracon_dev
-createdb -U tracon_dev -E UNICODE tracon_dev
+sudo -u postgres dropdb traconkauppa
+sudo -u postgres createdb -O traconkauppa -E UNICODE traconkauppa

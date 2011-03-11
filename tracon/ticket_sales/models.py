@@ -18,10 +18,6 @@ __all__ = [
     "Customer",
     "Order",
     "OrderProduct",
-    "ShirtSize",
-    "ShirtOrder",
-    "ShirtCode",
-    "AccommodationCode",
 ]
 
 TICKET_SPAM_ADDRESS = "Tracon V -lipputarkkailu <lipunmyyntispam10@tracon.fi>"
@@ -137,9 +133,6 @@ class Batch(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=100)
     price_cents = models.IntegerField()
-    includes_ticket = models.BooleanField(default=True)
-    includes_tshirt = models.BooleanField(default=False)
-    includes_accommodation = models.BooleanField(default=False)
     requires_shipping = models.BooleanField(default=True)
     available = models.BooleanField(default=True)
 
@@ -178,7 +171,6 @@ class Customer(models.Model):
 
 class Order(models.Model):
     # REVERSE: order_product_set = ForeignKeyFrom(OrderProduct)
-    # REVERSE: shirt_order_set = ForeignKeyFrom(ShirtOrder)
 
     customer = models.OneToOneField(Customer, null=True, blank=True)
     start_time = models.DateTimeField(auto_now=True)
@@ -240,19 +232,6 @@ class Order(models.Model):
             return "Unconfirmed"
 
     @property
-    def tshirts(self):
-        # TODO Port to Django DB reduction functions if possible
-        return sum(op.tshirts for op in self.order_product_set.all())
-
-    @property
-    def accommodation(self):
-        return sum(op.accommodation for op in self.order_product_set.all())
-
-    @property
-    def tickets(self):
-        return sum(op.tickets for op in self.order_product_set.all())
-
-    @property
     def reference_number_base(self):
         return "5%04d" % self.pk
 
@@ -280,7 +259,6 @@ class Order(models.Model):
         assert self.customer is not None
         assert not self.is_confirmed
 
-        self.shirt_order_set.filter(count__lte=0).delete()
         self.order_product_set.filter(count__lte=0).delete()
 
         self.confirm_time = datetime.now()
@@ -303,8 +281,7 @@ class Order(models.Model):
     def email_vars(self):
         return dict(
             order=self,
-            products=self.order_product_set.all(),
-            shirts=self.shirt_order_set.all()
+            products=self.order_product_set.all()
         )
 
     @property
@@ -357,40 +334,8 @@ class Order(models.Model):
             bcc=(TICKET_SPAM_ADDRESS,)
         ).send(fail_silently=True)
 
-    @property
-    def is_there_shirt_codes(self):
-        return bool(ShirtCode.objects.filter(shirt_order__order=self))
-
-    @property
-    def is_there_accommodation_codes(self):
-        return bool(self.accommodation_code_set.all())
-
-    def create_codes(self):
-        self.create_shirt_codes()
-        self.create_accommodation_codes()
-
-    def create_shirt_codes(self):
-        if self.is_there_shirt_codes:
-            return
-
-        for shirt_order in self.shirt_order_set.all():
-            for i in xrange(shirt_order.count):
-                ShirtCode.create_random(shirt_order=shirt_order)
-
-    def create_accommodation_codes(self):
-        if self.is_there_accommodation_codes:
-            return
-
-        for i in xrange(self.accommodation):
-            AccommodationCode.create_random(order=self)
-
     def render(self, c):
         render_receipt(self, c)
-        render_codes(
-            shirt_codes=ShirtCode.objects.filter(shirt_order__order=self),
-            accommodation_codes=self.accommodation_code_set.all(),
-            c=c
-        )
 
     def __unicode__(self):
         return u"#%s %s (%s)" % (
@@ -419,84 +364,8 @@ class OrderProduct(models.Model):
     def formatted_price(self):
         return format_price(self.price_cents)
 
-    @property
-    def tickets(self):
-        return self.count if self.product.includes_ticket else 0
-
-    @property
-    def tshirts(self):
-        return self.count if self.product.includes_tshirt else 0
-
-    @property
-    def accommodation(self):
-        return self.count if self.product.includes_accommodation else 0
-
     def __unicode__(self):
         return u"%dx %s" % (
             self.count,
             self.product.name if self.product is not None else None
         )
-
-class ShirtSize(models.Model):
-    # REVERSE: shirt_order_set = ForeignKeyFrom(ShirtOrder)
-
-    name = models.CharField(max_length=5)
-    ladyfit = models.BooleanField()
-    available = models.BooleanField()
-
-    @property
-    def readable_name(self):
-        if self.ladyfit:
-            return u"%s Ladyfit" % (self.name)
-        else:
-            return self.name
-
-    def __unicode__(self):
-        return self.readable_name
-
-class ShirtOrder(models.Model):
-    order = models.ForeignKey(Order, related_name="shirt_order_set")
-    size = models.ForeignKey(ShirtSize, related_name="shirt_order_set")
-    count = models.IntegerField(default=0)
-
-    @property
-    def target(self):
-        return self.size
-
-    def __unicode__(self):
-        return u"%dx%s" % (
-            self.count,
-            self.size
-        )
-
-def create_random_code(cls, **kwargs):
-    while True:
-        try:
-            c = cls(id=generate_code(), **kwargs)
-            c.save()
-            break
-        except IntegrityError:
-            pass
-
-    return c
-
-class ShirtCode(models.Model):
-    shirt_order = models.ForeignKey(ShirtOrder, null=True, blank=True, related_name="shirt_code_set")
-    
-    @classmethod
-    def create_random(cls, **kwargs):
-        return create_random_code(cls, **kwargs)
-
-    def __unicode__(self):
-        return format_code(self.id)
-
-class AccommodationCode(models.Model):
-    order = models.ForeignKey(Order, null=True, blank=True, related_name="accommodation_code_set")
-
-    @classmethod
-    def create_random(cls, **kwargs):
-        return create_random_code(cls, **kwargs)
-
-    def __unicode__(self):
-        return format_code(self.id)
-
