@@ -4,7 +4,7 @@ encoding: utf-8
 {% endcomment %}
 <div id="left">
   <h2>Liput</h2>
-
+	<div class="box">
   <ul>
     {% for product in products %}
       <li>
@@ -15,17 +15,11 @@ encoding: utf-8
   </ul>
 
   <p><em>Yhteensä: {{ order.formatted_price }}</em></p>
-
-  {% if shirts %}
-    <h2>Paidat</h2>
-
-    <p>{% for shirt in shirts %}{{ shirt.count }}&times; {{ shirt.size.readable_name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-  {% endif %}
+</div>
 </div>
 
-<div id="right">
-  <h2>Toimitusosoite</h2>
-
+<h2>Toimitusosoite</h2>
+<div class="box">
   <p>
     {{ order.customer.name }}<br/>
     {{ order.customer.address }}<br/>

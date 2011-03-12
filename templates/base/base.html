@@ -1,8 +1,7 @@
 {% comment %}
 encoding: utf-8
 vim: shiftwidth=2 expandtab
-{% endcomment %}{% load wizard_ui %}<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html 
+{% endcomment %}{% load wizard_ui %}<!DOCTYPE html 
    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fi" lang="fi">
@@ -11,6 +10,9 @@ vim: shiftwidth=2 expandtab
     <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/style.css" />
   </head>
   <body>
+	<div id="swirlhack"> 
+		<div id="swirl"></div> 
+	</div> 
 	<div id="header" class="menu-paavalikko-container">
 	<ul id="topmenu" class="menu">
 		<li id="menu-item-home" class="menu-item current-menu-item page_item current_page_item"><a href="http://2011.tracon.fi/" title="Etusivu"><img id="homeicon" src="http://2011.tracon.fi/wp-content/themes/tracon6_teaser/images/icon-home.png" alt="Etusivu" /> Takaisin</a></li>
@@ -24,6 +26,9 @@ vim: shiftwidth=2 expandtab
     
     <div id="contentwrapper">
        <div id="content">
+	<!--[if lte IE 7]>
+	<div id="updateie">Selaimesi versio on vanhentunut, eikä lippukauppamme tue sitä. Uusin versio selaimestasi löytyy <a href="http://www.microsoft.com/finland/windows/internet-explorer/worldwide-sites.aspx">täältä</a>.</div>
+	<![endif]-->
       {% comment %}
         Progress bar.
       {% endcomment %}

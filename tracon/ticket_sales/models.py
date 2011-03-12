@@ -20,7 +20,7 @@ __all__ = [
     "OrderProduct",
 ]
 
-TICKET_SPAM_ADDRESS = "Tracon V -lipputarkkailu <lipunmyyntispam10@tracon.fi>"
+TICKET_SPAM_ADDRESS = "Tracon VI -lipputarkkailu <lipunmyyntispam11@tracon.fi>"
 SHIPPING_AND_HANDLING_CENTS = 100
 DUE_DAYS = 7
 
@@ -310,7 +310,7 @@ class Order(models.Model):
     def send_order_confirmation_message(self):
         # TODO encap this, and don't fail silently, warn admins instead
         EmailMessage(
-            subject="Tracon V: Tilausvahvistus (#%04d)" % self.pk,
+            subject="Tracon VI: Tilausvahvistus (#%04d)" % self.pk,
             body=self.order_confirmation_message,
             to=(self.customer.name_and_email,),
             bcc=(TICKET_SPAM_ADDRESS,)
@@ -319,7 +319,7 @@ class Order(models.Model):
     def send_payment_confirmation_message(self):
         # TODO see above
         EmailMessage(
-            subject="Tracon V: Maksuvahvistus (#%04d)" % self.pk,
+            subject="Tracon VI: Maksuvahvistus (#%04d)" % self.pk,
             body=self.payment_confirmation_message,
             to=(self.customer.name_and_email,),
             bcc=(TICKET_SPAM_ADDRESS,)
@@ -328,7 +328,7 @@ class Order(models.Model):
     def send_delivery_confirmation_message(self):
         # TODO see above
         EmailMessage(
-            subject="Tracon V: Toimitusvahvistus (#%04d)" % self.pk,
+            subject="Tracon VI: Toimitusvahvistus (#%04d)" % self.pk,
             body=self.delivery_confirmation_message,
             to=(self.customer.name_and_email,),
             bcc=(TICKET_SPAM_ADDRESS,)

@@ -38,7 +38,7 @@ __all__ = [
 
 FIRST_PHASE = "welcome_phase"
 LAST_PHASE = "thanks_phase"
-EXIT_URL = "http://2010.tracon.fi"
+EXIT_URL = "http://2011.tracon.fi"
 
 def multiform_validate(forms):
     return ["syntax"] if not all(
