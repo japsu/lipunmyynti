@@ -9,8 +9,6 @@ from django.core.mail import EmailMessage
 
 from tracon.ticket_sales.format import format_date, format_datetime, format_price
 from tracon.receipt.pdf import render_receipt
-from tracon.control_slips.pdf import render_codes
-from tracon.control_slips.codes import generate_code, format_code
 
 __all__ = [
     "Batch",
