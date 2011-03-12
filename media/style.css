@@ -497,3 +497,10 @@ button.enterhack{
 	margin-bottom:10px;
 	color:#600;
 }
+#errors{
+	border:1px solid #b00;
+	background:#fee;
+	padding:0px 10px 5px 10px;
+	color:#600;
+	margin:10px 0;
+}

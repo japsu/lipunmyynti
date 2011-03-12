@@ -54,6 +54,7 @@ vim: shiftwidth=2 expandtab
               {% block body_text %}
                 <p>Sisältö tulee tähän.</p>
               {% endblock body_text %}
+              {% if errors %}
               <div id="errors">
                 {% for error in errors %}
                   {% ifequal error "syntax" %}
@@ -64,6 +65,7 @@ vim: shiftwidth=2 expandtab
                   {% endifequal %}
                 {% endfor %}
               </div>
+              {% endif %}
             </div>
               {% block form_content %}
                 <p>Lomakkeen sisältö tulee tähän.</p>
