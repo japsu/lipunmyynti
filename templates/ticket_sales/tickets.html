@@ -16,36 +16,30 @@ vim: shiftwidth=2 expandtab
     <th class="input">Määrä</th>
   </tr>
   {% for iform in form %}
-{% comment %}    {{ iform }}{% endcomment %}
-{% if iform.instance.product.in_stock %}
-    <tr class="{{ iform.instance.product.classname }}">
-    {% else %}
-    <tr class="{{ iform.instance.product.classname }} loppuunmyyty">
-	{% endif %}
-	{% if iform.instance.product.image %}
-	  <td class="productimage"><img src="{{ MEDIA_URL }}/images/{{ iform.instance.product.image }}" alt="{{ iform.instance.product.name }}" /></td>
-    {% else %}
-	  <td class="productimage"><img src="{{ MEDIA_URL }}/images/oletustuotekuva.png" alt="Ei tuotekuvaa" /></td>
-	{% endif %}
-      <td class="productname">{{ iform.instance.product.name }} <div class="description">{{ iform.instance.product.description }}</div>
-	{% if iform.instance.product.in_stock %}
-		{% if iform.instance.product.max_order_amount < 10 %}
-		<div class="tuotesaldo">Saatavilla enää {{ iform.instance.product.max_order_amount }} kpl!</div>
-		{% endif %}
-	{% else %}
-		<div class="loppuunmyyty">Loppuunmyyty!</div>
-	{% endif %}
-      </small></td>
-      <td class="right">{{ iform.instance.product.formatted_price }}</td>
-      {% if iform.instance.product.available %}
-	{% if iform.instance.product.in_stock %}
-        <td class="tcount">{{ iform.count }}</td>
-	{% else %}
-        <td class="tcount">&nbsp;</td>
-	{% endif %}
-        
+    <tr class="{{ iform.instance.product.classname }}{% if not iform.instance.product.in_stock %} loppuunmyyty{% endif %}">
+
+      {% if iform.instance.product.image %}
+        <td class="productimage"><img src="{{ MEDIA_URL }}/images/{{ iform.instance.product.image }}" alt="{{ iform.instance.product.name }}" /></td>
       {% else %}
-        <td class="tcount">Ei saatavilla</td>
+        <td class="productimage"><img src="{{ MEDIA_URL }}/images/oletustuotekuva.png" alt="Ei tuotekuvaa" /></td>
+      {% endif %}
+
+      <td class="productname">{{ iform.instance.product.name }} <div class="description">{{ iform.instance.product.description }}</div>
+        {% if iform.instance.product.in_stock %}
+          {% if iform.instance.product.availability_low %}
+            <div class="tuotesaldo">Saatavilla enää {{ iform.instance.product.max_order_amount }} kpl!</div>
+          {% endif %}
+        {% else %}
+          <div class="loppuunmyyty">Loppuunmyyty!</div>
+        {% endif %}
+      </td>
+
+      <td class="right">{{ iform.instance.product.formatted_price }}</td>
+
+      {% if iform.instance.product.in_stock %}
+        <td class="tcount">{{ iform.count }}</td>
+      {% else %}
+        <td class="tcount">&nbsp;</td>
       {% endif %}
     </tr>
   {% endfor %}
