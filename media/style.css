@@ -449,11 +449,28 @@ button.buttongradient{
 	-webkit-border-radius:10px;
 	-khtml-border-radius:10px;
 	border-radius:10px;
-	padding:3px 10px;
+	padding:5px 10px;
 	cursor:pointer;cursor:hand;
 }
 button.btndisabled{
 	background:#eee;
 	border:1px solid #aaa;
 	cursor:default;
+}
+fieldset label{
+	clear:left;
+	float:left;
+	display:block;
+	width:160px
+}
+fieldset div{
+	border-bottom:1px dotted #ddd;
+	width:400px;
+	padding:6px 0;
+}
+fieldset div input{
+	width:220px;
+}
+#address_container{
+	padding-top:10px;
 }
