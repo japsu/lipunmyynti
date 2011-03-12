@@ -14,11 +14,11 @@ vim: shiftwidth=2 expandtab
 <div id="address_container">
 <div class="req"><label for="id_first_name">Etunimi <strong>*</strong></label>{{ form.first_name }}</div>
 <div class="req"><label for="id_last_name">Sukunimi <strong>*</strong></label>{{ form.last_name }}</div>
-<div class="req"><label for="id_address">Osoite <strong>*</strong></label>{{ form.address }}</div>
-<div class="req"><label for="id_zip_code">Postinumero <strong>*</strong></label>{{ form.zip_code }}</div>
-<div class="req"><label for="id_city">Postitoimipaikka <strong>*</strong></label>{{ form.city }}</div>
+<div class="req addrfirst"><label for="id_address">Osoite <strong>*</strong></label>{{ form.address }}</div>
+<div class="req addr"><label for="id_zip_code">Postinumero <strong>*</strong></label>{{ form.zip_code }}</div>
+<div class="req addrlast"><label for="id_city">Postitoimipaikka <strong>*</strong></label>{{ form.city }}</div>
 <div class="req"><label for="id_email">Sähköpostiosoite <strong>*</strong></label>{{ form.email }}</div>
-<div class="opt"><label for="id_phone_number">Puhelinnumero</label>{{ form.phone_number }}</div>
+<div class="opt last"><label for="id_phone_number">Puhelinnumero</label>{{ form.phone_number }}</div>
 </div>
 </fieldset>
 {% endblock form_content %}

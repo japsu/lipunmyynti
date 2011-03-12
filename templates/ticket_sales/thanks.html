@@ -6,11 +6,9 @@ vim: shiftwidth=2 expandtab
 {% endcomment %}
 {% block body_text %}
 <h1>Kiitos tilauksesta!</h1>
+<p>Tilauksesi on nyt valmis! Tilausvahvistus ja maksutiedot on lähetetty antamaasi sähköpostiosoitteeseen. Nähdään Traconissa!</p>
 <p>Tilauksesi tiedot:</p>
 {% endblock body_text %}
 {% block form_content %}
 {% include "ticket_sales/order_statement.html" %}
 {% endblock form_content %}
-{% block mascot_text %}
-<p>Onneksi olkoon, tilauksesi on valmis! Myös minä ja toverini tulimme valmiiksi siinä sivussa. Tilausvahvistus ja maksutiedot on lähetetty antamaasi sähköpostiosoitteeseen. Nähdään Traconissa!</p>
-{% endblock mascot_text %}

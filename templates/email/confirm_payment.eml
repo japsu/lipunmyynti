@@ -1,6 +1,6 @@
 Hyvä vastaanottaja,
 
-Olemme vastaanottaneet {{ order.payment_date|date }} maksun Tracon V
+Olemme vastaanottaneet {{ order.payment_date|date }} maksun Tracon VI
 -ennakkolipputilauksestanne numero {{ order.pk|stringformat:"04d" }}.
 
 Vahvistamme maksetuiksi seuraavat lipputuotteet:
@@ -23,11 +23,11 @@ Liput toimitetaan seuraavaan osoitteeseen:
 
 Jos ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
 yhteyttä lipunmyyntiin joko vastaamalla tähän viestiin tai lähettämällä
-sähköpostia osoitteella lipunmyynti10@tracon.fi.
+sähköpostia osoitteella lipunmyynti11@tracon.fi.
 
-Lippujen postitus aloitetaan 1. kesäkuuta 2010. Saatte erillisen
+Lippujen postitus aloitetaan 1. kesäkuuta 2011. Saatte erillisen
 vahvistusviestin, kun lippunne on postitettu.
 
 Ystävällisin terveisin
 -- 
-Tracon V -lipunmyynti <lipunmyynti10@tracon.fi>
+Tracon VI -lipunmyynti <lipunmyynti11@tracon.fi>
