@@ -82,7 +82,7 @@ vim: shiftwidth=2 expandtab
                 {% comment %}
                   This button is removed from view using CSS.
                 {% endcomment %}
-                <button class="enterhack buttongradient" type="submit" name="action" value="next">{{ phase.next_text|safe }}</button>
+                <button class="enterhack buttongradient" type="submit" name="action" value="next">&nbsp;</button><br />
               {% endif %}
 
               {% if phase.can_cancel %}
@@ -98,7 +98,7 @@ vim: shiftwidth=2 expandtab
               {% endif %}
 
               {% if phase.next_phase %}
-                <button class="buttongradient" type="submit" name="action" value="next" tabindex="100">{{ phase.next_text|safe }}</button>
+                <button class="buttongradient" id="nextbutton" type="submit" name="action" value="next" tabindex="100">{{ phase.next_text|safe }}</button>
               {% else %}
               <button class="buttongradient btndisabled" type="submit" name="action" value="next" disabled="disabled">{{ phase.next_text|safe }}</button>
               {% endif %}
