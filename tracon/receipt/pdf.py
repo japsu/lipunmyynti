@@ -13,7 +13,7 @@ def render_receipt(order, c):
     render_logo(135*mm, 265*mm, c)
 
     c.setFont("Times-Roman", 12)
-    c.drawString(135*mm, 260*mm, u"Tampere-talossa 3.-4.7.2010")
+    c.drawString(135*mm, 260*mm, u"Tampere-talossa 3.-4.9.2011")
 
     c.drawString(BASE_INDENT, 270*mm, order.customer.name)
     c.drawString(BASE_INDENT, 265*mm, order.customer.address)
@@ -21,7 +21,7 @@ def render_receipt(order, c):
 
     c.drawString(BASE_INDENT, 200*mm, u"Hyvä vastaanottaja,")
 
-    c.drawString(BASE_INDENT, 190*mm, u"Tässä tilaamanne Tracon V -tapahtuman lipputuotteet:")
+    c.drawString(BASE_INDENT, 190*mm, u"Tässä tilaamanne Tracon VI -tapahtuman lipputuotteet:")
 
     ypos = 180*mm
 
@@ -31,34 +31,26 @@ def render_receipt(order, c):
 
     ypos -= 15*mm
     
-    if order.tshirts > 0:
-        c.drawString(BASE_INDENT, ypos, u"%d kpl" % order.tshirts)
-        c.drawString(DEEP_INDENT, ypos, u"T-paitalipuke")
-        c.drawString(DEEP_INDENT, ypos - 5*mm, u"T-paidan saa tapahtumasta lipuketta vastaan.")
-
-        ypos -= 15*mm
-
     if order.accommodation > 0:
         c.drawString(BASE_INDENT, ypos, u"%d kpl" % order.accommodation)
-        c.drawString(DEEP_INDENT, ypos, u"Majoituslipuke")
-        c.drawString(DEEP_INDENT, ypos - 5*mm, u"Esitetään majoitukseen saavuttaessa majoituksen valvojalle.")
-
+        c.drawString(DEEP_INDENT, ypos, u"Majoitus")
+        c.drawString(DEEP_INDENT, ypos - 5*mm, u"Pääsette majoitukseen ilmoittamalla lipun varaajan nimen.")
         ypos -= 15*mm
 
     c.drawString(BASE_INDENT, ypos, u"Mikäli yllä olevassa luettelossa on virheitä tai kuoren sisältö ei vastaa luetteloa, olkaa hyvä ja")
     c.drawString(BASE_INDENT, ypos - 5*mm, u"ottakaa viipymättä yhteyttä lipunmyyntivastaavaan sähköpostitse osoitteella")
-    c.drawString(BASE_INDENT, ypos - 10*mm, u"lipunmyynti10@tracon.fi tai puhelimitse numeroon 050 550 0838.")
+    c.drawString(BASE_INDENT, ypos - 10*mm, u"lipunmyynti11@tracon.fi tai puhelimitse numeroon 050 550 0838.")
 
     c.drawString(BASE_INDENT, ypos - 20*mm, u"Mainitkaa viestissänne tilausnumeronne #%04d." % order.id)
 
     ypos -= 30*mm
 
-    c.drawString(BASE_INDENT, ypos, u"Lisätietoja Tracon V -tapahtumasta löydätte kotisivuiltamme: http://2010.tracon.fi/")
+    c.drawString(BASE_INDENT, ypos, u"Lisätietoja Tracon VI -tapahtumasta löydätte kotisivuiltamme: http://2011.tracon.fi/")
 
     ypos -= 15*mm
 
     c.drawString(BASE_INDENT, ypos, u"Ystävällisin terveisin")
-    c.drawString(BASE_INDENT, ypos - 10*mm, u"Tracon V -tapahtuman järjestäjät")
+    c.drawString(BASE_INDENT, ypos - 10*mm, u"Tracon VI -tapahtuman järjestäjät")
 
     c.line(BASE_INDENT, 20*mm, 210*mm - BASE_INDENT, 20*mm)
     c.setFont("Helvetica", 8)
