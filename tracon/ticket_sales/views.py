@@ -182,9 +182,10 @@ class TicketsPhase(Phase):
 
         # XXX When the admin changes the available property of products, existing sessions in the Tickets phase will break.
         for product in Product.objects.filter(available=True).order_by("id"):
-            order_product, created = OrderProduct.objects.get_or_create(order=order, product=product)
-            form = init_form(OrderProductForm, request, instance=order_product, prefix="o%d" % order_product.pk)
-            forms.append(form)
+		#if product.in_stock:
+			order_product, created = OrderProduct.objects.get_or_create(order=order, product=product)
+			form = init_form(OrderProductForm, request, instance=order_product, prefix="o%d" % order_product.pk)
+			forms.append(form)
 
         return forms
 

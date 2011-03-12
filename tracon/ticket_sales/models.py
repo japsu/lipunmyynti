@@ -130,6 +130,10 @@ class Batch(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
+    description = models.TextField()
+    image = models.CharField(max_length=32)
+    classname = models.CharField(max_length=32)
+    sell_limit = models.IntegerField()
     price_cents = models.IntegerField()
     requires_shipping = models.BooleanField(default=True)
     available = models.BooleanField(default=True)
@@ -137,6 +141,19 @@ class Product(models.Model):
     @property
     def formatted_price(self):
         return format_price(self.price_cents)
+    
+    @property
+    def in_stock(self):
+		cnt = OrderProduct.objects.filter(product=self).aggregate(models.Sum('count'))
+		if self.sell_limit > cnt["count__sum"]:
+			return True
+		else:
+			return False
+	
+    @property
+    def max_order_amount(self):
+		cnt = OrderProduct.objects.filter(product=self).aggregate(models.Sum('count'))
+		return cnt["count__sum"]
 
     def __unicode__(self):
         return u"%s (%s)" % (self.name, self.formatted_price)

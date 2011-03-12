@@ -353,7 +353,7 @@ hr {
 table {
 	border: 1px solid #bebebe;
 	margin: 10px 0 0 0;
-	width:400px;
+	width:100%;
 	-moz-border-radius:10px 10px 0 0;
 	-webkit-border-radius:10px 10px 0 0;
 	-khtml-border-radius:10px 10px 0 0;
@@ -377,7 +377,22 @@ th {
 	padding-top:10px;padding-bottom:10px;
 }
 td.tcount,th.input,td.right,th.right{text-align:right}
-td{border-top:1px solid #ddd;background:#fafafa;}
+td.tcount{padding-left:20px;}
+td{border-top:1px solid #ddd;background:#fafafa;vertical-align:top}
+td.productimage{width:80px;}
+td.productimage img{border:1px solid #bbb;}
+tr.large td{font-size:20px}
+tr.normal td{font-size:17px}
+tr.small td{font-size:14px}
+td.productname{font-weight:bold;color:#666;}
+td div.description{padding-top:0.5em;font-weight:normal;color:#333}
+tr.large td div.description{font-size:16px;}
+tr.normal td div.description{font-size:14px;}
+tr.large td div.tuotesaldo{font-size:16px;padding-top:0.5em;}
+td div.loppuunmyyty{text-transform:uppercase;padding-top:0.5em;font-size:18px;}
+tr.loppuunmyyty td{background:#f4f4f4;color:#999}
+tr.loppuunmyyty td div.description{color:#777}
+tr.loppuunmyyty td.productimage img{filter:alpha(opacity=50);opacity: 0.5;-moz-opacity:0.5;}
 em {
 	font-style: italic;
 }

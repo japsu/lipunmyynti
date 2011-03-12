@@ -11,17 +11,48 @@ vim: shiftwidth=2 expandtab
 <p>Kirjoita kenttiin, montako mitäkin tuotetta haluat. Voit tilata useita tuotteita samalla kertaa. Voit vielä tarkistaa tiedot myöhemmin, ennen kuin vahvistat tilauksen.</p>
 <table>
   <tr>
-    <th>Tuote</th>
+    <th colspan="2">Tuote</th>
     <th class="right">Kappalehinta</th>
     <th class="input">Määrä</th>
   </tr>
   {% for iform in form %}
 {% comment %}    {{ iform }}{% endcomment %}
-    <tr>
-      <td>{{ iform.instance.product.name }}</td>
+{% if iform.instance.product.in_stock %}
+    <tr class="{{ iform.instance.product.classname }}">
+    {% else %}
+    <tr class="{{ iform.instance.product.classname }} loppuunmyyty">
+	{% endif %}
+	{% if iform.instance.product.image %}
+	  <td class="productimage"><img src="{{ MEDIA_URL }}/images/{{ iform.instance.product.image }}" alt="{{ iform.instance.product.name }}" /></td>
+      <td class="productname">{{ iform.instance.product.name }} <div class="description">{{ iform.instance.product.description }}</div>
+	{% if iform.instance.product.in_stock %}
+		{% if iform.instance.product.max_order_amount < 10 %}
+		<div class="tuotesaldo">Saatavilla enää {{ iform.instance.product.max_order_amount }} kpl!</div>
+		{% endif %}
+	{% else %}
+		<div class="loppuunmyyty">Loppuunmyyty!</div>
+	{% endif %}
+      </small></td>
+    {% else %}
+      <td colspan="2" class="productname">{{ iform.instance.product.name }}<div class="description">{{ iform.instance.product.description }}</div>
+	{% if iform.instance.product.in_stock %}
+		{% if iform.instance.product.max_order_amount < 10 %}
+		<div class="tuotesaldo">Saatavilla enää {{ iform.instance.product.max_order_amount }} kpl!</div>
+		{% endif %}
+	{% else %}
+		<div class="loppuunmyyty">Loppuunmyyty!</div>
+	{% endif %}
+      
+      </small></td>
+    {% endif %}
       <td class="right">{{ iform.instance.product.formatted_price }}</td>
       {% if iform.instance.product.available %}
+	{% if iform.instance.product.in_stock %}
         <td class="tcount">{{ iform.count }}</td>
+	{% else %}
+        <td class="tcount">&nbsp;</td>
+	{% endif %}
+        
       {% else %}
         <td class="tcount">Ei saatavilla</td>
       {% endif %}
