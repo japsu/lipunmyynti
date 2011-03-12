@@ -353,7 +353,7 @@ hr {
 table {
 	border: 1px solid #bebebe;
 	margin: 10px 0 0 0;
-	width:100%;
+	width:585px;
 	-moz-border-radius:10px 10px 0 0;
 	-webkit-border-radius:10px 10px 0 0;
 	-khtml-border-radius:10px 10px 0 0;
@@ -519,3 +519,5 @@ button.enterhack{
 	color:#600;
 	margin:10px 0;
 }
+#t_right{background:url(images/kuva_right.jpg) no-repeat 50% 50%;height:255px;width:190px;float:right;margin-left:15px;}
+#bottom{clear:both;}
