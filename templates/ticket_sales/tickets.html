@@ -24,6 +24,9 @@ vim: shiftwidth=2 expandtab
 	{% endif %}
 	{% if iform.instance.product.image %}
 	  <td class="productimage"><img src="{{ MEDIA_URL }}/images/{{ iform.instance.product.image }}" alt="{{ iform.instance.product.name }}" /></td>
+    {% else %}
+	  <td class="productimage">&nbsp;</td>
+	{% endif %}
       <td class="productname">{{ iform.instance.product.name }} <div class="description">{{ iform.instance.product.description }}</div>
 	{% if iform.instance.product.in_stock %}
 		{% if iform.instance.product.max_order_amount < 10 %}
@@ -33,18 +36,6 @@ vim: shiftwidth=2 expandtab
 		<div class="loppuunmyyty">Loppuunmyyty!</div>
 	{% endif %}
       </small></td>
-    {% else %}
-      <td colspan="2" class="productname">{{ iform.instance.product.name }}<div class="description">{{ iform.instance.product.description }}</div>
-	{% if iform.instance.product.in_stock %}
-		{% if iform.instance.product.max_order_amount < 10 %}
-		<div class="tuotesaldo">Saatavilla enää {{ iform.instance.product.max_order_amount }} kpl!</div>
-		{% endif %}
-	{% else %}
-		<div class="loppuunmyyty">Loppuunmyyty!</div>
-	{% endif %}
-      
-      </small></td>
-    {% endif %}
       <td class="right">{{ iform.instance.product.formatted_price }}</td>
       {% if iform.instance.product.available %}
 	{% if iform.instance.product.in_stock %}
