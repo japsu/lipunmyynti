@@ -5,20 +5,23 @@
 from tracon.ticket_sales.models import *
 
 PRODUCTS = [
-    ("Koko viikonlopun lippu", 1500, True, True),
-    ("Lauantailippu", 1000, True, True),
-    ("Sunnuntailippu", 1000, True, True),
-    ("Lattiamajoitus perjantain ja lauantain väliseksi yöksi", 700, False, False),
-    ("Lattiamajoitus lauantain ja sunnuntain väliseksi yöksi", 700, False, True),
-    ("Taidekujapöytä", 1500, False, True)
+    # (name, price_cents, classname, requires_shipping, sell_limit, available)
+    ("Koko viikonlopun lippu", 1500, "large", True, 5000, True),
+    ("Lauantailippu", 1000, "medium", True, 5000, True),
+    ("Sunnuntailippu", 1000, "medium", True, 5000, True),
+    ("Lattiamajoitus perjantain ja lauantain väliseksi yöksi", 700, "small", False, 500, False),
+    ("Lattiamajoitus lauantain ja sunnuntain väliseksi yöksi", 700, "small", False, 500, True),
+    ("Taidekujapöytä", 1500, "small", False, 50, True)
 ]
 
 def create_products():
-    for name, price_cents, requires_shipping, available in PRODUCTS:
+    for name, price_cents, classname, requires_shipping, sell_limit, available in PRODUCTS:
         obj = Product(
             name=name,
             price_cents=price_cents,
+            classname=classname,
             requires_shipping=requires_shipping,
+            sell_limit=sell_limit,
             available=available
         )
         obj.save()

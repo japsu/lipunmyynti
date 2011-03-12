@@ -21,6 +21,7 @@ __all__ = [
 TICKET_SPAM_ADDRESS = "Tracon VI -lipputarkkailu <lipunmyyntispam11@tracon.fi>"
 SHIPPING_AND_HANDLING_CENTS = 100
 DUE_DAYS = 7
+LOW_AVAILABILITY_THRESHOLD = 10
 
 class Batch(models.Model):
     create_time = models.DateTimeField(auto_now=True)
@@ -144,16 +145,21 @@ class Product(models.Model):
     
     @property
     def in_stock(self):
-		cnt = OrderProduct.objects.filter(product=self).aggregate(models.Sum('count'))
-		if self.sell_limit > cnt["count__sum"]:
-			return True
-		else:
-			return False
+        return (self.amount_available > 0)
+
+    @property
+    def availability_low(self):
+        return (self.amount_available < LOW_AVAILABILITY_THRESHOLD)
 	
     @property
-    def max_order_amount(self):
-		cnt = OrderProduct.objects.filter(product=self).aggregate(models.Sum('count'))
-		return cnt["count__sum"]
+    def amount_available(self):
+        return self.sell_limit - self.amount_sold
+
+    @property
+    def amount_sold(self):
+        cnt = OrderProduct.objects.filter(product=self, order__confirm_time__isnull=False).aggregate(models.Sum('count'))
+        sm = cnt['count__sum']
+        return sm if sm is not None else 0
 
     def __unicode__(self):
         return u"%s (%s)" % (self.name, self.formatted_price)

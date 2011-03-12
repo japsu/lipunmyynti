@@ -182,23 +182,21 @@ class TicketsPhase(Phase):
 
         # XXX When the admin changes the available property of products, existing sessions in the Tickets phase will break.
         for product in Product.objects.filter(available=True).order_by("id"):
-		#if product.in_stock:
-			order_product, created = OrderProduct.objects.get_or_create(order=order, product=product)
-			form = init_form(OrderProductForm, request, instance=order_product, prefix="o%d" % order_product.pk)
-			forms.append(form)
+            order_product, created = OrderProduct.objects.get_or_create(order=order, product=product)
+            form = init_form(OrderProductForm, request, instance=order_product, prefix="o%d" % order_product.pk)
+            forms.append(form)
 
         return forms
 
-    def validate(self, request, form):
-        errors = multiform_validate(form)
+def validate(self, request, form):
+    errors = multiform_validate(form)
 
-        # If the above step failed, not all forms have cleaned_data.
-        if errors:
-            return errors
+    # If the above step failed, not all forms have cleaned_data.
+    if errors:
+        return errors
 
-        if sum(i.cleaned_data["count"] for i in form) <= 0:
-            errors.append("zero")
-
+    if sum(i.cleaned_data["count"] for i in form) <= 0:
+        errors.append("zero")
         return errors
 
     def save(self, request, form):
