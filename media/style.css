@@ -381,13 +381,13 @@ td.tcount{padding-left:20px;}
 td{border-top:1px solid #ddd;background:#fafafa;vertical-align:top}
 td.productimage{width:80px;}
 td.productimage img{border:1px solid #bbb;}
+tr td{font-size:17px}
 tr.large td{font-size:20px}
-tr.normal td{font-size:17px}
 tr.small td{font-size:14px}
 td.productname{font-weight:bold;color:#666;}
 td div.description{padding-top:0.5em;font-weight:normal;color:#333}
+tr td div.description{font-size:14px;}
 tr.large td div.description{font-size:16px;}
-tr.normal td div.description{font-size:14px;}
 tr.large td div.tuotesaldo{font-size:16px;padding-top:0.5em;}
 td div.loppuunmyyty{text-transform:uppercase;padding-top:0.5em;font-size:18px;}
 tr.loppuunmyyty td{background:#f4f4f4;color:#999}
