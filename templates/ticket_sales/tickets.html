@@ -25,7 +25,7 @@ vim: shiftwidth=2 expandtab
 	{% if iform.instance.product.image %}
 	  <td class="productimage"><img src="{{ MEDIA_URL }}/images/{{ iform.instance.product.image }}" alt="{{ iform.instance.product.name }}" /></td>
     {% else %}
-	  <td class="productimage">&nbsp;</td>
+	  <td class="productimage"><img src="{{ MEDIA_URL }}/images/oletustuotekuva.png" alt="Ei tuotekuvaa" /></td>
 	{% endif %}
       <td class="productname">{{ iform.instance.product.name }} <div class="description">{{ iform.instance.product.description }}</div>
 	{% if iform.instance.product.in_stock %}
