@@ -69,7 +69,7 @@ class Batch(models.Model):
             confirm_time__isnull=False,
 
             # Order is paid
-            payment_time__isnull=False,
+            payment_date__isnull=False,
 
             # Order has not yet been allocated into a Batch
             batch__isnull=True
@@ -197,7 +197,7 @@ class Order(models.Model):
     start_time = models.DateTimeField(auto_now=True)
     confirm_time = models.DateTimeField(null=True, blank=True)
     ip_address = models.CharField(max_length=15, null=True, blank=True)
-    payment_time = models.DateTimeField(null=True, blank=True)
+    payment_date = models.DateField(null=True, blank=True)
     batch = models.ForeignKey(Batch, null=True, blank=True)
 
     @property
@@ -206,7 +206,7 @@ class Order(models.Model):
 
     @property
     def is_paid(self):
-        return self.payment_time is not None
+        return self.payment_date is not None
 
     @property
     def is_batched(self):
@@ -265,16 +265,14 @@ class Order(models.Model):
     def formatted_reference_number(self):
         return "".join((i if (n+1) % 5 else i+" ") for (n, i) in enumerate(self.reference_number[::-1]))[::-1]
 
-    # XXX hack: Curse me for making payment_time a DateTimeField instead of a DateField.
-    # Not gonna change the schema of our installed production database for this.
-    def _get_payment_date(self):
-        return self.payment_time.date()
-    def _set_payment_date(self, value):
+    def _get_payment_time(self):
+        return datetime.combine(self.payment_date, dtime(0,0))
+    def _set_payment_time(self, value):
         if value is None:
-            self.payment_time = None
+            self.payment_date = None
         else:
-            self.payment_time = datetime.combine(value, dtime(0,0))
-    payment_date = property(_get_payment_date, _set_payment_date)
+            self.payment_date = value.date()
+    payment_time = property(_get_payment_time, _set_payment_time)
 
     def confirm_order(self):
         assert self.customer is not None

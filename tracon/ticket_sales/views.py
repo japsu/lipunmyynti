@@ -188,16 +188,18 @@ class TicketsPhase(Phase):
 
         return forms
 
-def validate(self, request, form):
-    errors = multiform_validate(form)
+    def validate(self, request, form):
+        errors = multiform_validate(form)
 
-    # If the above step failed, not all forms have cleaned_data.
-    if errors:
-        return errors
+        # If the above step failed, not all forms have cleaned_data.
+        if errors:
+            return errors
 
-    if sum(i.cleaned_data["count"] for i in form) <= 0:
-        errors.append("zero")
-        return errors
+        if sum(i.cleaned_data["count"] for i in form) <= 0:
+            errors.append("zero")
+            return errors
+
+        return []
 
     def save(self, request, form):
         multiform_save(form)
