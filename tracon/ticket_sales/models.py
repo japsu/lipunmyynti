@@ -18,7 +18,7 @@ __all__ = [
     "OrderProduct",
 ]
 
-TICKET_SPAM_ADDRESS = "Tracon VI -lipputarkkailu <lipunmyyntispam11@tracon.fi>"
+TICKET_SPAM_ADDRESS = "Tracon VI -lipputarkkailu <petri.haikonen@ecxol.net>"
 SHIPPING_AND_HANDLING_CENTS = 100
 DUE_DAYS = 7
 LOW_AVAILABILITY_THRESHOLD = 10
@@ -114,7 +114,7 @@ class Batch(models.Model):
 
     def send_delivery_confirmation_messages(self):
         for order in self.order_set.all():
-            order.send_delivery_confirmation_message()
+            order.send_confirmation_message("toimitusvahvistus")
 
     def __unicode__(self):
         return u"#%d (%s)" % (
@@ -138,6 +138,7 @@ class Product(models.Model):
     price_cents = models.IntegerField()
     requires_shipping = models.BooleanField(default=True)
     available = models.BooleanField(default=True)
+    ilmoitus_mail = models.CharField(max_length=100)
 
     @property
     def formatted_price(self):
@@ -150,7 +151,7 @@ class Product(models.Model):
     @property
     def availability_low(self):
         return (self.amount_available < LOW_AVAILABILITY_THRESHOLD)
-	
+
     @property
     def amount_available(self):
         return self.sell_limit - self.amount_sold
@@ -285,7 +286,7 @@ class Order(models.Model):
         self.confirm_time = datetime.now()
 
         self.save()
-        self.send_order_confirmation_message()
+        self.send_confirmation_message("tilausvahvistus")
 
     def confirm_payment(self, payment_date=None):
         assert self.is_confirmed
@@ -296,7 +297,7 @@ class Order(models.Model):
         self.payment_date = payment_date
 
         self.save()        
-        self.send_payment_confirmation_message()
+        self.send_confirmation_message("maksuvahvistus")
 
     @property
     def email_vars(self):
@@ -328,31 +329,29 @@ class Order(models.Model):
     def formatted_due_date(self):
         return format_date(self.due_date)
 
-    def send_order_confirmation_message(self):
+    def send_confirmation_message(self, msgtype):
         # TODO encap this, and don't fail silently, warn admins instead
+        for op in self.order_product_set.filter(count__gt=0):
+            if op.product.ilmoitus_mail:
+                msgbcc = (TICKET_SPAM_ADDRESS,op.product.ilmoitus_mail)
+            else:
+                msgbcc = (TICKET_SPAM_ADDRESS,)
+        
+        if msgtype == "tilausvahvistus":
+            msgsubject = "Tracon VI: Tilausvahvistus (#%04d)" % self.pk
+            msgbody = self.order_confirmation_message
+        elif msgtype == "maksuvahvistus":
+            msgsubject = "Tracon VI: Maksuvahvistus (#%04d)" % self.pk
+            msgbody = self.payment_confirmation_message
+        elif msgtype == "toimitusvahvistus":
+            msgsubject = "Tracon VI: Toimitusvahvistus (#%04d)" % self.pk
+            msgbody = self.delivery_confirmation_message
+        
         EmailMessage(
-            subject="Tracon VI: Tilausvahvistus (#%04d)" % self.pk,
-            body=self.order_confirmation_message,
+            subject=msgsubject,
+            body=msgbody,
             to=(self.customer.name_and_email,),
-            bcc=(TICKET_SPAM_ADDRESS,)
-        ).send(fail_silently=True)
-
-    def send_payment_confirmation_message(self):
-        # TODO see above
-        EmailMessage(
-            subject="Tracon VI: Maksuvahvistus (#%04d)" % self.pk,
-            body=self.payment_confirmation_message,
-            to=(self.customer.name_and_email,),
-            bcc=(TICKET_SPAM_ADDRESS,)
-        ).send(fail_silently=True)
-
-    def send_delivery_confirmation_message(self):
-        # TODO see above
-        EmailMessage(
-            subject="Tracon VI: Toimitusvahvistus (#%04d)" % self.pk,
-            body=self.delivery_confirmation_message,
-            to=(self.customer.name_and_email,),
-            bcc=(TICKET_SPAM_ADDRESS,)
+            bcc=msgbcc
         ).send(fail_silently=True)
 
     def render(self, c):
