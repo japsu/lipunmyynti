@@ -14,7 +14,8 @@ def main():
 
     for shirt_size in ShirtSize.objects.all().order_by("id"):
         n = sum(i.count for i in shirt_size.shirt_order_set.filter(
-            order__confirm_time__isnull=False
+            order__confirm_time__isnull=False,
+            order__cancellation_time__isnull=True
         ))
 
         writer.writerow((shirt_size, n))
