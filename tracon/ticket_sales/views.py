@@ -35,6 +35,7 @@ __all__ = [
     "cancel_batch_view",
     "deliver_batch_view",
     "search_view",
+    "closed_view",
 ]    
 
 FIRST_PHASE = "welcome_phase"
@@ -283,7 +284,26 @@ class ThanksPhase(Phase):
 
         return redirect(self.next_phase)
 
+class ClosedPhase(Phase):
+    name = "welcome_phase"
+    friendly_name = "Tervetuloa!"
+    template = "ticket_sales/closed.html"
+    prev_phase = None
+    next_phase = None
+    can_cancel = True
+    index = 0
+
+    def available(self, request):
+        return True
+
+    def save(self, request, form):
+        pass
+
+    def next(self, request):
+        return HttpResponseRedirect("http://2011.tracon.fi")
+
 thanks_view = ThanksPhase()
+closed_view = ClosedPhase()
 
 ALL_PHASES = [welcome_view, tickets_view, address_view, confirm_view, thanks_view]
 for num, phase in enumerate(ALL_PHASES):

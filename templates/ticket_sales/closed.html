@@ -1,0 +1,16 @@
+{% extends "base/base.html" %}
+{% load wizard_ui %}
+{% comment %}
+encoding: utf-8
+vim: shiftwidth=2 expandtab
+{% endcomment %}
+{% block body_text %}
+<h1>Lippukauppa on suljettu</h1>
+{% endblock %}
+{% block mascot_text %}
+<p>Lippuja myydään myös ovella!</p>
+{% endblock %}
+{% block form_content %}
+<p class="welcome">Ennakkolippujen myynti on tältä erää lopetettu.</p>
+<p class="welcome">Lisätietoja lipuista voit lukea <a href="http://2010.tracon.fi/liput" target="_blank">tapahtuman kotisivuilta.</a></p>
+{% endblock %}
