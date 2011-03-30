@@ -72,7 +72,10 @@ class Batch(models.Model):
             payment_date__isnull=False,
 
             # Order has not yet been allocated into a Batch
-            batch__isnull=True
+            batch__isnull=True,
+
+            # Order has not been cancelled
+            cancellation_time__isnull=True
         ).order_by("confirm_time")
 
         accepted = 0
@@ -169,9 +172,9 @@ class Customer(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
-    address = models.CharField(max_length=200)
-    zip_code = models.CharField(max_length=5)
-    city = models.CharField(max_length=30)
+    address = models.CharField(max_length=200, blank=True, default="")
+    zip_code = models.CharField(max_length=5, blank=True, default="")
+    city = models.CharField(max_length=30, blank=True, default="")
     phone_number = models.CharField(max_length=30, null=True, blank=True)
 
     def __unicode__(self):
@@ -197,8 +200,17 @@ class Order(models.Model):
     start_time = models.DateTimeField(auto_now=True)
     confirm_time = models.DateTimeField(null=True, blank=True)
     ip_address = models.CharField(max_length=15, null=True, blank=True)
-    payment_date = models.DateField(null=True, blank=True)
+    payment_time = models.DateTimeField(null=True, blank=True)
+    cancellation_time = models.DateTimeField(null=True, blank=True)
     batch = models.ForeignKey(Batch, null=True, blank=True)
+
+    @property
+    def is_active(self):
+        return self.is_confirmed and not self.is_cancelled
+
+    @property
+    def is_outstanding(self):
+        return self.is_confirmed and self.requires_shipping and not self.is_cancelled
 
     @property
     def is_confirmed(self):
@@ -215,6 +227,14 @@ class Order(models.Model):
     @property
     def is_delivered(self):
         return self.is_batched and self.batch.is_delivered
+
+    @property
+    def is_overdue(self):
+        return self.is_confirmed and not self.is_paid and self.due_date < datetime.now()
+
+    @property
+    def is_cancelled(self):
+        return self.cancellation_time is not None
 
     @property
     def price_cents(self):
@@ -245,10 +265,10 @@ class Order(models.Model):
         elif self.is_paid:
             return "Paid; awaiting allocation into batch"
         elif self.is_confirmed:
-            if datetime.now() < self.due_date:
-                return "Confirmed; awaiting payment"
-            else:
+            if self.is_overdue:
                 return "Confirmed; payment overdue since %s" % self.formatted_due_date
+            else:
+                return "Confirmed; payment due %s" % self.formatted_due_date
         else:
             return "Unconfirmed"
 
@@ -296,6 +316,13 @@ class Order(models.Model):
         self.save()        
         self.send_payment_confirmation_message()
 
+    def cancel(self):
+        assert self.is_confirmed
+
+        self.cancellation_time = datetime.now()
+        self.save()
+        self.send_cancellation_notice_message()
+
     @property
     def email_vars(self):
         return dict(
@@ -316,11 +343,24 @@ class Order(models.Model):
         return render_to_string("email/confirm_delivery.eml", self.email_vars)
 
     @property
+    def payment_reminder_message(self):
+        return render_to_string("email/payment_reminder.eml", self.email_vars)
+
+    @property
+    def cancellation_notice_message(self):
+        return render_to_string("email/cancellation_notice.eml", self.email_vars)
+
+    @property
     def due_date(self):
         if not self.confirm_time:
             return None
 
-        return datetime.combine((self.confirm_time + timedelta(days=DUE_DAYS)).date(), dtime(23, 59, 59))
+        # Accom bookings are due IMMEDIATELY.
+        elif not self.requires_shipping:
+            return self.confirm_time
+
+        else:
+            return datetime.combine((self.confirm_time + timedelta(days=DUE_DAYS)).date(), dtime(23, 59, 59))
 
     @property
     def formatted_due_date(self):
@@ -349,6 +389,23 @@ class Order(models.Model):
         EmailMessage(
             subject="Tracon VI: Toimitusvahvistus (#%04d)" % self.pk,
             body=self.delivery_confirmation_message,
+            to=(self.customer.name_and_email,),
+            bcc=(TICKET_SPAM_ADDRESS,)
+        ).send(fail_silently=True)
+
+    def send_payment_reminder_message(self):
+        # TODO see above
+        EmailMessage(
+            subject="Tracon VI: Maksumuistutus (#%04d)" % self.pk,
+            body=self.payment_reminder_message,
+            to=(self.customer.name_and_email,),
+            bcc=(TICKET_SPAM_ADDRESS,)
+        ).send(fail_silently=True)
+
+    def send_cancellation_notice_message(self):
+        EmailMessage(
+            subject="Tracon VI: Tilaus peruuntunut (#%04d)" % self.pk,
+            body=self.cancellation_notice_message,
             to=(self.customer.name_and_email,),
             bcc=(TICKET_SPAM_ADDRESS,)
         ).send(fail_silently=True)

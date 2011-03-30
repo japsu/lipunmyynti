@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'stats/$', redirect_to, dict(url='/hallinta/tiedot/'), name="old_stats_url"),
 
     url(r'hallinta/$', manage_view, name="manage_view"),
+    url(r'hallinta/haku/$', search_view, name="search_view"),
 
     url(r'hallinta/maksut/$', payments_view, name="payments_view"),
     url(r'hallinta/maksut/yksi/$', process_single_payment_view, name="process_single_payment_view"),

@@ -34,6 +34,7 @@ __all__ = [
     "render_batch_view",
     "cancel_batch_view",
     "deliver_batch_view",
+    "search_view",
 ]    
 
 FIRST_PHASE = "welcome_phase"
@@ -447,6 +448,25 @@ def deliver_batch_view(request, batch_id):
 
     else:
         return render_to_response("ticket_admin/deliver_batch.html", vars, context_instance=context)
+
+# XXX Wrong perm
+@permission_required("ticket_sales.can_manage_batches")
+@require_http_methods(["GET","POST"])
+def search_view(request):
+    orders = []
+
+    if request.method == "POST":
+        form = SearchForm(request.POST)
+
+        if form.is_valid():
+            orders = perform_search(**form.cleaned_data)
+    else:
+        form = SearchForm()
+        
+    vars = dict(form=form, orders=orders)
+    context = RequestContext(request, {})
+
+    return render_to_response("ticket_admin/search.html", vars, context_instance=context)
 
 def admin_error_page(request, error):
     vars = dict(error=error)

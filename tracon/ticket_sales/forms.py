@@ -14,6 +14,7 @@ __all__ = [
     "ConfirmSinglePaymentForm",
     "MultiplePaymentsForm",
     "CreateBatchForm",
+    "SearchForm",
 ]
 
 class HappyIntegerField(forms.IntegerField):
@@ -44,7 +45,8 @@ class OrderProductForm(forms.ModelForm):
         model = OrderProduct
         
 class CustomerForm(forms.ModelForm):
-    zip_code = FIZipCodeField()
+    #XXX hackily commented out
+    #zip_code = FIZipCodeField()
 
     class Meta:
         model = Customer
@@ -60,3 +62,8 @@ class MultiplePaymentsForm(forms.Form):
 
 class CreateBatchForm(forms.Form):
     max_orders = forms.IntegerField(label=u"Kuinka monta tilausta (enintään)?")
+
+class SearchForm(forms.Form):
+    id = forms.IntegerField(label=u"Tilausnumero", required=False)
+    name = forms.CharField(label=u"Nimi", required=False)
+    email = forms.CharField(label=u"Sähköpostiosoite", required=False)

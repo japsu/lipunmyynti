@@ -98,5 +98,16 @@ def get_order_by_ref(ref):
     assert order.reference_number == ref
     return order
 
-# XXX these should prolly be made instance or class methods of Batch
+SEARCH_CRITERIA_MAP = dict(
+    id="id",
+    name="customer__name__icontains",
+    email="customer__email__icontains"
+)
 
+def perform_search(**kwargs):
+    criteria = dict((SEARCH_CRITERIA_MAP[k], v)
+        for (k, v) in kwargs.iteritems() if v)
+    return Order.objects.filter(
+        confirm_time__isnull=False,
+        **criteria
+    )
