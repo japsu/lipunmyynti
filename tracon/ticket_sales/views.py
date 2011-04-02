@@ -202,6 +202,12 @@ class TicketsPhase(Phase):
             errors.append("zero")
             return errors
 
+        for product in Product.objects.filter(available=True).order_by("id"):
+            for prod in form:
+                if (prod.instance.product.amount_available < prod.cleaned_data["count"]):
+                    errors.append("soldout")
+                    return errors
+
         return []
 
     def save(self, request, form):

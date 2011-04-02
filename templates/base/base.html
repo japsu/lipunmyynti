@@ -68,6 +68,9 @@ vim: shiftwidth=2 expandtab
                   {% ifequal error "zero" %}
                     <p>Et ole valinnut yhtään tuotetta.</p>
                   {% endifequal %}
+                  {% ifequal error "soldout" %}
+                    <p>Jotain valitsemaasi tuotetta ei ole saatavilla syöttämääsi määrää.</p>
+                  {% endifequal %}
                 {% endfor %}
               </div>
               {% endif %}
