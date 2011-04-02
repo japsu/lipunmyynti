@@ -244,7 +244,8 @@ class ConfirmPhase(Phase):
 
     def validate(self, request, form):
         order = get_order(request)
-        if (is_soldout(dict((i.product, i.count) for i in order.product))):
+        products = OrderProduct.objects.filter(order=order, count__gt=0)
+        if (is_soldout(dict((i.product, i.count) for i in products))):
             errors.append("soldout_confirm")
             return errors
         return [] 
