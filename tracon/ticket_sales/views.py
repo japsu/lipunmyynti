@@ -202,7 +202,7 @@ class TicketsPhase(Phase):
             errors.append("zero")
             return errors
 
-        if (is_soldout(dict((form.instance.product, form.cleaned_data["count"]) for form in forms))):
+        if (is_soldout(dict((i.instance.product, i.cleaned_data["count"]) for i in form))):
             errors.append("soldout")
             return errors
 
