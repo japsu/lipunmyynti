@@ -243,6 +243,7 @@ class ConfirmPhase(Phase):
     next_text = "Vahvista &#10003;"
 
     def validate(self, request, form):
+        order = get_order(request)
         if (is_soldout(dict((i.product, i.count) for i in order.product))):
             errors.append("soldout_confirm")
             return errors
