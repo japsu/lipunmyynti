@@ -518,6 +518,7 @@ button.enterhack{
 	padding:0px 10px 5px 10px;
 	color:#600;
 	margin:10px 0;
+	width:560px;
 }
 #t_right{background:url(images/kuva_right.jpg) no-repeat 50% 50%;height:255px;width:190px;float:right;margin-left:15px;}
 #bottom{clear:both;}
