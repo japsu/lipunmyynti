@@ -174,9 +174,9 @@ class Customer(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
-    address = models.CharField(max_length=200, blank=True, default="")
-    zip_code = models.CharField(max_length=5, blank=True, default="")
-    city = models.CharField(max_length=30, blank=True, default="")
+    address = models.CharField(max_length=200)
+    zip_code = models.CharField(max_length=5)
+    city = models.CharField(max_length=30)
     phone_number = models.CharField(max_length=30, null=True, blank=True)
 
     def __unicode__(self):
