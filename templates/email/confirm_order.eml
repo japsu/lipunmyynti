@@ -39,11 +39,7 @@ Viitenumeroa on ehdottomasti käytettävä maksettaessa!
 Vastaanotetut maksut käsitellään viikoittain. Kun maksunne on käsitelty,
 saatte tästä erillisen vahvistusviestin.
 
-Lippujen postitus aloitetaan 1. kesäkuuta 2011.
-
-{% if order.accommodation %}Lippujen yhteydessä toimitetaan majoituskuponki, joka tulee esittää
-majoituspaikan henkilökunnalle yhdessä rannekkeen kanssa. Majoituksen
-yksityiskohdista lähetetään sähköpostitse lisätietoa ennen tapahtumaa.
+{% if order.requires_shipping %}Lippujen postitus aloitetaan 1. kesäkuuta 2011.
 
 {% endif %}Ystävällisin terveisin
 -- 
