@@ -21,9 +21,7 @@ Yhteensä: {{ order.formatted_price }} (ALV 0%)
 {% if order.customer.phone_number %}{{ order.customer.phone_number }}
 {% endif %}{{ order.customer.email }}
 
-{% for product in products %}{% if product.product.mail_description %}{{ product.product.mail_description }}
-
-{% endif %}{% endfor %}Jos ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
+Jos ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
 yhteyttä lipunmyyntiin joko vastaamalla tähän viestiin tai lähettämällä
 sähköpostia osoitteella liput11@tracon.fi.
 

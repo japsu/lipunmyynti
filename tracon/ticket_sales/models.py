@@ -135,7 +135,7 @@ class Batch(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    mail_description = models.TextField()
+    mail_description = models.TextField(null=True, blank=True)
     image = models.CharField(max_length=32)
     classname = models.CharField(max_length=32)
     sell_limit = models.IntegerField()
@@ -317,10 +317,26 @@ class Order(models.Model):
         self.send_cancellation_notice_message()
 
     @property
+    def deduplicated_product_messages(self):
+        seen = set()
+        result = list()
+
+        for op in self.order_product_set.all():
+            md = op.product.mail_description
+    
+            if md is not None:
+                if md not in seen:
+                    seen.add(md)
+                    result.append(md)
+
+        return result
+
+    @property
     def email_vars(self):
         return dict(
             order=self,
-            products=self.order_product_set.all()
+            products=self.order_product_set.all(),
+            messages=self.deduplicated_product_messages
         )
 
     @property
