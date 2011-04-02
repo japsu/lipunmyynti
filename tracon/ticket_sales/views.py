@@ -34,6 +34,8 @@ __all__ = [
     "render_batch_view",
     "cancel_batch_view",
     "deliver_batch_view",
+    "search_view",
+    "closed_view",
 ]    
 
 FIRST_PHASE = "welcome_phase"
@@ -282,7 +284,26 @@ class ThanksPhase(Phase):
 
         return redirect(self.next_phase)
 
+class ClosedPhase(Phase):
+    name = "welcome_phase"
+    friendly_name = "Tervetuloa!"
+    template = "ticket_sales/closed.html"
+    prev_phase = None
+    next_phase = None
+    can_cancel = True
+    index = 0
+
+    def available(self, request):
+        return True
+
+    def save(self, request, form):
+        pass
+
+    def next(self, request):
+        return HttpResponseRedirect("http://2011.tracon.fi")
+
 thanks_view = ThanksPhase()
+closed_view = ClosedPhase()
 
 ALL_PHASES = [welcome_view, tickets_view, address_view, confirm_view, thanks_view]
 for num, phase in enumerate(ALL_PHASES):
@@ -447,6 +468,25 @@ def deliver_batch_view(request, batch_id):
 
     else:
         return render_to_response("ticket_admin/deliver_batch.html", vars, context_instance=context)
+
+# XXX Wrong perm
+@permission_required("ticket_sales.can_manage_batches")
+@require_http_methods(["GET","POST"])
+def search_view(request):
+    orders = []
+
+    if request.method == "POST":
+        form = SearchForm(request.POST)
+
+        if form.is_valid():
+            orders = perform_search(**form.cleaned_data)
+    else:
+        form = SearchForm()
+        
+    vars = dict(form=form, orders=orders)
+    context = RequestContext(request, {})
+
+    return render_to_response("ticket_admin/search.html", vars, context_instance=context)
 
 def admin_error_page(request, error):
     vars = dict(error=error)

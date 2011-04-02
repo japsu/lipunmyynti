@@ -1,0 +1,37 @@
+Hyvä vastaanottaja,
+
+Valittaen ilmoitamme, että Tracon V -lipputilauksenne numero {{ order.pk|stringformat:"04d" }} on
+peruuntunut, koska emme saaneet siitä maksua määräaikaan mennessä.
+
+Tilauksenne sisälsi seuraavat lipputuotteet:
+
+{% for product in products %}{{ product.count }} kpl	{{ product.product.name }}
+	{{ product.count }} x {{ product.product.formatted_price }} = {{ product.formatted_price }}
+{% endfor %}
+Toimituskulut: {{ order.formatted_shipping_and_handling }}
+
+Yhteensä: {{ order.formatted_price }} (ALV 0%)
+
+{% if order.tshirts %}Paitakoot:
+
+{% for shirt in shirts %}{{ shirt.count }} kpl	{{ shirt.size.readable_name }}
+{% endfor %}
+{% endif %}Antamanne yhteystiedot:
+
+{{ order.customer.name }}
+{{ order.customer.address }}
+{{ order.customer.zip_code }} {{ order.customer.city }}
+
+{{ order.customer.phone_number }}
+{{ order.customer.email }}
+
+Mikäli koette tilauksenne peruuntuneen virheellisesti, olkaa hyvä ja
+vastatkaa tähän sähköpostiviestiin välittömästi.
+
+Mikäli olette maksanut tässä sähköpostissa viitatun tilauksenne, olkaa hyvä
+ja vastatkaa tähän sähköpostiviestiin välittömästi ja vastauksessanne
+ilmoittakaa, milloin tilauksen maksoitte ja käytittekö viitenumeroa.
+
+Ystävällisin terveisin
+-- 
+Tracon V -lipunmyynti <lipunmyynti10@tracon.fi>
