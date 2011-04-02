@@ -27,7 +27,7 @@ vim: shiftwidth=2 expandtab
       <td class="productname">{{ iform.instance.product.name }} <div class="description">{{ iform.instance.product.description }}</div>
         {% if iform.instance.product.in_stock %}
           {% if iform.instance.product.availability_low %}
-            <div class="tuotesaldo">Saatavilla enää {{ iform.instance.product.max_order_amount }} kpl!</div>
+            <div class="tuotesaldo">Saatavilla enää {{ iform.instance.product.amount_available }} kpl!</div>
           {% endif %}
         {% else %}
           <div class="loppuunmyyty">Loppuunmyyty!</div>
