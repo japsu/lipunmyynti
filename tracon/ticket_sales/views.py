@@ -242,6 +242,12 @@ class ConfirmPhase(Phase):
     next_phase = "thanks_phase"
     next_text = "Vahvista &#10003;"
 
+    def validate(self, request, form):
+        if (is_soldout(dict((order.product, order.product.count) for i in order))):
+            errors.append("soldout_confirm")
+            return errors
+        return [] 
+
     def vars(self, request, form):
         order = get_order(request)
         products = OrderProduct.objects.filter(order=order, count__gt=0)
