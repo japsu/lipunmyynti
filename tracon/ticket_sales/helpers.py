@@ -13,6 +13,7 @@ __all__ = [
     "clear_order",
     "destroy_order",
     "init_form",
+    "is_soldout",
 ]
 
 ORDER_KEY = "tracon.ticket_sales.order_id"
