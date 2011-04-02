@@ -35,7 +35,7 @@ seuraavilla maksutiedoilla:
 
 Suomalainen tilinumero  451077-236912
 IBAN                    FI51 4510 7720 0369 12
-SWIFT/BIC               AABAFI22
+SWIFT/BIC               HELSFIHH
 
 Saaja			Tracon ry
 Viitenumero		{{ order.formatted_reference_number }}
