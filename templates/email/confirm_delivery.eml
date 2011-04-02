@@ -7,8 +7,8 @@ Vahvistamme postitetuiksi seuraavat lipputuotteet:
 
 {% for product in products %}{{ product.count }} kpl	{{ product.product.name }}
 	{{ product.count }} x {{ product.product.formatted_price }} = {{ product.formatted_price }}
-{% endfor %}
-Toimituskulut: {{ order.formatted_shipping_and_handling }}
+{% endfor %}{% if order.requires_shipping %}
+Toimituskulut: {{ order.formatted_shipping_and_handling }}{% endif %}
 
 Yhteensä: {{ order.formatted_price }} (ALV 0%)
 
@@ -18,10 +18,12 @@ Liput on postitettu seuraavaan osoitteeseen:
 {{ order.customer.address }}
 {{ order.customer.zip_code }} {{ order.customer.city }}
 
-{{ order.customer.phone_number }}
-{{ order.customer.email }}
+{% if order.customer.phone_number %}{{ order.customer.phone_number }}
+{% endif %}{{ order.customer.email }}
 
-Jos ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
+{% for product in products %}{% if product.product.mail_description %}{{ product.product.mail_description }}
+
+{% endif %}{% endfor %}Jos ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
 yhteyttä lipunmyyntiin joko vastaamalla tähän viestiin tai lähettämällä
 sähköpostia osoitteella liput11@tracon.fi.
 
