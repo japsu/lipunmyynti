@@ -17,6 +17,7 @@ urlpatterns = patterns('',
 
     url(r'hallinta/$', manage_view, name="manage_view"),
     url(r'hallinta/haku/$', search_view, name="search_view"),
+    url(r'hallinta/tilaus/$', order_view, name="order_view"),
 
     url(r'hallinta/maksut/$', payments_view, name="payments_view"),
     url(r'hallinta/maksut/yksi/$', process_single_payment_view, name="process_single_payment_view"),
