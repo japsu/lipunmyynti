@@ -66,7 +66,6 @@ class Phase(object):
         if request.method not in self.methods:
             return HttpResponseNotAllowed(self.methods)
 
-        form = self.make_form(request)
         order = get_order(request)
 
         if not self.available(request):
@@ -74,6 +73,8 @@ class Phase(object):
                 return redirect(LAST_PHASE)
             else:
                 return redirect(FIRST_PHASE)
+
+        form = self.make_form(request)
         
         if request.method == "POST":
             # Which button was clicked?
