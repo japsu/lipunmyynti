@@ -200,7 +200,7 @@ class Order(models.Model):
     start_time = models.DateTimeField(auto_now=True)
     confirm_time = models.DateTimeField(null=True, blank=True)
     ip_address = models.CharField(max_length=15, null=True, blank=True)
-    payment_time = models.DateTimeField(null=True, blank=True)
+    payment_date = models.DateField(null=True, blank=True)
     cancellation_time = models.DateTimeField(null=True, blank=True)
     batch = models.ForeignKey(Batch, null=True, blank=True)
 
@@ -284,15 +284,6 @@ class Order(models.Model):
     @property
     def formatted_reference_number(self):
         return "".join((i if (n+1) % 5 else i+" ") for (n, i) in enumerate(self.reference_number[::-1]))[::-1]
-
-    def _get_payment_time(self):
-        return datetime.combine(self.payment_date, dtime(0,0))
-    def _set_payment_time(self, value):
-        if value is None:
-            self.payment_date = None
-        else:
-            self.payment_date = value.date()
-    payment_time = property(_get_payment_time, _set_payment_time)
 
     def confirm_order(self):
         assert self.customer is not None
