@@ -27,7 +27,10 @@ sähköpostia osoitteella liput11@tracon.fi.
 
 Jos ylläolevat tiedot ovat oikein, maksakaa tilaus seuraavilla tiedoilla:
 
-Saajan tilinumero	451077-236912
+Suomalainen tilinumero	451077-236912
+IBAN                    FI51 4510 7720 0369 12
+SWIFT/BIC               AABAFI22
+
 Saaja			Tracon ry
 Viitenumero		{{ order.formatted_reference_number }}
 Summa			{{ order.formatted_price }}
