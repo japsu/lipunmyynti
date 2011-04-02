@@ -6,7 +6,7 @@ Vahvistamme tilatuiksi seuraavat lipputuotteet:
 
 {% for product in products %}{{ product.count }} kpl	{{ product.product.name }}
 	{{ product.count }} x {{ product.product.formatted_price }} = {{ product.formatted_price }}
-{% endfor %}{% if not order.requires_shipping %}
+{% endfor %}{% if order.requires_shipping %}
 Toimituskulut: {{ order.formatted_shipping_and_handling }}{% endif %}
 
 Yhteensä: {{ order.formatted_price }} (ALV 0%)
