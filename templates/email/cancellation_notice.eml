@@ -12,11 +12,7 @@ Toimituskulut: {{ order.formatted_shipping_and_handling }}
 
 Yhteensä: {{ order.formatted_price }} (ALV 0%)
 
-{% if order.tshirts %}Paitakoot:
-
-{% for shirt in shirts %}{{ shirt.count }} kpl	{{ shirt.size.readable_name }}
-{% endfor %}
-{% endif %}Antamanne yhteystiedot:
+Antamanne yhteystiedot:
 
 {{ order.customer.name }}
 {{ order.customer.address }}

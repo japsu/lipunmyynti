@@ -135,6 +135,7 @@ class Batch(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
+    mail_description = models.TextField()
     image = models.CharField(max_length=32)
     classname = models.CharField(max_length=32)
     sell_limit = models.IntegerField()
