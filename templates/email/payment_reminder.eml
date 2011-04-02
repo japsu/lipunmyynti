@@ -1,6 +1,6 @@
 Hyvä vastaanottaja,
 
-Kirjanpitomme mukaan emme ole saaneet maksuanne Tracon V -lipputilauksestanne
+Kirjanpitomme mukaan emme ole saaneet maksuanne Tracon VI -lipputilauksestanne
 numero {{ order.pk|stringformat:"04d" }}.
 
 Olette tilannut seuraavat lipputuotteet:
@@ -50,4 +50,4 @@ sähköpostiinne.
 
 Ystävällisin terveisin
 -- 
-Tracon V -lipunmyynti <lipunmyynti10@tracon.fi>
+Tracon VI -lipunmyynti <liput11@tracon.fi>

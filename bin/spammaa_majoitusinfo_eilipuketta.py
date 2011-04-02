@@ -9,7 +9,7 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 
 DRY_RUN = False
-TICKET_SPAM_ADDRESS = "Tracon V -lipputarkkailu <lipunmyyntispam10@tracon.fi>"
+TICKET_SPAM_ADDRESS = "Tracon V -lipputarkkailu <lipunmyyntispam11@tracon.fi>"
 
 def get_applicable_orders():
     return Order.objects.filter(

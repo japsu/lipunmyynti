@@ -1,6 +1,6 @@
 Hyvä vastaanottaja,
 
-Valittaen ilmoitamme, että Tracon V -lipputilauksenne numero {{ order.pk|stringformat:"04d" }} on
+Valittaen ilmoitamme, että Tracon VI -lipputilauksenne numero {{ order.pk|stringformat:"04d" }} on
 peruuntunut, koska emme saaneet siitä maksua määräaikaan mennessä.
 
 Tilauksenne sisälsi seuraavat lipputuotteet:
@@ -34,4 +34,4 @@ ilmoittakaa, milloin tilauksen maksoitte ja käytittekö viitenumeroa.
 
 Ystävällisin terveisin
 -- 
-Tracon V -lipunmyynti <lipunmyynti10@tracon.fi>
+Tracon VI -lipunmyynti <liput11@tracon.fi>

@@ -39,7 +39,7 @@ def render_receipt(order, c):
 
     c.drawString(BASE_INDENT, ypos, u"Mikäli yllä olevassa luettelossa on virheitä tai kuoren sisältö ei vastaa luetteloa, olkaa hyvä ja")
     c.drawString(BASE_INDENT, ypos - 5*mm, u"ottakaa viipymättä yhteyttä lipunmyyntivastaavaan sähköpostitse osoitteella")
-    c.drawString(BASE_INDENT, ypos - 10*mm, u"lipunmyynti11@tracon.fi tai puhelimitse numeroon 050 550 0838.")
+    c.drawString(BASE_INDENT, ypos - 10*mm, u"liput11@tracon.fi tai puhelimitse numeroon 050 550 0838.")
 
     c.drawString(BASE_INDENT, ypos - 20*mm, u"Mainitkaa viestissänne tilausnumeronne #%04d." % order.id)
 
