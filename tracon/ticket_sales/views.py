@@ -220,18 +220,6 @@ class AddressPhase(Phase):
     prev_phase = "tickets_phase"
     next_phase = "confirm_phase"
 
-    def validate(self, request, form):
-        errors = multiform_validate(form)
-
-        # If the above step failed, not all forms have cleaned_data.
-        if errors:
-            return errors
-
-        if (is_soldout(dict((i.product, i.count) for i in order.product))):
-            errors.append("soldout_confirm")
-            return errors
-        return [] 
-
     def make_form(self, request):
         order = get_order(request)
 
