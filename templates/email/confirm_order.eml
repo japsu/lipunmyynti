@@ -20,9 +20,8 @@ Yhteensä: {{ order.formatted_price }} (ALV 0%)
 {{ order.customer.phone_number }}
 {{ order.customer.email }}
 
-{% for product in products %}
-{% if product.mail_description %}
-{{ product.mail_description }}
+{% for product in products %}{% if product.product.mail_description %}
+{{ product.product.mail_description }}
 
 {% endif %}{% endfor %}
 
