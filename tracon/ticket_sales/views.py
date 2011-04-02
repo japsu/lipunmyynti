@@ -243,6 +243,7 @@ class ConfirmPhase(Phase):
     next_text = "Vahvista &#10003;"
 
     def validate(self, request, form):
+        errors = multiform_validate(form)
         order = get_order(request)
         products = OrderProduct.objects.filter(order=order, count__gt=0)
         if (is_soldout(dict((i.product, i.count) for i in products))):
