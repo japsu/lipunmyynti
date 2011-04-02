@@ -63,3 +63,9 @@ def init_form(form_class, request, instance=None, prefix=None):
         kwargs["prefix"] = prefix
 
     return form_class(*args, **kwargs)
+
+def is_soldout(productdata):
+    for (product, amount) in productdata.iteritems():
+        if (product.amount_available < amount):
+            return True
+    return False 
