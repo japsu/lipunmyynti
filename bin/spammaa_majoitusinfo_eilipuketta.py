@@ -7,9 +7,9 @@
 from tracon.ticket_sales.models import Order
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.conf import settings
 
 DRY_RUN = False
-TICKET_SPAM_ADDRESS = "Tracon V -lipputarkkailu <lipunmyyntispam11@tracon.fi>"
 
 def get_applicable_orders():
     return Order.objects.filter(
@@ -38,7 +38,7 @@ def send_accom_info_message(order):
         body=body,
         from_email="Tracon V Majoitus <majoitus10@tracon.fi>",
         to=(order.customer.name_and_email,),
-        bcc=(TICKET_SPAM_ADDRESS,)
+        bcc=(settings.TICKET_SPAM_EMAIL,)
     ).send(fail_silently=True)
         
 def main():

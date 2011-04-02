@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from datetime import datetime, timedelta, date
 from datetime import time as dtime
 from django.core.mail import EmailMessage
+from django.conf import settings
 
 from tracon.ticket_sales.format import format_date, format_datetime, format_price
 from tracon.receipt.pdf import render_receipt
@@ -18,7 +19,6 @@ __all__ = [
     "OrderProduct",
 ]
 
-TICKET_SPAM_ADDRESS = "Tracon VI -lipputarkkailu <petri.haikonen@ecxol.net>"
 SHIPPING_AND_HANDLING_CENTS = 100
 DUE_DAYS = 7
 LOW_AVAILABILITY_THRESHOLD = 10
@@ -364,10 +364,6 @@ class Order(models.Model):
         if not self.confirm_time:
             return None
 
-        # Accom bookings are due IMMEDIATELY.
-        elif not self.requires_shipping:
-            return self.confirm_time
-
         else:
             return datetime.combine((self.confirm_time + timedelta(days=DUE_DAYS)).date(), dtime(23, 59, 59))
 
@@ -376,12 +372,12 @@ class Order(models.Model):
         return format_date(self.due_date)
 
     def send_confirmation_message(self, msgtype):
-        # TODO encap this, and don't fail silently, warn admins instead
+        # don't fail silently, warn admins instead
         for op in self.order_product_set.filter(count__gt=0):
             if op.product.ilmoitus_mail:
-                msgbcc = (TICKET_SPAM_ADDRESS,op.product.ilmoitus_mail)
+                msgbcc = (settings.TICKET_SPAM_EMAIL, op.product.ilmoitus_mail)
             else:
-                msgbcc = (TICKET_SPAM_ADDRESS,)
+                msgbcc = (settings.TICKET_SPAM_EMAIL,)
         
         if msgtype == "tilausvahvistus":
             msgsubject = "Tracon VI: Tilausvahvistus (#%04d)" % self.pk
@@ -392,6 +388,8 @@ class Order(models.Model):
         elif msgtype == "toimitusvahvistus":
             msgsubject = "Tracon VI: Toimitusvahvistus (#%04d)" % self.pk
             msgbody = self.delivery_confirmation_message
+        else:
+            raise NotImplementedError(msgtype)
         
         EmailMessage(
             subject=msgsubject,
