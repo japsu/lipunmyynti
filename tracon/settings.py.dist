@@ -94,10 +94,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.core.context_processors.media',
     'django.core.context_processors.auth',
+    'tracon.ticket_sales.context_processors.tracon_specific'
 )
 
 EMAIL_HOST="mail.example.com"
 DATE_FORMAT="d.m.Y"
 DEFAULT_FROM_EMAIL="Tracon VI Lipunmyynti <liput11@tracon.fi>"
+TICKET_SPAM_EMAIL="Tracon VI Lipputarkkailu <lippuspam11@tracon.fi>"
 
 LOGIN_URL="/kirjaudu/"
+ANALYTICS_ACCOUNT="UA-00000000-0"

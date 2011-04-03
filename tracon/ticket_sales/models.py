@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from datetime import datetime, timedelta, date
 from datetime import time as dtime
 from django.core.mail import EmailMessage
+from django.conf import settings
 
 from tracon.ticket_sales.format import format_date, format_datetime, format_price
 from tracon.receipt.pdf import render_receipt
@@ -18,7 +19,6 @@ __all__ = [
     "OrderProduct",
 ]
 
-TICKET_SPAM_ADDRESS = "Tracon VI -lipputarkkailu <petri.haikonen@ecxol.net>"
 SHIPPING_AND_HANDLING_CENTS = 100
 DUE_DAYS = 7
 LOW_AVAILABILITY_THRESHOLD = 10
@@ -135,7 +135,7 @@ class Batch(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    mail_description = models.TextField()
+    mail_description = models.TextField(null=True, blank=True)
     image = models.CharField(max_length=32)
     classname = models.CharField(max_length=32)
     sell_limit = models.IntegerField()
@@ -174,9 +174,9 @@ class Customer(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
-    address = models.CharField(max_length=200, blank=True, default="")
-    zip_code = models.CharField(max_length=5, blank=True, default="")
-    city = models.CharField(max_length=30, blank=True, default="")
+    address = models.CharField(max_length=200)
+    zip_code = models.CharField(max_length=5)
+    city = models.CharField(max_length=30)
     phone_number = models.CharField(max_length=30, null=True, blank=True)
 
     def __unicode__(self):
@@ -317,10 +317,26 @@ class Order(models.Model):
         self.send_cancellation_notice_message()
 
     @property
+    def deduplicated_product_messages(self):
+        seen = set()
+        result = list()
+
+        for op in self.order_product_set.all():
+            md = op.product.mail_description
+    
+            if md is not None:
+                if md not in seen:
+                    seen.add(md)
+                    result.append(md)
+
+        return result
+
+    @property
     def email_vars(self):
         return dict(
             order=self,
-            products=self.order_product_set.all()
+            products=self.order_product_set.all(),
+            messages=self.deduplicated_product_messages
         )
 
     @property
@@ -348,10 +364,6 @@ class Order(models.Model):
         if not self.confirm_time:
             return None
 
-        # Accom bookings are due IMMEDIATELY.
-        elif not self.requires_shipping:
-            return self.confirm_time
-
         else:
             return datetime.combine((self.confirm_time + timedelta(days=DUE_DAYS)).date(), dtime(23, 59, 59))
 
@@ -360,12 +372,12 @@ class Order(models.Model):
         return format_date(self.due_date)
 
     def send_confirmation_message(self, msgtype):
-        # TODO encap this, and don't fail silently, warn admins instead
+        # don't fail silently, warn admins instead
         for op in self.order_product_set.filter(count__gt=0):
             if op.product.ilmoitus_mail:
-                msgbcc = (TICKET_SPAM_ADDRESS,op.product.ilmoitus_mail)
+                msgbcc = (settings.TICKET_SPAM_EMAIL, op.product.ilmoitus_mail)
             else:
-                msgbcc = (TICKET_SPAM_ADDRESS,)
+                msgbcc = (settings.TICKET_SPAM_EMAIL,)
         
         if msgtype == "tilausvahvistus":
             msgsubject = "Tracon VI: Tilausvahvistus (#%04d)" % self.pk
@@ -376,6 +388,8 @@ class Order(models.Model):
         elif msgtype == "toimitusvahvistus":
             msgsubject = "Tracon VI: Toimitusvahvistus (#%04d)" % self.pk
             msgbody = self.delivery_confirmation_message
+        else:
+            raise NotImplementedError(msgtype)
         
         EmailMessage(
             subject=msgsubject,

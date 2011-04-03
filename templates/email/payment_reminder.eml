@@ -21,9 +21,7 @@ Yhteensä: {{ order.formatted_price }} (ALV 0%)
 {% if order.customer.phone_number %}{{ order.customer.phone_number }}
 {% endif %}{{ order.customer.email }}
 
-{% for product in products %}{% if product.product.mail_description %}{{ product.product.mail_description }}
-
-{% endif %}{% endfor %}Mikäli olette jo maksanut tilauksen, olkaa hyvä ja vastatkaa tähän
+Mikäli olette jo maksanut tilauksen, olkaa hyvä ja vastatkaa tähän
 sähköpostiviestiin välittömästi ja vastauksessanne kertokaa, milloin
 maksoitte tilauksenne.
 
@@ -35,7 +33,10 @@ sähköpostitse.
 Muussa tapauksessa olkaa hyvä ja maksakaa tilauksenne ensi tilassa
 seuraavilla maksutiedoilla:
 
-Saajan tilinumero	451077-236912
+Suomalainen tilinumero  451077-236912
+IBAN                    FI51 4510 7720 0369 12
+SWIFT/BIC               HELSFIHH
+
 Saaja			Tracon ry
 Viitenumero		{{ order.formatted_reference_number }}
 Summa			{{ order.formatted_price }}
