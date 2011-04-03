@@ -404,7 +404,7 @@ class Order(models.Model):
             subject="Tracon VI: Maksumuistutus (#%04d)" % self.pk,
             body=self.payment_reminder_message,
             to=(self.customer.name_and_email,),
-            bcc=(TICKET_SPAM_ADDRESS,)
+            bcc=(TICKET_SPAM_EMAIL,)
         ).send(fail_silently=True)
 
     def send_cancellation_notice_message(self):
@@ -412,7 +412,7 @@ class Order(models.Model):
             subject="Tracon VI: Tilaus peruuntunut (#%04d)" % self.pk,
             body=self.cancellation_notice_message,
             to=(self.customer.name_and_email,),
-            bcc=(TICKET_SPAM_ADDRESS,)
+            bcc=(TICKET_SPAM_EMAIL,)
         ).send(fail_silently=True)
 
     def render(self, c):

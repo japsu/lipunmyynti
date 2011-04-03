@@ -23,11 +23,11 @@ encoding: utf-8
 </tr></thead><tbody>
 {% for order in orders.object_list %}
 <tr>
-<td{% if order.cancellation_time %} style="background:#ccc;color:#888;"{% endif %}><a href="{% url order_view %}?id={{ order.id }}">{{ order.pk|stringformat:"04d" }}</a></td>
-<td{% if order.cancellation_time %} style="background:#ccc;color:#888;"{% endif %}>{{ order.customer.name }}</td>
-<td style="text-align:right;{% if order.cancellation_time %}background:#ccc;color:#888;{% endif %}">{{ order.confirm_time|date:"d.m.Y" }}</td>
-<td style="text-align:right;{% if order.cancellation_time %}background:#ccc;color:#888;{% endif %}">{% if order.payment_date %}{{ order.payment_date|date:"d.m.Y" }}{% else %}Ei maksettu{% endif %}</td>
-<td style="text-align:right;{% if order.cancellation_time %}background:#ccc;color:#888;{% endif %}">{% if order.cancellation_time %}{{ order.cancellation_time|date:"d.m.Y H:i" }}{% else %}Ei peruttu{% endif %}</td>
+<td{% if order.cancellation_time %} style="background:#ddd;color:#888;"{% endif %}><a href="{% url order_view %}?id={{ order.id }}">{{ order.pk|stringformat:"04d" }}</a></td>
+<td{% if order.cancellation_time %} style="background:#ddd;color:#888;"{% endif %}>{{ order.customer.name }}</td>
+<td style="text-align:right;{% if order.cancellation_time %}background:#ddd;color:#888;{% endif %}">{{ order.confirm_time|date:"d.m.Y" }}</td>
+<td style="text-align:right;{% if order.cancellation_time %}background:#ddd;color:#888;{% endif %}">{% if order.payment_date %}{{ order.payment_date|date:"d.m.Y" }}{% else %}Ei maksettu{% endif %}</td>
+<td style="text-align:right;{% if order.cancellation_time %}background:#ddd;color:#888;{% endif %}">{% if order.cancellation_time %}{{ order.cancellation_time|date:"d.m.Y H:i" }}{% else %}Ei peruttu{% endif %}</td>
 </tr>
 {% endfor %}
 </tbody></table>
