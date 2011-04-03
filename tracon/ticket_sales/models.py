@@ -162,7 +162,7 @@ class Product(models.Model):
 
     @property
     def amount_sold(self):
-        cnt = OrderProduct.objects.filter(product=self, order__confirm_time__isnull=False).aggregate(models.Sum('count'))
+        cnt = OrderProduct.objects.filter(product=self, order__confirm_time__isnull=False, order__cancellation_time__isnull=True).aggregate(models.Sum('count'))
         sm = cnt['count__sum']
         return sm if sm is not None else 0
 

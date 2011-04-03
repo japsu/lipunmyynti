@@ -65,5 +65,6 @@ class CreateBatchForm(forms.Form):
 
 class SearchForm(forms.Form):
     id = forms.IntegerField(label=u"Tilausnumero", required=False)
-    name = forms.CharField(label=u"Nimi", required=False)
+    first_name = forms.CharField(label=u"Etunimi", required=False)
+    last_name = forms.CharField(label=u"Sukunimi", required=False)
     email = forms.CharField(label=u"Sähköpostiosoite", required=False)

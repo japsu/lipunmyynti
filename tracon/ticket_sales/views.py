@@ -10,6 +10,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.http import require_POST, require_GET, require_http_methods
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from django.core.urlresolvers import reverse
 
 from tracon.ticket_sales.models import *
 from tracon.ticket_sales.forms import *
@@ -491,14 +492,14 @@ def deliver_batch_view(request, batch_id):
 def search_view(request):
     orders = []
 
-#    if request.method == "POST":
-#        form = SearchForm(request.POST)
+    if request.method == "POST":
+        form = SearchForm(request.POST)
 
-#        if form.is_valid():
-#            orders = perform_search(**form.cleaned_data)
-#    else:
-#        form = SearchForm()
-    orders =  Order.objects.all()
+        if form.is_valid():
+            orders = perform_search(**form.cleaned_data)
+    else:
+        form = SearchForm()
+        orders =  Order.objects.filter(confirm_time__isnull=False)
     try:
         page = int(request.GET.get('page', '1'))
     except ValueError:
@@ -508,10 +509,10 @@ def search_view(request):
         orders = paginator.page(page)
     except (EmptyPage, InvalidPage):
         orders = paginator.page(paginator.num_pages)    
-    vars = dict(orders=orders)
+    vars = dict(orders=orders, form=form)
     context = RequestContext(request, {})
 
-    return render_to_response("ticket_admin/browse_tickets.html", vars, context_instance=context)
+    return render_to_response("ticket_admin/browse_orders.html", vars, context_instance=context)
 
 @permission_required("ticket_sales.can_manage_batches")
 @require_http_methods(["GET","POST"])
@@ -523,12 +524,47 @@ def order_view(request):
 
     products = []
     order = get_object_or_404(Order, id=orderid)
+
+    try:
+        cancel = int(request.GET.get('cancel', '0'))
+    except ValueError:
+        cancel = 0
+
+    if (order.id and cancel == 1):
+        if (not order.cancellation_time):
+            order.cancel()
+        else:
+            order.cancellation_time = None
+            order.save()
+        return HttpResponseRedirect(reverse('order_view') + '?id=' + str(order.id))
+
+    try:
+        payment = int(request.GET.get('payment', '0'))
+    except ValueError:
+        payment = 0
+
+    if (order.id and payment == 1 and not order.cancellation_time):
+        if (not order.payment_date):
+            order.confirm_payment(date.today())
+        else:
+            order.payment_date = None
+            order.save()
+        return HttpResponseRedirect(reverse('order_view') + '?id=' + str(order.id))
+
+    try:
+        email = int(request.GET.get('email', '0'))
+    except ValueError:
+        email = 0
+
+    if (order.id and email == 1 and not order.cancellation_time):
+        order.send_confirmation_message("tilausvahvistus")
+        return HttpResponseRedirect(reverse('order_view') + '?id=' + str(order.id))
+
     context = RequestContext(request, {})
     customer = init_form(CustomerForm, request, instance=order.customer, prefix="cust")
 
-    for product in Product.objects.all().order_by("id"):
-        order_product, created = OrderProduct.objects.get_or_create(order=order, product=product)
-        form = init_form(OrderProductForm, request, instance=order_product, prefix="o%d" % order_product.pk)
+    for product in OrderProduct.objects.filter(order=order).order_by("id"):
+        form = init_form(OrderProductForm, request, instance=product, prefix="o%d" % product.pk)
         products.append(form)
 
     vars = dict(order=order, customer=customer, products=products)

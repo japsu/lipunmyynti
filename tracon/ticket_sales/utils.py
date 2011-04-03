@@ -100,7 +100,8 @@ def get_order_by_ref(ref):
 
 SEARCH_CRITERIA_MAP = dict(
     id="id",
-    name="customer__name__icontains",
+    first_name="customer__first_name__icontains",
+    last_name="customer__last_name__icontains",
     email="customer__email__icontains"
 )
 
