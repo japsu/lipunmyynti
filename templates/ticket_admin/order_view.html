@@ -53,8 +53,10 @@ function cancel() {
 <button type="submit" value="save" name="action" {% if order.cancellation_time %}disabled="disabled"{% endif %}>Tallenna muutokset</button></form><br />
 
 <button onclick="cancel();">{% if order.cancellation_time %}Palauta tilaus{% else %}Peru tilaus{% endif %}</button>
-<button onclick="window.location.href='{% url order_view %}?id={{ order.id }}&payment=1'" {% if order.cancellation_time %}disabled="disabled"{% endif %}>{% if order.payment_date %}Merkitse maksamattomaksi{% else %}Merkitse maksetuksi{% endif %}</button>
+<button onclick="window.location.href='{% url order_view %}?id={{ order.id }}&payment=1'" {% if order.cancellation_time %}disabled="disabled"{% endif %}>{% if order.payment_date %}Merkitse maksamattomaksi{% else %}Merkitse maksetuksi{% endif %}</button><br />
+<h3>Lähetä sähköpostiviestejä uudelleen</h3>
 <button onclick="window.location.href='{% url order_view %}?id={{ order.id }}&email=1'" {% if order.cancellation_time %}disabled="disabled"{% endif %}>Lähetä vahvistussähköposti</button>
+<button onclick="window.location.href='{% url order_view %}?id={{ order.id }}&email_payment=1'" {% if not order.payment_date %}disabled="disabled"{% endif %}>Lähetä maksun saapumisilmoitus</button>
 
 </form>
 {% endblock content %}

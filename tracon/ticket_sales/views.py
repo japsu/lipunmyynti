@@ -560,6 +560,15 @@ def order_view(request):
         order.send_confirmation_message("tilausvahvistus")
         return HttpResponseRedirect(reverse('order_view') + '?id=' + str(order.id))
 
+    try:
+        email = int(request.GET.get('email_payment', '0'))
+    except ValueError:
+        email = 0
+
+    if (order.id and email == 1 and not order.cancellation_time and order.payment_date):
+        order.send_confirmation_message("maksuvahvistus")
+        return HttpResponseRedirect(reverse('order_view') + '?id=' + str(order.id))
+
     context = RequestContext(request, {})
     customer = init_form(CustomerForm, request, instance=order.customer, prefix="cust")
 
