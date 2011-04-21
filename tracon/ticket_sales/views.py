@@ -347,8 +347,11 @@ def stats_view(request):
         soldop_set = product.order_product_set.filter(order__confirm_time__isnull=False)
 
         count = soldop_set.aggregate(count=Sum('count'))['count']
-        cents = soldop_set.aggregate(cents=Sum('product__price_cents'))['cents']
-        item = dict(product=product, count=count, cents=format_price(cents if cents is not None else 0))
+        count = count if count is not None else 0
+
+        cents = count * product.price_cents
+
+        item = dict(product=product, count=count, cents=format_price(cents))
         data.append(item)
 
     vars = dict(data=data)
