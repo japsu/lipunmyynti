@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.http import require_POST, require_GET, require_http_methods
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
+from django.db.models import Sum
 
 from tracon.ticket_sales.models import *
 from tracon.ticket_sales.forms import *
@@ -336,8 +337,18 @@ def manage_view(request):
 
 @login_required
 def stats_view(request):
-    # TODO rewrite me
-    vars = {}
+    # Ei toimi:
+    #data = Product.objects.annotate(count=Sum('order_product_set__count'))
+    #data = OrderProduct.objects.filter(order__confirm_time__isnull=False).values("product").annotate(count=Sum('count')).order_by()
+
+    data = []
+
+    for product in Product.objects.all():
+        count = product.order_product_set.filter(order__confirm_time__isnull=False).aggregate(count=Sum('count'))['count']
+        item = dict(product=product, count=count)
+        data.append(item)
+
+    vars = dict(data=data)
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/stats.html", vars, context_instance=context)
 
