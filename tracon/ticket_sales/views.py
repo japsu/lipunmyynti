@@ -345,7 +345,7 @@ def stats_view(request):
     total_cents = 0
 
     for product in Product.objects.all():
-        soldop_set = product.order_product_set.filter(order__confirm_time__isnull=False)
+        soldop_set = product.order_product_set.filter(order__confirm_time__isnull=False, order__cancellation_time__isnull=True)
 
         count = soldop_set.aggregate(count=Sum('count'))['count']
         count = count if count is not None else 0
