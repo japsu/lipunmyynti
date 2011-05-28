@@ -14,10 +14,12 @@ __all__ = [
     "destroy_order",
     "init_form",
     "is_soldout",
+    "is_phase_completed",
+    "complete_phase"
 ]
 
 ORDER_KEY = "tracon.ticket_sales.order_id"
-PRIOR_KEY = "tracon.ticket_sales.prior_orders"
+PHASE_KEY = "tracon.ticket_sales.phases"
 
 def redirect(view_name, **kwargs):
     return HttpResponseRedirect(reverse(view_name, kwargs=kwargs))
@@ -38,6 +40,9 @@ def get_order(request):
 def clear_order(request):
     if request.session.has_key(ORDER_KEY):
         del request.session[ORDER_KEY]
+
+    if request.session.has_key(PHASE_KEY):
+        del request.session[PHASE_KEY]
 
 def destroy_order(request):
     order = get_order(request)
@@ -70,3 +75,12 @@ def is_soldout(productdata):
         if (product.amount_available < amount):
             return True
     return False 
+
+def is_phase_completed(request, phase):
+    completed_phases = request.session.get(PHASE_KEY, set())
+    return phase in completed_phases
+
+def complete_phase(request, phase):
+    completed_phases = request.session.get(PHASE_KEY, set())
+    completed_phases.add(phase)
+    request.session[PHASE_KEY] = completed_phases

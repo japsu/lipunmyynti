@@ -101,6 +101,7 @@ class Phase(object):
 
                 # The "Next" button should only proceed with valid data.
                 if action == "next":
+                    complete_phase(request, self.name)
                     return self.next(request)
 
             # The "Previous" button should work regardless of form validity.
@@ -116,7 +117,7 @@ class Phase(object):
 
     def available(self, request):
         order = get_order(request)
-        return not order.is_confirmed
+        return is_phase_completed(request, self.prev_phase) and not order.is_confirmed
 
     def validate(self, request, form):
         if not form.is_valid():
@@ -164,6 +165,7 @@ class WelcomePhase(Phase):
     template = "ticket_sales/welcome.html"
     prev_phase = None
     next_phase = "tickets_phase"
+    permit_new = True
 
     def save(self, request, form):
         order = get_order(request)
