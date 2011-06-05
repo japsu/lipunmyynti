@@ -91,6 +91,10 @@ def get_order_by_ref(ref):
     if not ref.startswith("5"):
         raise Order.DoesNotExist
 
+    # XXX hard-coded length in here and models.Order.reference_number_base
+    if len(ref) != 6:
+        raise Order.DoesNotExist
+
     # Lose the prefix and checksum
     id = int(ref[1:-1])
 
