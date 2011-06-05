@@ -21,17 +21,26 @@ def render_receipt(order, c):
 
     c.drawString(BASE_INDENT, 200*mm, u"Hyvä vastaanottaja,")
 
-    c.drawString(BASE_INDENT, 190*mm, u"Tässä tilaamanne Tracon VI -tapahtuman lipputuotteet:")
+    c.drawString(BASE_INDENT, 190*mm, u"Tässä tilaamanne Tracon VI -tapahtuman pääsyliput:")
 
     ypos = 180*mm
 
-    for op in order.order_product_set.all():
+    for op in order.order_product_set.filter(product__requires_shipping=True):
         c.drawString(BASE_INDENT, ypos, u"%d kpl" % op.count)
         c.drawString(DEEP_INDENT, ypos, op.product.name)
-        if op.product.mail_description is not None:
-            c.drawString(DEEP_INDENT, ypos - 5*mm, op.product.mail_description)
 
-        ypos -= 15*mm
+        ypos -= 10*mm
+
+    non_ship = order.order_product_set.filter(product__requires_shipping=False)
+    if non_ship:
+        c.drawString(BASE_INDENT, ypos, u"Seuraavista tilaamistanne tuotteista saatte lisäohjeita sähköpostitse ennen tapahtumaa:")
+        ypos -= 10*mm
+
+        for op in non_ship:
+            c.drawString(BASE_INDENT, ypos, u"%d kpl" % op.count)
+            c.drawString(DEEP_INDENT, ypos, op.product.name)
+
+            ypos -= 10*mm
     
     c.drawString(BASE_INDENT, ypos, u"Mikäli yllä olevassa luettelossa on virheitä tai kuoren sisältö ei vastaa luetteloa, olkaa hyvä ja")
     c.drawString(BASE_INDENT, ypos - 5*mm, u"ottakaa viipymättä yhteyttä lipunmyyntivastaavaan sähköpostitse osoitteella liput11@tracon.fi")
