@@ -87,7 +87,6 @@ class Batch(models.Model):
                 continue
 
             order.batch = batch
-            order.create_codes()
             order.save()
 
             accepted += 1

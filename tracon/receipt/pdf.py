@@ -25,21 +25,17 @@ def render_receipt(order, c):
 
     ypos = 180*mm
 
-    c.drawString(BASE_INDENT, ypos, u"%d kpl" % order.tickets)
-    c.drawString(DEEP_INDENT, ypos, u"Ennakkolippu")
-    c.drawString(DEEP_INDENT, ypos - 5*mm, u"Oikeuttaa sisäänpääsyyn molempina tapahtumapäivinä sekä ennakkotilaajan etuihin.")
+    for op in order.order_product_set.all():
+        c.drawString(BASE_INDENT, ypos, u"%d kpl" % op.count)
+        c.drawString(DEEP_INDENT, ypos, op.product.name)
+        if op.product.mail_description is not None:
+            c.drawString(DEEP_INDENT, ypos - 5*mm, op.product.mail_description)
 
-    ypos -= 15*mm
-    
-    if order.accommodation > 0:
-        c.drawString(BASE_INDENT, ypos, u"%d kpl" % order.accommodation)
-        c.drawString(DEEP_INDENT, ypos, u"Majoitus")
-        c.drawString(DEEP_INDENT, ypos - 5*mm, u"Pääsette majoitukseen ilmoittamalla lipun varaajan nimen.")
         ypos -= 15*mm
-
+    
     c.drawString(BASE_INDENT, ypos, u"Mikäli yllä olevassa luettelossa on virheitä tai kuoren sisältö ei vastaa luetteloa, olkaa hyvä ja")
-    c.drawString(BASE_INDENT, ypos - 5*mm, u"ottakaa viipymättä yhteyttä lipunmyyntivastaavaan sähköpostitse osoitteella")
-    c.drawString(BASE_INDENT, ypos - 10*mm, u"liput11@tracon.fi tai puhelimitse numeroon 050 550 0838.")
+    c.drawString(BASE_INDENT, ypos - 5*mm, u"ottakaa viipymättä yhteyttä lipunmyyntivastaavaan sähköpostitse osoitteella liput11@tracon.fi")
+    c.drawString(BASE_INDENT, ypos - 10*mm, u"tai puhelimitse numeroon 0400 464 988 (Janne Forsell, parhaiten tavoittaa klo 10-18).")
 
     c.drawString(BASE_INDENT, ypos - 20*mm, u"Mainitkaa viestissänne tilausnumeronne #%04d." % order.id)
 

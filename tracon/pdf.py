@@ -18,6 +18,8 @@ FIRE_OF_YSGARD_FILENAME = os.path.join(settings.MEDIA_ROOT, "FOY1REG.TTF")
 FIRE_OF_YSGARD_FONT = TTFont(FIRE_OF_YSGARD, FIRE_OF_YSGARD_FILENAME)
 pdfmetrics.registerFont(FIRE_OF_YSGARD_FONT)
 
+LOGO_FILENAME = os.path.join(settings.MEDIA_ROOT, "images", "tracon_logo_kuitille.png")
+
 @contextmanager
 def state_saved(canvas):
     try:
@@ -29,7 +31,5 @@ def state_saved(canvas):
 def render_logo(x, y, c):
     with state_saved(c):
         c.translate(x, y)
-
-        c.setFont(FIRE_OF_YSGARD, 36)
-        c.drawString(0, 0, "Tracon")
-        c.drawString(40*mm, 0, "V")
+        c.drawImage(LOGO_FILENAME, 0, 0, 48*mm, 21.4*mm)
+        
