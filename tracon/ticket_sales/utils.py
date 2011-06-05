@@ -96,10 +96,14 @@ def get_order_by_ref(ref):
         raise Order.DoesNotExist
 
     # Lose the prefix and checksum
-    id = int(ref[1:-1])
+    order_id = int(ref[1:-1])
 
-    order = Order.objects.get(id=id)
-    assert order.reference_number == ref
+    order = Order.objects.get(id=order_id)
+
+    # Final validation check
+    if ref != order.reference_number:
+        raise Order.DoesNotExist
+
     return order
 
 SEARCH_CRITERIA_MAP = dict(
