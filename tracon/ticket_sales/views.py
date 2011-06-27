@@ -345,22 +345,31 @@ def stats_view(request):
 
     data = []
     total_cents = 0
+    total_paid_cents = 0
 
     for product in Product.objects.all():
         soldop_set = product.order_product_set.filter(order__confirm_time__isnull=False, order__cancellation_time__isnull=True)
+        paidop_set = soldop_set.filter(order__payment_date__isnull=False)
 
         count = soldop_set.aggregate(count=Sum('count'))['count']
         count = count if count is not None else 0
 
+        paid_count = paidop_set.aggregate(count=Sum('count'))['count']
+        paid_count = paid_count if paid_count is not None else 0
+
         cents = count * product.price_cents
         total_cents += cents
 
-        item = dict(product=product, count=count, cents=format_price(cents))
+        paid_cents = paid_count * product.price_cents
+        total_paid_cents += paid_cents
+
+        item = dict(product=product, count=count, cents=format_price(cents), paid_count=paid_count, paid_cents=format_price(paid_cents))
         data.append(item)
 
     total_price = format_price(total_cents)
+    total_paid_price = format_price(total_paid_cents)
 
-    vars = dict(data=data, total_price=total_price)
+    vars = dict(data=data, total_price=total_price, total_paid_price=total_paid_price)
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/stats.html", vars, context_instance=context)
 

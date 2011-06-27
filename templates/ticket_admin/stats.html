@@ -10,8 +10,10 @@ encoding: utf-8
   <thead>
     <tr>
       <th>Tuote</th>
-      <th>Kpl</th>
-      <th>Rahaa</th>
+      <th>Myyty kpl</th>
+      <th>Myyty €</th>
+      <th>Maksettu kpl</th>
+      <th>Maksettu €</th>
     </tr>
   </thead>
   <tbody>
@@ -20,6 +22,8 @@ encoding: utf-8
         <td>{{ item.product.name }}</td>
         <td>{{ item.count }}</td>
         <td>{{ item.cents }}</td>
+        <td>{{ item.paid_count }}</td>
+        <td>{{ item.paid_cents }}</td>
       </tr>
     {% endfor %}
   </tbody>
@@ -28,6 +32,8 @@ encoding: utf-8
       <th>Yhteensä</th>
       <th></th>
       <th>{{ total_price }}</th>
+      <th></th>
+      <th>{{ total_paid_price }}</th>
     </tr>
   </tfoot>
 </table>
