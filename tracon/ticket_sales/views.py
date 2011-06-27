@@ -343,6 +343,11 @@ def stats_view(request):
     #data = Product.objects.annotate(count=Sum('order_product_set__count'))
     #data = OrderProduct.objects.filter(order__confirm_time__isnull=False).values("product").annotate(count=Sum('count')).order_by()
 
+    orders = Order.objects.all()
+    cancelled_orders = orders.filter(cancellation_time__isnull=False)
+    paid_orders = orders.filter(cancellation_time__isnull=True, payment_date__isnull=False)
+    delivered_orders = paid_orders.filter(batch__delivery_time__isnull=False)
+
     data = []
     total_cents = 0
     total_paid_cents = 0
@@ -369,7 +374,15 @@ def stats_view(request):
     total_price = format_price(total_cents)
     total_paid_price = format_price(total_paid_cents)
 
-    vars = dict(data=data, total_price=total_price, total_paid_price=total_paid_price)
+    vars = dict(
+        data=data,
+        num_orders=orders.count(),
+        num_cancelled_orders=cancelled_orders.count(),
+        num_paid_orders=paid_orders.count(),
+        num_delivered_orders=delivered_orders.count(),
+        total_price=total_price,
+        total_paid_price=total_paid_price
+    )
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/stats.html", vars, context_instance=context)
 

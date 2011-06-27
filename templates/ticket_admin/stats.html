@@ -5,7 +5,18 @@ encoding: utf-8
 
 {% endcomment %}
 {% block content %}
-<h1>Myyty tähän mennessä</h1>
+<h1>Lipunmyynnin raportti</h1>
+
+<ul>
+  <li>Tilauksia <b>{{ num_orders }} kpl, joista</b>
+    <ul>
+      <li>maksettu <b>{{ num_paid_orders }} kpl</b></li>
+      <li>toimitettu <b>{{ num_delivered_orders }} kpl</b></li>
+      <li>peruttu <b>{{ num_cancelled_orders }} kpl</b></li>
+    </ul>
+  </li>
+</ul>
+
 <table>
   <thead>
     <tr>
