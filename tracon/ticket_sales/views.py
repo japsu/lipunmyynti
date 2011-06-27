@@ -343,9 +343,9 @@ def stats_view(request):
     #data = Product.objects.annotate(count=Sum('order_product_set__count'))
     #data = OrderProduct.objects.filter(order__confirm_time__isnull=False).values("product").annotate(count=Sum('count')).order_by()
 
-    orders = Order.objects.all()
-    cancelled_orders = orders.filter(cancellation_time__isnull=False)
-    paid_orders = orders.filter(cancellation_time__isnull=True, payment_date__isnull=False)
+    confirmed_orders = Order.objects.filter(confirm_time__isnull=False)
+    cancelled_orders = confirmed_orders.filter(cancellation_time__isnull=False)
+    paid_orders = confirmed_orders.filter(cancellation_time__isnull=True, payment_date__isnull=False)
     delivered_orders = paid_orders.filter(batch__delivery_time__isnull=False)
 
     data = []
@@ -376,7 +376,7 @@ def stats_view(request):
 
     vars = dict(
         data=data,
-        num_orders=orders.count(),
+        num_confirmed_orders=confirmed_orders.count(),
         num_cancelled_orders=cancelled_orders.count(),
         num_paid_orders=paid_orders.count(),
         num_delivered_orders=delivered_orders.count(),
