@@ -41,7 +41,10 @@ Viitenumeroa on ehdottomasti käytettävä maksettaessa!
 Vastaanotetut maksut käsitellään viikoittain. Kun maksunne on käsitelty,
 saatte tästä erillisen vahvistusviestin.
 
-{% if order.requires_shipping %}Lippujen postitus aloitetaan 1. kesäkuuta 2011.
+{% if order.requires_shipping %}Huomioithan, että lippuja toimitetaan pitkin kesää isommissa erissä, 
+eli rannekeen toimituksessa voi kestää useampi viikko. Kaikki 
+lipputilaukset toimitetaan kuitenkin hyvissä ajoin ennen tapahtumaa eikä 
+kukaan lippunsa ajoissa maksanut jää vaille lippuja.
 
 {% for message in messages %}{{ message }}
 

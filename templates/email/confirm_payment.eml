@@ -25,8 +25,12 @@ Jos ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
 yhteyttä lipunmyyntiin joko vastaamalla tähän viestiin tai lähettämällä
 sähköpostia osoitteella liput11@tracon.fi.
 
-{% if order.requires_shipping %}Lippujen postitus aloitetaan 1. kesäkuuta 2011. Saatte erillisen
-vahvistusviestin, kun lippunne on postitettu.
+{% if order.requires_shipping %}Huomioithan, että lippuja toimitetaan pitkin kesää isommissa erissä, 
+eli rannekeen toimituksessa voi kestää useampi viikko. Kaikki 
+lipputilaukset toimitetaan kuitenkin hyvissä ajoin ennen tapahtumaa eikä 
+kukaan lippunsa ajoissa maksanut jää vaille lippuja.
+
+Saatte erillisen vahvistusviestin, kun lippunne on postitettu.
 
 {% endif %}Ystävällisin terveisin
 -- 
