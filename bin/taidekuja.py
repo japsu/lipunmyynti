@@ -16,7 +16,7 @@ def main(out=sys.stdout):
         cancellation_time__isnull=True
     ).order_by("id")
 
-    ordinal = 1
+    ordinal = 3
 
     for order in orders:
         count=order.order_product_set.get(product=PRODUCT).count

@@ -360,9 +360,14 @@ class Order(models.Model):
 
     @property
     def due_date(self):
+        # XXX
+        PURKKA_THRESHOLD = datetime(2011, 8, 12, 12, 33)
+        PURKKA_DUEDATE = datetime(2011, 8, 17, 23, 59, 59)
+
         if not self.confirm_time:
             return None
-
+        elif self.requires_shipping and self.confirm_time >= PURKKA_THRESHOLD:
+            return PURKKA_DUEDATE
         else:
             return datetime.combine((self.confirm_time + timedelta(days=DUE_DAYS)).date(), dtime(23, 59, 59))
 
