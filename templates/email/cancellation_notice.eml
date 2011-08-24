@@ -1,6 +1,7 @@
 Hyvä vastaanottaja,
 
-Tracon VI -lipputilauksenne numero {{ order.pk|stringformat:"04d" }} on peruutettu.
+Tracon VI -lipputilauksenne numero {{ order.pk|stringformat:"04d" }} on peruutettu,
+koska sitä ei maksettu eräpäivään mennessä.
 
 Tilauksenne sisälsi seuraavat lipputuotteet:
 
