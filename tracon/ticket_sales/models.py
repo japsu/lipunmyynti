@@ -12,6 +12,7 @@ from tracon.ticket_sales.format import format_date, format_datetime, format_pric
 from tracon.receipt.pdf import render_receipt
 
 __all__ = [
+    "School",
     "Batch",
     "Product",
     "Customer",
@@ -168,6 +169,15 @@ class Product(models.Model):
     def __unicode__(self):
         return u"%s (%s)" % (self.name, self.formatted_price)
 
+class School(models.Model):
+    # REVERSE: order_set
+
+    name = models.CharField(max_length=40)
+    address = models.CharField(max_length=40)
+    product = models.ForeignKey(Product)
+    max_people = models.IntegerField()
+
+
 class Customer(models.Model):
     # REVERSE: order = OneToOne(Order)
     first_name = models.CharField(max_length=100)
@@ -204,6 +214,7 @@ class Order(models.Model):
     payment_date = models.DateField(null=True, blank=True)
     cancellation_time = models.DateTimeField(null=True, blank=True)
     batch = models.ForeignKey(Batch, null=True, blank=True)
+    school = models.ForeignKey(School, null=True, blank=True)
 
     @property
     def is_active(self):
