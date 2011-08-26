@@ -20,7 +20,8 @@ tapahtumaa."""),
     ("Taidekujapöytä", 1500, "Haluatko taidekujalle myymään taidettasi tai käsitöitäsi? Varaa taidekujapöytäsi tästä! Taidekujavastaavamme ottaa järjestelyistä yhteyttä henkilökohtaisesti kaikkiin varaajiin.", "i_art.png", "small", False, 50, True, 
 
 """Taidekujavastaava ottaa sinuun henkilökohtaisesti yhteyttä koskien
-taidekujavarauksesi järjestelyitä. Tervetuloa taidekujalle!""")
+taidekujavarauksesi järjestelyitä. Tervetuloa taidekujalle!"""),
+    ("Lattiamajoitus (Kaukajärvi)", 700, "TODO", "i_lasu.png", "small", False, 100, True, "TODO")
 ]
 
 def create_products():
