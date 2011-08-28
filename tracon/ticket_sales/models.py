@@ -176,6 +176,7 @@ class School(models.Model):
     address = models.CharField(max_length=40)
     product = models.ForeignKey(Product)
     max_people = models.IntegerField()
+    priority = models.IntegerField()
 
 
 class Customer(models.Model):
