@@ -178,6 +178,21 @@ class School(models.Model):
     max_people = models.IntegerField()
     priority = models.IntegerField()
 
+    @property
+    def amount_placed(self):
+        total = 0
+        for order in self.order_set.filter(confirm_time__isnull=False, payment_date__isnull=False, cancellation_time__isnull=True):
+            sleepy_op = order.order_product_set.get(product=self.product)
+            total += sleepy_op.count
+        return total
+
+    @property
+    def amount_available(self):
+        return self.max_people - self.amount_placed
+
+    def __unicode__(self):
+        return self.name
+
 
 class Customer(models.Model):
     # REVERSE: order = OneToOne(Order)

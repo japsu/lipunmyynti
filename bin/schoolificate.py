@@ -6,7 +6,7 @@ from tracon.ticket_sales.models import *
 from send_sleeping_info import CLASU, TAMMERKOSKI, KAUKAJARVI, SLEEPY_PRODUCTS
 from create_schools import KAUKKIS, PERUS
 
-DRY_RUN=True
+DRY_RUN=False
 
 def get_sleepy_order_set():
     return Order.objects.filter(

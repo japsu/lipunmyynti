@@ -13,7 +13,7 @@ def main():
         name=u"Kaukajärven koulu",
         address=u"Juvankatu 13",
         product=KAUKKIS,
-        max_people=1,
+        max_people=100,
         priority=0
     ).save()
 
@@ -21,7 +21,7 @@ def main():
         name=u"Tammerkosken koulu",
         address=u"Rautatienkatu 3-5",
         product=PERUS,
-        max_people=1,
+        max_people=100,
         priority=50
     ).save()
 
@@ -29,7 +29,7 @@ def main():
         name=u"Klassillinen koulu",
         address=u"Tuomiokirkonkatu 5",
         product=PERUS,
-        max_people=1,
+        max_people=180,
         priority=100
     ).save()
 
