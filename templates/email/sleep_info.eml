@@ -1,7 +1,8 @@
 Hei!
 
 Olet varannut Traconin lattiamajoituksesta {{ count }} majoituspai{{ count|pluralize:"kan,kkaa" }}
-nimellä {{ name|upper }}. 
+lauantain 3.9.2011 ja sunnuntain 4.9.2011 väliseksi yöksi nimellä
+{{ name|upper }}. 
 
 Majoituspaikkasi on {{ school|upper }} osoitteessa {{ address|upper }}.
 
