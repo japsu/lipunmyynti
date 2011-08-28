@@ -1,9 +1,9 @@
 Hei!
 
-Olet varannut Traconin lattiamajoituksesta {{ count }} majoituspaikkaa 
+Olet varannut Traconin lattiamajoituksesta {{ count }} majoituspai{{ count|pluralize:"kan,kkaa" }}
 nimellä {{ name|upper }}. 
 
-Majoituspaikkasi sijaitsee {{ school }}.
+Majoituspaikkasi on {{ school|upper }} osoitteessa {{ address|upper }}.
 
 Tässä ohjeet lattiamajoituksesta.
 
@@ -37,20 +37,20 @@ TAPAHTUMAPAIKALTA MAJOITUKSEEN
 {% if tammerkoski %}Tampere-talosta Tammerkosken koululle (Rautatienkatu 3-5) on matkaa
 noin kilometri. Koulu on rautatieasemalta 5 korttelia pohjoiseen, suoraan
 Rautatienkatua pitkin ja heti Tuomiokirkon jälkeen.
-{% elif clasu %}Tampere-talosta Klassilliselle koululle (Tuomiokirkonkatu 5) on matkaa
+{% endif %}{% if clasu %}Tampere-talosta Klassilliselle koululle (Tuomiokirkonkatu 5) on matkaa
 noin kilometri. Koulu on rautatieasemalta kaksi korttelia pohjoiseen,
 Rautatienkatua pitkin ja vasemmalla puolella.
-{% elif kaukajarvi %}Tampere-talosta Kaukajärven koululle (Juvankatu 13) on matkaa
+{% endif %}{% if kaukajarvi %}Tampere-talosta Kaukajärven koululle (Juvankatu 13) on matkaa
 noin 6,5 kilometriä. Helpoiten majoitukseen pääset conibussilla sekä
 julkisen liikenteen busseilla.  TKLn busseista linja 22 kulkee
 Tampere-talon ja Kaukajärven koulun ohitse, pysäkit ovelta-ovelle (ja toki 
 jatkaa Tampere-talolta keskustaan), linja 15 kulkee Kaukajärven koulun ja 
 keskustorin välillä.
 {% endif %}
-
 Tampere-talon ja majoituspaikkojen väliä liikennöi myös Traconin ikioma 
 CONIBUSSI, jolla taitat matkan helposti ja edullisesti. Conibussilla matka 
-maksaa 1 €/hlö/suunta (varaathan tasarahan!). TODO AIKATAULU
+maksaa 1 €/hlö/suunta (varaathan tasarahan!). Conibussin aikataulu
+ilmoitetaan paikan päällä.
 
 
 MAJOITUKSEEN SAAPUMINEN
@@ -76,15 +76,14 @@ järjestyksenvalvojien antamia ohjeita.
 
 {% if tammerkoski %}Tammerkosken koululla on erilliset suihkut miehille ja naisille.
 Suihkut ovat käytössä läpi majoituksen aukioloajan.
-{% elif clasu %}Klassillisella koululla on suihkutila, johon on miesten ja naisten
+{% endif %}{% if clasu %}Klassillisella koululla on suihkutila, johon on miesten ja naisten
 vuorot. Suihkutilat ovat käytössä läpi majoituksen aukioloajan seuraavasti:
 parilliset tunnit miesten vuoro ja parittomat tunnit naisten 
 vuoro.
-{% elif kaukajärvi %}Kaukajärvellä ei ole suihkutiloja käytössä, suosittelemme
+{% endif %}{% if kaukajarvi %}Kaukajärvellä ei ole suihkutiloja käytössä. Suosittelemme
 käyttämään Tammerkosken koulun suihkutiloja (su klo 08-13) joihin liikut
 kätevästi con- tai TKL:n bussilla.
 {%endif%}
-
 Jos poistut majoituspaikasta yön aikana, ilmoittaudu poistuessasi 
 majoitusvalvojalle, jotta majoitusvalvojalla on jatkuvasti tiedossaan ketkä 
 majoittujista ovat majoituspaikassa sisällä.
@@ -97,23 +96,21 @@ että tupakantumpit päätyvät niille kuuluviin paikkoihin.
 
 MAJOITUKSESTA POISTUMINEN
 
-{% if tammerkoski %}Kaikki majoittujat herätetään viimeistään kello 09, 
-ja majoituksesta on poistuttava kello 13 mennessä.
-{% elif clasu %}Kaikki majoittujat herätetään viimeistään kello 09, ja 
+{% if tammerkoski %}Kaikki majoittujat herätetään viimeistään kello 09, ja majoituksesta
+on poistuttava kello 13 mennessä.
+{% endif %}{% if clasu %}Kaikki majoittujat herätetään viimeistään kello 09, ja 
 majoituksesta on poistuttava kello 11 mennessä.
-{% elif kaukajärvi %}Kaikki majoittujat herätetään viimeistään kello 
-09, ja majoituksesta on poistuttava kello 10:30 mennessä.
+{% endif %}{% if kaukajarvi %}Kaikki majoittujat herätetään viimeistään kello 09, ja
+majoituksesta on poistuttava kello 10:30 mennessä.
 {%endif%}
-
 Mikäli poistut majoituksesta aikaisemmin, ilmoita siitä majoituksen 
 valvojalle.
 
 Sunnuntaiaamuna conibussi liikennöi majoituspaikkojen ja Tampere-talon 
-väliä kello TODO MISTÄ MIHIN TODO MILLÄ VUOROVÄLILLÄ. Hinta on sama 
-kuin illallakin eli 1 €/hlö/suunta.
+väliä. Hinta on sama kuin illallakin eli 1 €/hlö/suunta.
 
 
-HILJAINEN HUONE
+{% if not kaukajarvi %}HILJAINEN HUONE
 
 Tammerkoskessa ja Clasussa on ns. hiljainen huone, joka on tarkoitettu niille 
 jotka aikovat nukkua yleiseen herätykseen kello 09 asti. Hiljaisessa 
@@ -129,7 +126,7 @@ hiljaiseen huoneeseen tultaessa.
 - EI OMIA HERÄTYKSIÄ! ;)
 
 
-TURVALLISUUS MAJOITUSPAIKOISSA
+{% endif %}TURVALLISUUS MAJOITUSPAIKOISSA
 
 Majoituspaikkoja valvovat läpi yön majoitusvalvojat sekä kortilliset 
 järjestyksenvalvojat.
@@ -143,7 +140,7 @@ NÄLKÄ?
 Majoituspaikoissa ei ole kahvioita tai muuta ruokamyyntiä. Kannattaa siis 
 varautua pienellä iltapalalla!
 
-{% if not kaukajärvi %}Majoituspaikkojen lähistöltä löytyy seuraavia 
+{% if not kaukajarvi %}Majoituspaikkojen lähistöltä löytyy seuraavia 
 myöhään auki olevia ruokapaikkoja:
 
 Tampereen keskusta on täynnä ravintoloita. Lähimpinä ruokapaikkoina on 
@@ -151,7 +148,6 @@ Rautatienkadun Subway (lauantaina klo 23 asti auki, aukeaa sunnuntaina klo
 11), sekä erinomainen kiinalainen ravintola Lotus Garden (Rongankatu 5-7, la 
 klo ->23, su klo 12->) suht edullisesti takeawayna. Hämeenkadun ja 
 Itsenäisyydenkadun pizzeriat palvelevat läpi yön.{% endif %}
-
 
 KYSY LISÄÄ!
 

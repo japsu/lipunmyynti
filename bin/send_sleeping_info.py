@@ -6,10 +6,10 @@ from tracon.ticket_sales.models import *
 from datetime import  datetime, timedelta
 from django.conf import settings
 from django.core.mail import EmailMessage
-from django.template import Template, Context
+from django.template.loader import render_to_string
 
-DRY_RUN = True
-MESSAGE_TEMPLATE = Template("email/sleep_info.eml")
+DRY_RUN = False
+MESSAGE_SUBJECT = u"Tracon VI: Lattiamajoituksen ohje (#{id:04d})"
 
 SLEEPY_PRODUCTS = Product.objects.filter(name__icontains="majoitus")
 
@@ -21,20 +21,22 @@ def send_sleep_info(order):
     op = order.order_product_set.get(product__in=SLEEPY_PRODUCTS)
 
     vars = dict(
+        id=order.id,
         name=order.customer.name,
         count=op.count,
-        school=order.school,
+        school=order.school.name,
+        address=order.school.address,
         clasu=(order.school == CLASU),
         tammerkoski=(order.school == TAMMERKOSKI),
         kaukajarvi=(order.school == KAUKAJARVI)
     )
-    ctx = Context(vars)
 
-    body=MESSAGE_TEMPLATE.render(ctx)
+    body=render_to_string("email/sleep_info.eml", vars)
+    subject=MESSAGE_SUBJECT.format(**vars)
 
     if not DRY_RUN:
         EmailMessage(
-            subject=MESSAGE_SUBJECT,
+            subject=subject,
             body=body,
             from_email=settings.DEFAULT_FROM_EMAIL,
             to=(order.customer.email,),
@@ -44,7 +46,7 @@ def send_sleep_info(order):
     print order
 
 def main():
-    orders = Order.objects.get(school__isnull=False)
+    orders = Order.objects.filter(school__isnull=False)
     for order in orders:
         send_sleep_info(order)
 
