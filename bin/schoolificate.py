@@ -20,7 +20,7 @@ def get_sleepy_order_set():
         cancellation_time__isnull=True,
 
         # Contains lodging
-        order_product_set__in=SLEEPY_PRODUCTS,
+        order_product_set__product__in=SLEEPY_PRODUCTS,
 
         # Has not been schoolificated yet
         school__isnull=True
