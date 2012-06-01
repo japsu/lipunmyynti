@@ -10,6 +10,7 @@ encoding: utf-8
 <h2>Tiedot</h2>
 <ul>
   <li><a href="{% url stats_view %}">Lipunmyynnin raportti</a></li>
+  <li><a href="{% url tickets_by_date_view %}">le tickets_by_date</a></li>
   {% comment %}XXX väärä perm {% endcomment %}
   {% if perms.ticket_sales.can_manage_batches %}
     <li><a href="{% url search_view %}">Lipputilausten haku</a></li>

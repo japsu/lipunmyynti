@@ -30,6 +30,8 @@ urlpatterns = patterns('',
     url(r'hallinta/erat/(?P<batch_id>\d+)/vahvista/$', deliver_batch_view, name="deliver_batch_view"),
 
     url(r'hallinta/tiedot/$', stats_view, name="stats_view"),
+    url(r'hallinta/tickets_by_date/$', tickets_by_date_view, {'raw': False}, name="tickets_by_date_view"),
+    url(r'hallinta/tickets_by_date/raw/$', tickets_by_date_view, {'raw': True}, name="tickets_by_date_raw"),
 
     url(r'kirjaudu/$', 'django.contrib.auth.views.login', dict(template_name="ticket_admin/login.html"), name="login_page"),
     url(r'kirjaudu/ulos/$', 'django.contrib.auth.views.logout', dict(template_name="ticket_admin/logged_out.html"), name="logout_page"),
