@@ -37,6 +37,13 @@ encoding: utf-8
         <td>{{ item.paid_cents }}</td>
       </tr>
     {% endfor %}
+    <tr>
+      <td>Toimituskulut</td>
+      <td>{{ num_req_delivery }}</td>
+      <td>{{ shipping_and_handling_total }}</td>
+      <td>{{ num_req_delivery_paid }}</td>
+      <td>{{ shipping_and_handling_paid }}</td>
+    </tr>
   </tbody>
   <tfoot>
     <tr>

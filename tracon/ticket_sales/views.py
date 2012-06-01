@@ -352,6 +352,15 @@ def stats_view(request):
     paid_orders = confirmed_orders.filter(cancellation_time__isnull=True, payment_date__isnull=False)
     delivered_orders = paid_orders.filter(batch__delivery_time__isnull=False)
 
+    req_delivery = confirmed_orders.filter(order_product_set__product__requires_shipping=True).distinct()
+    num_req_delivery = req_delivery.count()
+    num_req_delivery_paid = req_delivery.filter(payment_date__isnull=False).count()
+    shipping_and_handling_paid_cents = num_req_delivery_paid * SHIPPING_AND_HANDLING_CENTS
+    shipping_and_handling_paid = format_price(shipping_and_handling_paid_cents)
+    
+    shipping_and_handling_total_cents = num_req_delivery * SHIPPING_AND_HANDLING_CENTS
+    shipping_and_handling_total = format_price(shipping_and_handling_total_cents)
+
     data = []
     total_cents = 0
     total_paid_cents = 0
@@ -375,6 +384,9 @@ def stats_view(request):
         item = dict(product=product, count=count, cents=format_price(cents), paid_count=paid_count, paid_cents=format_price(paid_cents))
         data.append(item)
 
+    total_cents += shipping_and_handling_total_cents
+    total_paid_cents += shipping_and_handling_paid_cents
+
     total_price = format_price(total_cents)
     total_paid_price = format_price(total_paid_cents)
 
@@ -384,6 +396,11 @@ def stats_view(request):
         num_cancelled_orders=cancelled_orders.count(),
         num_paid_orders=paid_orders.count(),
         num_delivered_orders=delivered_orders.count(),
+        num_req_delivery=num_req_delivery,
+        num_req_delivery_paid=num_req_delivery_paid,
+        shipping_and_handling_total=shipping_and_handling_total,
+        shipping_and_handling_paid=shipping_and_handling_paid,
+
         total_price=total_price,
         total_paid_price=total_paid_price
     )

@@ -18,6 +18,7 @@ __all__ = [
     "Customer",
     "Order",
     "OrderProduct",
+    "SHIPPING_AND_HANDLING_CENTS",
 ]
 
 SHIPPING_AND_HANDLING_CENTS = 100
