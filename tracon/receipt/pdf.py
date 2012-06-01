@@ -13,7 +13,7 @@ def render_receipt(order, c):
     render_logo(135*mm, 265*mm, c)
 
     c.setFont("Times-Roman", 12)
-    c.drawString(135*mm, 260*mm, u"Tampere-talossa 3.-4.9.2011")
+    c.drawString(135*mm, 260*mm, u"Tampere-talossa 8.-9.9.2012")
 
     c.drawString(BASE_INDENT, 270*mm, order.customer.name)
     c.drawString(BASE_INDENT, 265*mm, order.customer.address)
@@ -21,7 +21,7 @@ def render_receipt(order, c):
 
     c.drawString(BASE_INDENT, 200*mm, u"Hyvä vastaanottaja,")
 
-    c.drawString(BASE_INDENT, 190*mm, u"Tässä tilaamanne Tracon VI -tapahtuman pääsyliput:")
+    c.drawString(BASE_INDENT, 190*mm, u"Tässä tilaamanne Tracon 7 -tapahtuman pääsyliput:")
 
     ypos = 180*mm
 
@@ -43,19 +43,19 @@ def render_receipt(order, c):
             ypos -= 10*mm
     
     c.drawString(BASE_INDENT, ypos, u"Mikäli yllä olevassa luettelossa on virheitä tai kuoren sisältö ei vastaa luetteloa, olkaa hyvä ja")
-    c.drawString(BASE_INDENT, ypos - 5*mm, u"ottakaa viipymättä yhteyttä lipunmyyntivastaavaan sähköpostitse osoitteella liput11@tracon.fi")
-    c.drawString(BASE_INDENT, ypos - 10*mm, u"tai puhelimitse numeroon 0400 464 988 (Janne Forsell, parhaiten tavoittaa klo 10-18).")
+    c.drawString(BASE_INDENT, ypos - 5*mm, u"ottakaa viipymättä yhteyttä lipunmyyntivastaavaan sähköpostitse osoitteella liput12@tracon.fi.")
+    #c.drawString(BASE_INDENT, ypos - 10*mm, u"tai puhelimitse numeroon 0400 464 988 (Janne Forsell, parhaiten tavoittaa klo 10-18).")
 
-    c.drawString(BASE_INDENT, ypos - 20*mm, u"Mainitkaa viestissänne tilausnumeronne #%04d." % order.id)
+    c.drawString(BASE_INDENT, ypos - 15*mm, u"Mainitkaa viestissänne tilausnumeronne #%04d." % order.id)
 
     ypos -= 30*mm
 
-    c.drawString(BASE_INDENT, ypos, u"Lisätietoja Tracon VI -tapahtumasta löydätte kotisivuiltamme: http://2011.tracon.fi/")
+    c.drawString(BASE_INDENT, ypos, u"Lisätietoja Tracon 7 -tapahtumasta löydätte kotisivuiltamme: http://2012.tracon.fi/")
 
     ypos -= 15*mm
 
     c.drawString(BASE_INDENT, ypos, u"Ystävällisin terveisin")
-    c.drawString(BASE_INDENT, ypos - 10*mm, u"Tracon VI -tapahtuman järjestäjät")
+    c.drawString(BASE_INDENT, ypos - 10*mm, u"Tracon 7 -tapahtuman järjestäjät")
 
     c.line(BASE_INDENT, 20*mm, 210*mm - BASE_INDENT, 20*mm)
     c.setFont("Helvetica", 8)
