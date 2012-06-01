@@ -58,7 +58,7 @@ class ConfirmSinglePaymentForm(forms.Form):
     order_id = forms.IntegerField()
 
 class MultiplePaymentsForm(forms.Form):
-    dump = forms.CharField(widget=forms.Textarea, label=u"Pastee tähän")
+    dump = forms.CharField(widget=forms.Textarea(attrs={'rows':15,'cols':'90'}), label=u"Pastee tähän")
 
 class CreateBatchForm(forms.Form):
     max_orders = forms.IntegerField(label=u"Kuinka monta tilausta (enintään)?")
