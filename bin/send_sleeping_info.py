@@ -46,7 +46,8 @@ def send_sleep_info(order):
     print order
 
 def main():
-    orders = Order.objects.filter(school__isnull=False)
+    # XXX PURKKA
+    orders = Order.objects.filter(school=KAUKAJARVI)
     for order in orders:
         send_sleep_info(order)
 

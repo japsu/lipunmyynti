@@ -1,6 +1,6 @@
 Hyvä vastaanottaja,
 
-Olemme vastaanottaneet {{ order.payment_date|date }} maksun Tracon VI
+Olemme vastaanottaneet {{ order.payment_date|date }} maksun Tracon 7
 -ennakkolipputilauksestanne numero {{ order.pk|stringformat:"04d" }}.
 
 Vahvistamme maksetuiksi seuraavat lipputuotteet:
@@ -23,7 +23,7 @@ Yhteensä: {{ order.formatted_price }} (ALV 0%)
 
 Jos ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
 yhteyttä lipunmyyntiin joko vastaamalla tähän viestiin tai lähettämällä
-sähköpostia osoitteella liput11@tracon.fi.
+sähköpostia osoitteella liput12@tracon.fi.
 
 {% if order.requires_shipping %}Huomioithan, että lippuja toimitetaan pitkin kesää isommissa erissä, 
 eli rannekeen toimituksessa voi kestää useampi viikko. Kaikki 
@@ -34,4 +34,4 @@ Saatte erillisen vahvistusviestin, kun lippunne on postitettu.
 
 {% endif %}Ystävällisin terveisin
 -- 
-Tracon VI -lipunmyynti <liput11@tracon.fi>
+Tracon 7 -lipunmyynti <liput12@tracon.fi>

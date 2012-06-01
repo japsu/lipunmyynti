@@ -142,7 +142,7 @@ class Product(models.Model):
     price_cents = models.IntegerField()
     requires_shipping = models.BooleanField(default=True)
     available = models.BooleanField(default=True)
-    ilmoitus_mail = models.CharField(max_length=100)
+    ilmoitus_mail = models.CharField(max_length=100, null=True, blank=True)
 
     @property
     def formatted_price(self):
@@ -180,6 +180,9 @@ class School(models.Model):
 
     @property
     def amount_placed(self):
+        if self.id is None:
+            return 0
+
         total = 0
         for order in self.order_set.filter(confirm_time__isnull=False, payment_date__isnull=False, cancellation_time__isnull=True):
             sleepy_op = order.order_product_set.get(product=self.product)
@@ -191,7 +194,7 @@ class School(models.Model):
         return self.max_people - self.amount_placed
 
     def __unicode__(self):
-        return self.name
+        return u"%s (%s/%s)" % (self.name, self.amount_placed, self.max_people)
 
 
 class Customer(models.Model):
@@ -388,10 +391,10 @@ class Order(models.Model):
     @property
     def due_date(self):
         # XXX
-        PURKKA_THRESHOLD = datetime(2011, 8, 12, 12, 33)
-        PURKKA_DUEDATE = datetime(2011, 8, 17, 23, 59, 59)
+        PURKKA_THRESHOLD = datetime(2012, 8, 12, 12, 33)
+        PURKKA_DUEDATE = datetime(2012, 8, 17, 23, 59, 59)
 
-        PURKKA2_DUEDATE = datetime(2011, 8, 30, 23, 59, 59)
+        PURKKA2_DUEDATE = datetime(2012, 8, 30, 23, 59, 59)
 
         if not self.confirm_time:
             return None
@@ -415,13 +418,13 @@ class Order(models.Model):
                 msgbcc = (settings.TICKET_SPAM_EMAIL,)
         
         if msgtype == "tilausvahvistus":
-            msgsubject = "Tracon VI: Tilausvahvistus (#%04d)" % self.pk
+            msgsubject = "Tracon 7: Tilausvahvistus (#%04d)" % self.pk
             msgbody = self.order_confirmation_message
         elif msgtype == "maksuvahvistus":
-            msgsubject = "Tracon VI: Maksuvahvistus (#%04d)" % self.pk
+            msgsubject = "Tracon 7: Maksuvahvistus (#%04d)" % self.pk
             msgbody = self.payment_confirmation_message
         elif msgtype == "toimitusvahvistus":
-            msgsubject = "Tracon VI: Toimitusvahvistus (#%04d)" % self.pk
+            msgsubject = "Tracon 7: Toimitusvahvistus (#%04d)" % self.pk
             msgbody = self.delivery_confirmation_message
         else:
             raise NotImplementedError(msgtype)
@@ -436,7 +439,7 @@ class Order(models.Model):
     def send_payment_reminder_message(self):
         # TODO see above
         EmailMessage(
-            subject="Tracon VI: Maksumuistutus (#%04d)" % self.pk,
+            subject="Tracon 7: Maksumuistutus (#%04d)" % self.pk,
             body=self.payment_reminder_message,
             to=(self.customer.name_and_email,),
             bcc=(settings.TICKET_SPAM_EMAIL,)
@@ -444,7 +447,7 @@ class Order(models.Model):
 
     def send_cancellation_notice_message(self):
         EmailMessage(
-            subject="Tracon VI: Tilaus peruuntunut (#%04d)" % self.pk,
+            subject="Tracon 7: Tilaus peruuntunut (#%04d)" % self.pk,
             body=self.cancellation_notice_message,
             to=(self.customer.name_and_email,),
             bcc=(settings.TICKET_SPAM_EMAIL,)

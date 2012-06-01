@@ -1,6 +1,6 @@
 Hyvä vastaanottaja,
 
-Kirjanpitomme mukaan emme ole saaneet maksuanne Tracon VI -lipputilauksestanne
+Kirjanpitomme mukaan emme ole saaneet maksuanne Tracon 7 -lipputilauksestanne
 numero {{ order.pk|stringformat:"04d" }}.
 
 Olette tilannut seuraavat lipputuotteet:
@@ -26,7 +26,7 @@ sähköpostiviestiin välittömästi ja vastauksessanne kertokaa, milloin
 maksoitte tilauksenne.
 
 Mikäli ette haluakaan tilaamianne tuotteita, voitte jättää tämän viestin
-huomiotta. Tilaukset, joita ei ole maksettu maanantaihin 15.8. mennessä,
+huomiotta. Tilaukset, joita ei ole maksettu perjantaihin 17.8. mennessä,
 perutaan automaattisesti. Saatte tilauksenne peruuntumisesta ilmoituksen
 sähköpostitse.
 
@@ -49,4 +49,4 @@ sähköpostiinne.
 
 Ystävällisin terveisin
 -- 
-Tracon VI -lipunmyynti <liput11@tracon.fi>
+Tracon 7 -lipunmyynti <liput12@tracon.fi>

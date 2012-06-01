@@ -2,35 +2,31 @@
 # encoding: utf-8
 # vim: shiftwidth=4 expandtab
 
-from tracon.ticket_sales.models import Order
+from tracon.ticket_sales.models import *
 from csv import writer
 import sys
 
-DRY_RUN = False
-
 def get_accom_orders():
-    confirmed_orders = Order.objects.filter(
-        confirm_time__isnull=False
-    )
-
-    # XXX vanha accom-protokolla, korjaa
-    for order in confirmed_orders:
-        if not order.requires_shipping and order.accommodation > 0:
-            yield order
+    return Order.objects.filter(
+        confirm_time__isnull=False,
+        cancellation_time__isnull=True,
+        school__isnull=False
+    ).order_by("school__name","customer__last_name","customer__first_name")
 
 def print_order_csv(orders, stream=sys.stdout):
     w = writer(stream)
 
-    w.writerow(["Tnro", "Sukunimi", "Etunimi", u"Määrä".encode("ISO-8859-1"), "Kuitti"])
+    w.writerow(["Koulu", "Sukunimi", "Etunimi", u"Määrä".encode("ISO-8859-1"), "Kuitti"])
 
     for order in orders:
-        firstname, lastname = order.customer.name.split(" ", 1)
+        firstname, lastname = order.customer.first_name, order.customer.last_name
         proof_required = "KUITTI!" if not order.is_paid else ""
+        op = OrderProduct.objects.get(order=order, product=order.school.product)
 
         firstname = firstname.encode("ISO-8859-1")
         lastname = lastname.encode("ISO-8859-1")
 
-        w.writerow([order.id, lastname, firstname, order.accommodation, proof_required])
+        w.writerow([order.school.name.encode("ISO-8859-1"), lastname, firstname, op.count, proof_required])
 
 def main():
     orders = get_accom_orders()

@@ -119,4 +119,4 @@ def perform_search(**kwargs):
     return Order.objects.filter(
         confirm_time__isnull=False,
         **criteria
-    )
+    ).order_by('-confirm_time')

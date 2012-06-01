@@ -1,6 +1,6 @@
 Hyvä vastaanottaja,
 
-Olemme {{ order.batch.delivery_date|date }} postittaneet Tracon VI-ennakkolipputilauksenne
+Olemme {{ order.batch.delivery_date|date }} postittaneet Tracon 7-ennakkolipputilauksenne
 numero {{ order.pk|stringformat:"04d" }}.
 
 Vahvistamme postitetuiksi seuraavat lipputuotteet:
@@ -23,10 +23,10 @@ Liput on postitettu seuraavaan osoitteeseen:
 
 Jos ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
 yhteyttä lipunmyyntiin joko vastaamalla tähän viestiin tai lähettämällä
-sähköpostia osoitteella liput11@tracon.fi.
+sähköpostia osoitteella liput12@tracon.fi.
 
 Tervetuloa Traconiin!
 
 Ystävällisin terveisin
 -- 
-Tracon VI -lipunmyynti <liput11@tracon.fi>
+Tracon 7 -lipunmyynti <liput12@tracon.fi>

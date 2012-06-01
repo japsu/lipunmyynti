@@ -44,7 +44,7 @@ __all__ = [
 
 FIRST_PHASE = "welcome_phase"
 LAST_PHASE = "thanks_phase"
-EXIT_URL = "http://2011.tracon.fi"
+EXIT_URL = "http://2012.tracon.fi"
 
 def multiform_validate(forms):
     return ["syntax"] if not all(
@@ -320,7 +320,7 @@ class ClosedPhase(Phase):
         pass
 
     def next(self, request):
-        return HttpResponseRedirect("http://2011.tracon.fi")
+        return HttpResponseRedirect("http://2012.tracon.fi")
 
 thanks_view = ThanksPhase()
 closed_view = ClosedPhase()
@@ -544,7 +544,7 @@ def search_view(request):
             orders = perform_search(**form.cleaned_data)
     else:
         form = SearchForm()
-        orders =  Order.objects.filter(confirm_time__isnull=False)
+        orders =  Order.objects.filter(confirm_time__isnull=False).order_by('-confirm_time')
     try:
         page = int(request.GET.get('page', '1'))
     except ValueError:

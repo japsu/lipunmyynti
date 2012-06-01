@@ -110,22 +110,23 @@ body {
 
 #header {
 	position: relative;
-	width: 950px;
-	height: 123px;
+	width: 800px;
+	height: 100px;
 	margin: 0 auto 0 auto;
 
-	background: transparent url('images/header.png') no-repeat scroll left top;
+	background: transparent url('images/header.png') no-repeat scroll right top;
 }
 
 #topmenu {
-	padding: 67px 0 0 60px;
+	padding: 67px 0 0 0px;
+	margin-left: -50px;
 }
 
 #topmenu li {
 	display: inline;
 	padding-left: 8px;
 	
-	color: #5E0000;
+	color: #E1E1E1;
 
 	list-style-type: none;
 }
@@ -134,13 +135,13 @@ body {
 	position: relative;
 	top: 15px;
 	
-	content: url('images/menuviiva.png');
+/*	content: url('images/menuviiva.png'); */
 }
 
 #topmenu a {
 	padding-right: 13px;
 
-	color: #5E0000;
+	color: #E1E1E1;
 
 	text-decoration: none;
 	text-transform: uppercase;
@@ -149,12 +150,12 @@ body {
 	font-family: "Trebuchet MS", Geneva, Arial, sans-serif;
 }
 
-#homeicon {
+/*#homeicon {
 	position: relative;
 	top: 2px;
 	width: 24px;
 	height: 20px;
-}
+}*/
 
 #glasspane {
 	position: relative;
@@ -162,7 +163,7 @@ body {
 	height: 220px;
 	margin: 0 auto 0 auto;
 	
-	background: transparent url('images/glasspane.png') no-repeat scroll left top;
+	background: transparent url('images/glasspane.png') no-repeat scroll left top; 
 }
 
 #showcase {
@@ -172,18 +173,8 @@ body {
 	width: 836px;
 	height: 170px;
 	
-	background: transparent url('images/lawandorder.jpg') no-repeat scroll left top;
+	background: transparent url('images/peace.png') no-repeat scroll left top;
 }
-
-#glass {
-	position: absolute;
-	left: 40px;
-	width: 866px;
-	height: 197px;
-	
-	background: transparent url('images/glass.png') no-repeat scroll left top;
-}
-
 #eyecatcher {
 	position: absolute;
 	left: 65px;
@@ -520,5 +511,14 @@ button.enterhack{
 	margin:10px 0;
 	width:560px;
 }
-#t_right{background:url(images/kuva_right.jpg) no-repeat 50% 50%;height:255px;width:190px;float:right;margin-left:15px;}
+#t_right{background:url(images/kuva_right.png) no-repeat 50% 50%;height:339px;width:190px;float:right;margin-left:15px;}
 #bottom{clear:both;}
+
+#takaisin {
+    background: url("images/icon-home.png") no-repeat scroll 0 0 transparent;
+    padding: 24px 13px 0 57px !important;
+}
+
+#takaisin:hover {
+	background-position: 0 -51px;
+}

@@ -1,6 +1,6 @@
 Hyvä vastaanottaja,
 
-Kiitos tilauksestanne Tracon VI:n verkkokaupassa! Tilauksenne numero on {{ order.pk|stringformat:"04d" }}.
+Kiitos tilauksestanne Tracon 7:n verkkokaupassa! Tilauksenne numero on {{ order.pk|stringformat:"04d" }}.
 
 Vahvistamme tilatuiksi seuraavat lipputuotteet:
 
@@ -23,7 +23,7 @@ Yhteensä: {{ order.formatted_price }} (ALV 0%)
 
 Jos ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
 yhteyttä lipunmyyntiin joko vastaamalla tähän viestiin tai lähettämällä
-sähköpostia osoitteella liput11@tracon.fi.
+sähköpostia osoitteella liput12@tracon.fi.
 
 Jos ylläolevat tiedot ovat oikein, maksakaa tilaus seuraavilla tiedoilla:
 
@@ -50,4 +50,4 @@ kukaan lippunsa ajoissa maksanut jää vaille lippuja.
 
 {% endfor %}{% endif %}Ystävällisin terveisin
 -- 
-Tracon VI -lipunmyynti <liput11@tracon.fi>
+Tracon 7 -lipunmyynti <liput12@tracon.fi>
