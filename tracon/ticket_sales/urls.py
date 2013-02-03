@@ -8,6 +8,7 @@ from tracon.ticket_sales.views import *
 
 urlpatterns = patterns('',
     url(r'tervetuloa/$', welcome_view, name="welcome_phase"),
+    #url(r'tervetuloa/$', closed_view, name="closed_phase"),
     url(r'liput/$', tickets_view, name="tickets_phase"),
     url(r'toimitusosoite/$', address_view, name="address_phase"),
     url(r'vahvistus/$', confirm_view, name="confirm_phase"),
@@ -37,6 +38,7 @@ urlpatterns = patterns('',
     url(r'kirjaudu/ulos/$', 'django.contrib.auth.views.logout', dict(template_name="ticket_admin/logged_out.html"), name="logout_page"),
 
     url(r'$', welcome_view, name="welcome_phase"),
+    #url(r'$', closed_view, name="closed_phase"),
 
     #url(r'$', redirect_to, dict(url='https://kauppadev.tracon.fi/tervetuloa/'), name="empty_url")
     #url(r'$', redirect_to, dict(url='http://2012.tracon.fi/liput'), name="empty_url")

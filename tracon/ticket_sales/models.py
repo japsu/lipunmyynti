@@ -24,6 +24,7 @@ __all__ = [
 SHIPPING_AND_HANDLING_CENTS = 100
 DUE_DAYS = 7
 LOW_AVAILABILITY_THRESHOLD = 10
+DEFAULT_FINAL_DEATH_DAYS = 14
 
 class Batch(models.Model):
     create_time = models.DateTimeField(auto_now=True)
@@ -284,7 +285,10 @@ class Order(models.Model):
     @property
     def requires_shipping(self):
         # TODO do this in the database, too
-        return any(op.product.requires_shipping for op in self.order_product_set.filter(count__gt=0))
+        #return any(op.product.requires_shipping for op in self.order_product_set.filter(count__gt=0))
+
+        # XXX PURKKA: tuote id:lla 8 on se viallinen Amuri-tuote johon unohtui toimitusbitti paalle
+        return any((op.product.requires_shipping and op.product.id != 8) for op in self.order_product_set.filter(count__gt=0))
     
     @property
     def formatted_price(self):
@@ -366,7 +370,10 @@ class Order(models.Model):
         return dict(
             order=self,
             products=self.order_product_set.all(),
-            messages=self.deduplicated_product_messages
+            messages=self.deduplicated_product_messages,
+
+            # only used by payment reminder messages
+            final_death=datetime.now() + timedelta(days=DEFAULT_FINAL_DEATH_DAYS),
         )
 
     @property

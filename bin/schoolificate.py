@@ -3,9 +3,8 @@
 # vim: sw=4 et
 
 from tracon.ticket_sales.models import *
-from send_sleeping_info import CLASU, TAMMERKOSKI, KAUKAJARVI, SLEEPY_PRODUCTS
-from create_schools import KAUKKIS, PERUS
-
+from send_sleeping_info import AMURI1K, AMURI2K, AMURI3K, PERJANTAIK, TAMMERKOSKIK, SLEEPY_PRODUCTS
+from create_schools import PERJANTAI, TAMMERKOSKI1, AMURI1, AMURI2
 DRY_RUN=False
 
 def get_sleepy_order_set():

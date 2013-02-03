@@ -9,13 +9,15 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 
 DRY_RUN = False
-MESSAGE_SUBJECT = u"Tracon VI: Lattiamajoituksen ohje (#{id:04d})"
+MESSAGE_SUBJECT = u"Tracon 7: Lattiamajoituksen ohje (#{id:04d})"
 
-SLEEPY_PRODUCTS = Product.objects.filter(name__icontains="majoitus")
+SLEEPY_PRODUCTS = Product.objects.filter(name__icontains="lauantain ja sunnuntain")
 
-CLASU = School.objects.get(name="Klassillinen koulu")
-TAMMERKOSKI = School.objects.get(name="Tammerkosken koulu")
-KAUKAJARVI = School.objects.get(name__icontains="Kaukaj")
+PERJANTAIK = School.objects.get(name__icontains="pe-la")
+TAMMERKOSKIK = School.objects.get(name__icontains="la-su")
+AMURI1K = School.objects.get(name__icontains="virheelliset")
+AMURI2K = School.objects.get(name__icontains="tavalliset")
+AMURI3K = School.objects.get(name__icontains="siirretyt")
 
 def send_sleep_info(order):
     op = order.order_product_set.get(product__in=SLEEPY_PRODUCTS)
@@ -24,11 +26,8 @@ def send_sleep_info(order):
         id=order.id,
         name=order.customer.name,
         count=op.count,
-        school=order.school.name,
-        address=order.school.address,
-        clasu=(order.school == CLASU),
-        tammerkoski=(order.school == TAMMERKOSKI),
-        kaukajarvi=(order.school == KAUKAJARVI)
+        tammerkoski=(order.school == TAMMERKOSKIK),
+        perjantai=(order.school == PERJANTAIK)
     )
 
     body=render_to_string("email/sleep_info.eml", vars)
@@ -40,14 +39,13 @@ def send_sleep_info(order):
             body=body,
             from_email=settings.DEFAULT_FROM_EMAIL,
             to=(order.customer.email,),
-            bcc=(settings.TICKET_SPAM_EMAIL,)
+            bcc=["liput12@tracon.fi"]
         ).send()
 
     print order
 
 def main():
-    # XXX PURKKA
-    orders = Order.objects.filter(school=KAUKAJARVI)
+    orders = Order.objects.filter(school__isnull=False)
     for order in orders:
         send_sleep_info(order)
 

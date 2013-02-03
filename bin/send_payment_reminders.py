@@ -5,9 +5,9 @@
 from tracon.ticket_sales.models import Order
 from datetime import  datetime, timedelta, date
 
-DRY_RUN = True
-#THRESHOLD = datetime.now() - timedelta(days=2)
-THRESHOLD = datetime(2011, 8, 8)
+DRY_RUN = False
+#THRESHOLD = datetime.now() - timedelta(days=10)
+THRESHOLD = datetime(2012, 8, 17)
 DONT_SEND = []
 
 def get_overdue_orders():

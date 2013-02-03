@@ -26,7 +26,7 @@ sähköpostiviestiin välittömästi ja vastauksessanne kertokaa, milloin
 maksoitte tilauksenne.
 
 Mikäli ette haluakaan tilaamianne tuotteita, voitte jättää tämän viestin
-huomiotta. Tilaukset, joita ei ole maksettu perjantaihin 17.8. mennessä,
+huomiotta. Tilaukset, joita ei ole maksettu {{ final_death|date}} mennessä,
 perutaan automaattisesti. Saatte tilauksenne peruuntumisesta ilmoituksen
 sähköpostitse.
 
