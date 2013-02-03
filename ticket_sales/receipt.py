@@ -1,14 +1,37 @@
 # encoding: utf-8
 # vim: shiftwidth=4 expandtab
 
+from __future__ import with_statement
+
+from contextlib import contextmanager
+import os
+
+from django.conf import settings
+
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
 
-from tracon.pdf import render_logo
+# XXX correct path
+LOGO_FILENAME = os.path.join(settings.MEDIA_ROOT, "images", "tracon_logo_kuitille.png")
 
 BASE_INDENT = 25*mm
 DEEP_INDENT = BASE_INDENT + 15*mm
 
+@contextmanager
+def state_saved(canvas):
+    try:
+        canvas.saveState()
+        yield canvas
+    finally:
+        canvas.restoreState()
+
+def render_logo(x, y, c):
+    with state_saved(c):
+        c.translate(x, y)
+        c.drawImage(LOGO_FILENAME, 0, 0, 48*mm, 21.4*mm)
+        
 def render_receipt(order, c):
     render_logo(135*mm, 265*mm, c)
 

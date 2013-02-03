@@ -1,8 +1,0 @@
-*.pyc
-*.swp
-bin/monies_by_date.txt
-bin/tickets_by_date.txt
-bin/orders_by_date.txt
-bin/shirt_sizes.txt
-bin/shirt_sizes_.txt
-tracon/settings.py
