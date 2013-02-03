@@ -7,6 +7,7 @@ from datetime import datetime, timedelta, date
 from datetime import time as dtime
 from django.core.mail import EmailMessage
 from django.conf import settings
+from django.utils import timezone
 
 from ticket_sales.format import format_date, format_datetime, format_price
 from .receipt import render_receipt
@@ -111,7 +112,7 @@ class Batch(models.Model):
 
     def confirm_delivery(self, delivery_time=None):
         if delivery_time is None:
-            delivery_time = datetime.now()
+            delivery_time = timezone.now()
 
         self.delivery_time = delivery_time
         self.save()
@@ -263,7 +264,7 @@ class Order(models.Model):
 
     @property
     def is_overdue(self):
-        return self.is_confirmed and not self.is_paid and self.due_date < datetime.now()
+        return self.is_confirmed and not self.is_paid and self.due_date < timezone.now()
 
     @property
     def is_cancelled(self):
@@ -327,7 +328,7 @@ class Order(models.Model):
 
         self.order_product_set.filter(count__lte=0).delete()
 
-        self.confirm_time = datetime.now()
+        self.confirm_time = timezone.now()
 
         self.save()
         self.send_confirmation_message("tilausvahvistus")
@@ -346,7 +347,7 @@ class Order(models.Model):
     def cancel(self):
         assert self.is_confirmed
 
-        self.cancellation_time = datetime.now()
+        self.cancellation_time = timezone.now()
         self.save()
         self.send_cancellation_notice_message()
 
@@ -373,7 +374,7 @@ class Order(models.Model):
             messages=self.deduplicated_product_messages,
 
             # only used by payment reminder messages
-            final_death=datetime.now() + timedelta(days=DEFAULT_FINAL_DEATH_DAYS),
+            final_death=timezone.now() + timedelta(days=DEFAULT_FINAL_DEATH_DAYS),
         )
 
     @property
@@ -399,10 +400,12 @@ class Order(models.Model):
     @property
     def due_date(self):
         # XXX
-        PURKKA_THRESHOLD = datetime(2012, 8, 12, 12, 33)
-        PURKKA_DUEDATE = datetime(2012, 8, 17, 23, 59, 59)
+        mytz = timezone.get_default_timezone()
 
-        PURKKA2_DUEDATE = datetime(2012, 8, 30, 23, 59, 59)
+        PURKKA_THRESHOLD = datetime(2012, 8, 12, 12, 33, tzinfo=mytz)
+        PURKKA_DUEDATE = datetime(2012, 8, 17, 23, 59, 59, tzinfo=mytz)
+
+        PURKKA2_DUEDATE = datetime(2012, 8, 30, 23, 59, 59, tzinfo=mytz)
 
         if not self.confirm_time:
             return None
