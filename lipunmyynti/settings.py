@@ -5,7 +5,7 @@ import os
 import django.conf.global_settings as defaults
 
 def mkpath(*parts):
-    return os.path.abspath(os.path.join(os.path.dirname(__FILE__), '..', *parts))
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), '..', *parts))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -115,9 +115,9 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = defaults.TEMPLATE_CONTEXT_PROCESSORS + [
+TEMPLATE_CONTEXT_PROCESSORS = defaults.TEMPLATE_CONTEXT_PROCESSORS + (
     'ticket_sales.context_processors.tracon_specific',
-]
+)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
