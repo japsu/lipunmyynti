@@ -2,12 +2,13 @@
 # vim: shiftwidth=4 expandtab
 
 from django.conf.urls.defaults import *
-
 from django.contrib import admin
+
+import ticket_sales.urls
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^admin/(.*)', admin.site.root),
-    url(r'^', include('ticket_sales.urls'))
+    url(r'^admin/(.*)', include(admin.site.urls)),
+    url(r'^', include(ticket_sales.urls))
 )
