@@ -9,6 +9,6 @@ import ticket_sales.urls
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^admin/(.*)', include(admin.site.urls)),
-    url(r'^', include(ticket_sales.urls))
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^', include(ticket_sales.urls)),
 )

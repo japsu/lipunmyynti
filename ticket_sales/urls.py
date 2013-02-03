@@ -34,8 +34,8 @@ urlpatterns = patterns('',
     url(r'hallinta/tickets_by_date/$', tickets_by_date_view, {'raw': False}, name="tickets_by_date_view"),
     url(r'hallinta/tickets_by_date/raw/$', tickets_by_date_view, {'raw': True}, name="tickets_by_date_raw"),
 
-    url(r'kirjaudu/$', 'django.contrib.auth.views.login', dict(template_name="ticket_admin/login.html"), name="login_page"),
-    url(r'kirjaudu/ulos/$', 'django.contrib.auth.views.logout', dict(template_name="ticket_admin/logged_out.html"), name="logout_page"),
+    url(r'kirjaudu/$', 'django.contrib.auth.views.login', dict(template_name="ticket_admin/login.html"), name="login"),
+    url(r'kirjaudu/ulos/$', 'django.contrib.auth.views.logout', dict(template_name="ticket_admin/logged_out.html"), name="logout"),
 
     url(r'$', welcome_view, name="welcome_phase"),
     #url(r'$', closed_view, name="closed_phase"),

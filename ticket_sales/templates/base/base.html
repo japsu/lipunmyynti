@@ -68,6 +68,7 @@ vim: shiftwidth=2 expandtab
       </div>
 
       <form method="post" action="{{ phase.url }}">
+        {% csrf_token %}
         <div id="top">
           <div id="t_right"></div>
           <div id="t_left">

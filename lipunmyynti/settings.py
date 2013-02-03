@@ -115,9 +115,9 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = defaults.TEMPLATE_CONTEXT_PROCESSORS + (
-    'ticket_sales.context_processors.tracon_specific',
-)
+#TEMPLATE_CONTEXT_PROCESSORS = defaults.TEMPLATE_CONTEXT_PROCESSORS + (
+#    'ticket_sales.context_processors.tracon_specific',
+#)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -163,6 +163,8 @@ LOGGING = {
         },
     }
 }
+
+USE_X_FORWARDED_HOST = True
 
 EMAIL_HOST='smtp.b2.fi'
 DATE_FORMAT='d.m.Y'
