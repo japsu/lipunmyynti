@@ -1,0 +1,32 @@
+{% comment %}
+vim: shiftwidth=2 expandtab
+encoding: utf-8
+{% endcomment %}
+<div id="left">
+  <h2>Liput</h2>
+	<div class="box">
+  <ul>
+    {% for product in products %}
+      <li>
+        {{ product.count }}&times; {{ product.product.name }} à {{ product.product.formatted_price }} = {{ product.formatted_price }}
+      </li>
+    {% endfor %}
+      <li>Toimituskulut: {{ order.formatted_shipping_and_handling }}</li>
+  </ul>
+
+  <p><em>Yhteensä: {{ order.formatted_price }}</em></p>
+</div>
+</div>
+
+<h2>Toimitusosoite</h2>
+<div class="box">
+  <p>
+    {{ order.customer.name }}<br/>
+    {{ order.customer.address }}<br/>
+    {{ order.customer.zip_code }} {{ order.customer.city }}
+  </p>
+  <p>
+    {{ order.customer.email }}<br/>
+    {{ order.customer.phone_number }}
+  </p>
+</div>

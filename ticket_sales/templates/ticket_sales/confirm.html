@@ -1,0 +1,13 @@
+{% extends "base/base.html" %}
+{% load wizard_ui %}
+{% comment %}
+encoding: utf-8
+vim: shiftwidth=2 expandtab
+{% endcomment %}
+{% block body_text %}
+<h1>Vahvista tilaus</h1>
+{% endblock body_text %}
+{% block form_content %}
+<p>Tarkista vielä tilauksen tietosi ja tilaamiesi tuotteiden määrät. Tuotteet maksetaan tilisiirrolla. Tilauksilla on maksuaikaa <strong>7 päivää tilauksesta.</strong></p>
+{% include "ticket_sales/order_statement.html" %}
+{% endblock form_content %}
