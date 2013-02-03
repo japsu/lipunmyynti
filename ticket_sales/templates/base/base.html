@@ -55,7 +55,7 @@ vim: shiftwidth=2 expandtab
         <ul>
         {% for the_phase, available, current in phases %}
           {% if available %}
-            <li><a href="{% url_ptr the_phase.name %}">{{ forloop.counter }}. {{ the_phase.friendly_name }}</a></li>
+            <li><a href="{{ the_phase.url }}">{{ forloop.counter }}. {{ the_phase.friendly_name }}</a></li>
           {% else %}
             {% if current %}
               <li class="selected">{{ forloop.counter }}. {{ the_phase.friendly_name }}</li>
@@ -67,7 +67,7 @@ vim: shiftwidth=2 expandtab
         </ul>
       </div>
 
-      <form method="post" action="{% url_ptr phase.name %}">
+      <form method="post" action="{{ phase.url }}">
         <div id="top">
           <div id="t_right"></div>
           <div id="t_left">
@@ -135,7 +135,7 @@ vim: shiftwidth=2 expandtab
       </div>
     </div>
     <div id="footer">
-      <p>Tracon ry 2009&ndash;2012 &middot; liput12 ät tracon piste fi</p>
+      <p>Tracon ry 2009&ndash;2013 &middot; liput12 ät tracon piste fi</p>
       <p id="rekisteriseloste"><a href="http://2012.tracon.fi/liput/rekisteriseloste" target="_blank">Henkilötietolain (523/99) 10 § mukainen rekisteriseloste</a></p>
     </div>
   </body>

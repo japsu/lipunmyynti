@@ -13,7 +13,6 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.http import require_POST, require_GET, require_http_methods
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
-from django.core.urlresolvers import reverse
 from django.db.models import Sum
 
 from ticket_sales.models import *
@@ -162,6 +161,10 @@ class Phase(object):
 
     def vars(self, request, form):
         return {}
+
+    @property
+    def url(self):
+        return reverse(self.name)
 
 class WelcomePhase(Phase):
     name = "welcome_phase"
