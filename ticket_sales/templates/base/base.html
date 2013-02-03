@@ -53,11 +53,11 @@ vim: shiftwidth=2 expandtab
       {% endcomment %}
       <div id="breadcrumb">
         <ul>
-        {% for the_phase, available, current in phases %}
-          {% if available %}
+        {% for the_phase in phases %}
+          {% if the_phase.available %}
             <li><a href="{{ the_phase.url }}">{{ forloop.counter }}. {{ the_phase.friendly_name }}</a></li>
           {% else %}
-            {% if current %}
+            {% if the_phase.current %}
               <li class="selected">{{ forloop.counter }}. {{ the_phase.friendly_name }}</li>
             {% else %}
               <li>{{ forloop.counter }}. {{ the_phase.friendly_name }}</li>

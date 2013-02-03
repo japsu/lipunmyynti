@@ -135,12 +135,22 @@ class Phase(object):
         phases = []
 
         for phase in ALL_PHASES:
-            available = phase.index < self.index and not order.is_confirmed
-            current = phase is self
+            phases.append(dict(
+                url=reverse(phase.name),
+                friendly_name=phase.friendly_name,
+                available=phase.index < self.index and not order.is_confirmed,
+                current=phase is self
+            ))
 
-            phases.append((phase, available, current))
+        phase = dict(
+            url=reverse(self.name),
+            next_phase=bool(self.next_phase),
+            prev_phase=bool(self.prev_phase),
+            can_cancel=self.can_cancel,
+            next_text=self.next_text
+        )   
 
-        vars = dict(self.vars(request, form), form=form, errors=errors, order=order, phase=self, phases=phases)
+        vars = dict(self.vars(request, form), form=form, errors=errors, order=order, phase=phase, phases=phases)
         return render_to_response(self.template, vars, context_instance=context)
 
     def make_form(self, request):
@@ -161,10 +171,6 @@ class Phase(object):
 
     def vars(self, request, form):
         return {}
-
-    @property
-    def url(self):
-        return reverse(self.name)
 
 class WelcomePhase(Phase):
     name = "welcome_phase"
