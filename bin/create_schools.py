@@ -2,7 +2,7 @@
 # encoding: utf-8
 # vim: shiftwidth=4 expandtab
 
-from tracon.ticket_sales.models import School, Product
+from ticket_sales.models import School, Product
 
 # TODO max_people
 PERJANTAI = Product.objects.get(name="Lattiamajoitus perjantain ja lauantain väliseksi yöksi (Tammerkoski)")

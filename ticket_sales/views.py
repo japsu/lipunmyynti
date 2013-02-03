@@ -16,11 +16,11 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 from django.db.models import Sum
 
-from tracon.ticket_sales.models import *
-from tracon.ticket_sales.forms import *
-from tracon.ticket_sales.helpers import *
-from tracon.ticket_sales.utils import *
-from tracon.ticket_sales.format import *
+from ticket_sales.models import *
+from ticket_sales.forms import *
+from ticket_sales.helpers import *
+from ticket_sales.utils import *
+from ticket_sales.format import *
 
 __all__ = [
     "welcome_view",

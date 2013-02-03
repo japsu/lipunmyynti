@@ -4,7 +4,7 @@
 
 # XXX Vanha accom-protokolla
 
-from tracon.ticket_sales.models import Order
+from ticket_sales.models import Order
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.conf import settings

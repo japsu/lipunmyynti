@@ -2,7 +2,7 @@
 # encoding: utf-8
 # vim: sw=4 et
 
-from tracon.ticket_sales.models import *
+from ticket_sales.models import *
 from create_schools import PERJANTAI
 
 PE_PRODUCTS = Product.objects.filter(name__icontains="perjantain ja lauantain")

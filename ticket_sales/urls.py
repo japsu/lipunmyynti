@@ -4,7 +4,7 @@
 from django.conf.urls.defaults import *
 from django.views.generic.simple import redirect_to
 
-from tracon.ticket_sales.views import *
+from ticket_sales.views import *
 
 urlpatterns = patterns('',
     url(r'tervetuloa/$', welcome_view, name="welcome_phase"),

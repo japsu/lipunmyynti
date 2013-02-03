@@ -4,7 +4,7 @@
 from django import forms
 from django.contrib.localflavor.fi.forms import FIZipCodeField
 
-from tracon.ticket_sales.models import *
+from ticket_sales.models import *
 
 __all__ = [
     "NullForm",

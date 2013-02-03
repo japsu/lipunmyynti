@@ -2,7 +2,7 @@
 # encoding: utf-8
 # vim: shiftwidth=4 expandtab
 
-from tracon.ticket_sales.models import *
+from ticket_sales.models import *
 from datetime import  datetime, timedelta
 from django.conf import settings
 from django.core.mail import EmailMessage

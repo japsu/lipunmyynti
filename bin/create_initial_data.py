@@ -2,7 +2,7 @@
 # encoding: utf-8
 # vim: shiftwidth=4 expandtab
 
-from tracon.ticket_sales.models import *
+from ticket_sales.models import *
 
 PRODUCTS = [
     # (name, price_cents, description, classname, requires_shipping, sell_limit, available)

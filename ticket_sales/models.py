@@ -8,8 +8,8 @@ from datetime import time as dtime
 from django.core.mail import EmailMessage
 from django.conf import settings
 
-from tracon.ticket_sales.format import format_date, format_datetime, format_price
-from tracon.receipt.pdf import render_receipt
+from ticket_sales.format import format_date, format_datetime, format_price
+from .receipt import render_receipt
 
 __all__ = [
     "School",

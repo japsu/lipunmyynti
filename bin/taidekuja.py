@@ -2,7 +2,7 @@
 # encoding: utf-8
 # vim: shiftwidth=4 expandtab
 
-from tracon.ticket_sales.models import *
+from ticket_sales.models import *
 import sys
 
 FORMAT=u"* ({order_id:04d}) {ordinal}. {name} - {phone} - {email} - {count} kpl - {payment_status}\n"

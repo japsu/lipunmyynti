@@ -1,7 +1,7 @@
 # encoding: utf-8
 # vim: shiftwidth=4 expandtab
 
-from tracon.ticket_sales.models import Order, OrderProduct
+from ticket_sales.models import Order, OrderProduct
 
 from datetime import date
 import re

@@ -4,7 +4,7 @@
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
-from tracon.ticket_sales.models import Order, OrderProduct
+from ticket_sales.models import Order, OrderProduct
 
 __all__ = [
     "redirect",
@@ -18,8 +18,8 @@ __all__ = [
     "complete_phase"
 ]
 
-ORDER_KEY = "tracon.ticket_sales.order_id"
-PHASE_KEY = "tracon.ticket_sales.phases"
+ORDER_KEY = "ticket_sales.order_id"
+PHASE_KEY = "ticket_sales.phases"
 
 def redirect(view_name, **kwargs):
     return HttpResponseRedirect(reverse(view_name, kwargs=kwargs))

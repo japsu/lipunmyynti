@@ -2,7 +2,7 @@
 # encoding: utf-8
 # vim: shiftwidth=4 expandtab
 
-from tracon.ticket_sales.models import Order
+from ticket_sales.models import Order
 from datetime import  datetime, timedelta, date
 
 DRY_RUN = False
