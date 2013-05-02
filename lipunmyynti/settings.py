@@ -133,6 +133,7 @@ INSTALLED_APPS = (
     'gunicorn',
     'south',
     'ticket_sales',
+    'payments'
 )
 
 # A sample logging configuration. The only tangible logging

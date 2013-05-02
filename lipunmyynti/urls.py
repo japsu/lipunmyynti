@@ -5,10 +5,12 @@ from django.conf.urls.defaults import *
 from django.contrib import admin
 
 import ticket_sales.urls
+import payments.urls
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^', include(payments.urls)),
     url(r'^', include(ticket_sales.urls)),
 )
