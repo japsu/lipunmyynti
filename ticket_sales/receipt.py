@@ -8,16 +8,20 @@ import os
 
 from django.conf import settings
 
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.lib.units import mm
-from reportlab.pdfgen import canvas
+try:
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+    from reportlab.lib.units import mm
+    from reportlab.pdfgen import canvas
+
+    BASE_INDENT = 25*mm
+    DEEP_INDENT = BASE_INDENT + 15*mm
+except ImportError:
+    from warnings import warn
+    warn('Failed to import ReportLab. Generating receipts will fail.')
 
 # XXX correct path
 LOGO_FILENAME = os.path.join(settings.MEDIA_ROOT, "images", "tracon_logo_kuitille.png")
-
-BASE_INDENT = 25*mm
-DEEP_INDENT = BASE_INDENT + 15*mm
 
 @contextmanager
 def state_saved(canvas):

@@ -4,7 +4,11 @@
 import datetime
 from collections import defaultdict
 
-from reportlab.pdfgen import canvas
+try:
+    from reportlab.pdfgen import canvas
+except ImportError:
+    from warnings import warn
+    warn('Failed to import ReportLab. Generating receipts will fail.')
 
 from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
