@@ -1,0 +1,98 @@
+[
+  {
+    "pk": 1,
+    "model": "ticket_sales.product",
+    "fields": {
+      "available": true,
+      "price_cents": 1500,
+      "name": "Koko viikonlopun lippu",
+      "image": "i_viikonloppu.png",
+      "requires_shipping": true,
+      "classname": "large",
+      "sell_limit": 3000,
+      "ilmoitus_mail": "",
+      "mail_description": "",
+      "description": "Tähän kuvaus"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "ticket_sales.product",
+    "fields": {
+      "available": true,
+      "price_cents": 1000,
+      "name": "Lauantailippu",
+      "image": "i_lauantai.png",
+      "requires_shipping": true,
+      "classname": "small",
+      "sell_limit": 3000,
+      "ilmoitus_mail": "",
+      "mail_description": "",
+      "description": "Tähän kuvaus"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "ticket_sales.product",
+    "fields": {
+      "available": true,
+      "price_cents": 1000,
+      "name": "Sunnuntailippu",
+      "image": "i_sunnuntai.png",
+      "requires_shipping": true,
+      "classname": "small",
+      "sell_limit": 3000,
+      "ilmoitus_mail": "",
+      "mail_description": "",
+      "description": "Tähän kuvaus"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "ticket_sales.product",
+    "fields": {
+      "available": true,
+      "price_cents": 1000,
+      "name": "Lattiamajoitus pe-la",
+      "image": "i_pela.png",
+      "requires_shipping": false,
+      "classname": "small",
+      "sell_limit": 200,
+      "ilmoitus_mail": "",
+      "mail_description": "",
+      "description": "Tähän kuvaus"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "ticket_sales.product",
+    "fields": {
+      "available": true,
+      "price_cents": 1000,
+      "name": "Lattiamajoitus la-su",
+      "image": "i_lasu.png",
+      "requires_shipping": false,
+      "classname": "small",
+      "sell_limit": 200,
+      "ilmoitus_mail": "",
+      "mail_description": "",
+      "description": "Tähän kuvaus"
+    }
+  },
+  {
+    "pk": 6,
+    "model": "ticket_sales.product",
+    "fields": {
+      "available": true,
+      "price_cents": 1500,
+      "name": "Taidekujapöytä",
+      "image": "oletustuotekuva.png",
+      "requires_shipping": false,
+      "classname": "small",
+      "sell_limit": 50,
+      "ilmoitus_mail": "",
+      "mail_description": "",
+      "description": "Tähän kuvaus"
+    }
+  }
+]
