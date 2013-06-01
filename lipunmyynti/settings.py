@@ -208,8 +208,9 @@ PIPELINE_COMPILERS = (
     'pipeline.compilers.stylus.StylusCompiler',
 )
 
-# XXX
 PIPELINE_STYLUS_BINARY = 'stylus' # hail PATH
+
+# XXX
 PIPELINE_CSS_COMPRESSOR = None
 PIPELINE_JS_COMPRESSOR = None
 
