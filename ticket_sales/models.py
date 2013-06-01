@@ -409,7 +409,7 @@ class Order(models.Model):
     @property
     def due_date(self):
         if self.confirm_time:
-            return datetime.combine((self.confirm_time + timedelta(days=DUE_DAYS)).date(), dtime(23, 59, 59)).replace(tzinfo=get_default_timezone())
+            return datetime.combine((self.confirm_time + timedelta(days=DUE_DAYS)).date(), dtime(23, 59, 59)).replace(tzinfo=timezone.get_default_timezone())
         else:
             return None
 

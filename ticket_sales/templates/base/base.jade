@@ -26,6 +26,10 @@ html
               else
                 li {{ forloop.counter }}. {{ the_phase.friendly_name }}
 
+        #messages
+          for message in messages
+            .alert(class='alert-{{ message.tags }}') {{ message  }}
+
         block body_text
           p Sisältö tulee tähän.
 

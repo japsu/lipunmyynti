@@ -28,3 +28,11 @@
             td {{ op.product.name }}
             td {{ op.product.formatted_price }}
             td {{ op.formatted_price }}
+
+        tr
+          td(colspan='3') Toimituskulut
+          td {{ order.formatted_shipping_and_handling }}
+
+        tr
+          th(colspan='3') Yhteensä
+          th {{ order.formatted_price }}

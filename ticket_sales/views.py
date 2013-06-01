@@ -11,6 +11,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.messages import add_message, INFO, WARNING, ERROR
 from django.views.decorators.http import require_POST, require_GET, require_http_methods
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.db.models import Sum
@@ -143,6 +144,7 @@ class Phase(object):
 
     def validate(self, request, form):
         if not form.is_valid():
+            add_message(request, ERROR, 'Tarkista lomakkeen sisältö.')
             return ["syntax"]
         else:
             return []
@@ -239,10 +241,12 @@ class TicketsPhase(Phase):
             return errors
 
         if sum(i.cleaned_data["count"] for i in form) <= 0:
+            add_message(request, INFO, 'Valitse vähintään yksi tuote.')
             errors.append("zero")
             return errors
 
         if (is_soldout(dict((i.instance.product, i.cleaned_data["count"]) for i in form))):
+            add_message(request, ERROR, 'Valitsemasi tuote on valitettavasti juuri myyty loppuun.')
             errors.append("soldout")
             return errors
 
