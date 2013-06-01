@@ -6,7 +6,7 @@
     virtualenv --distribute --no-site-packages venv-lipunmyynti
     source venv-lipunmyynti/bin/activate
 
-    git clone /srv/git/lipunmyynti.git -b master lipunmyynti
+    git clone /srv/git/lipunmyynti.git
     cd lipunmyynti
 
     pip install -r requirements.txt
