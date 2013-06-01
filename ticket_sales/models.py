@@ -239,6 +239,18 @@ class Order(models.Model):
     cancellation_time = models.DateTimeField(null=True, blank=True)
     batch = models.ForeignKey(Batch, null=True, blank=True)
     school = models.ForeignKey(School, null=True, blank=True)
+    checkout_vars = {
+        'PASSWORD' : 'SAIPPUAKAUPPIAS',
+        'VERSION' : '0001',
+        'LANGUAGE' : 'FI',
+        'MERCHANT' : '375917',
+        'COUNTRY' : 'FIN',
+        'CURRENCY' : 'EUR',
+        'DEVICE' : '1',
+        'CONTENT' : '1',
+        'TYPE' : '0',
+        'ALGORITHM' : '0',
+    }
 
     @property
     def is_active(self):
@@ -475,43 +487,6 @@ class Order(models.Model):
             self.formatted_price,
             self.readable_state
         )
-    def get_mac(self):
-        password = "SAIPPUAKAUPPIAS"
-        _mac = md5.new()
-        _mac.update("0001")
-        _mac.update("+")
-        _mac.update("12345")
-        _mac.update("+")
-        _mac.update("1000")
-        _mac.update("+")
-        _mac.update("12344")
-        _mac.update("+")
-        _mac.update("FIN")
-        _mac.update("+")
-        _mac.update("EUR")
-        _mac.update("+")
-        _mac.update("1")
-        _mac.update("+")
-        _mac.update("1")
-        _mac.update("+")
-        _mac.update("0")
-        _mac.update("+")
-        _mac.update("2")
-        _mac.update("+")
-        _mac.update("20130505")
-        _mac.update("+")
-        _mac.update(self.customer.first_name)
-        _mac.update("+")
-        _mac.update(self.customer.last_name)
-        _mac.update("+")
-        _mac.update(self.customer.address)
-        _mac.update("+")
-        _mac.update(self.customer.zip_code)
-        _mac.update("+")
-        _mac.update(self.customer.city)
-        _mac.update("+")
-        _mac.update(password)
-        return _mac
 
     class Meta:
         permissions = (("can_manage_payments", "Can manage payments"),)

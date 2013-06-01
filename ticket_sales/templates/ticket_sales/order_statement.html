@@ -15,7 +15,7 @@ encoding: utf-8
   </ul>
 
   <p><em>Yhteensä: {{ order.formatted_price }}</em></p>
-</div>
+  </div>
 </div>
 
 <h2>Toimitusosoite</h2>
@@ -28,29 +28,5 @@ encoding: utf-8
   <p>
     {{ order.customer.email }}<br/>
     {{ order.customer.phone_number }}
-    <input type='hidden' name='VERSION' value='0001'>
-    <input type='hidden' name='STAMP' value='{{ phase.stamp }}'>
-    <input type='hidden' name='AMOUNT' value='1000'>
-    <input type='hidden' name='REFERENCE' value='12344'>
-    <input type='hidden' name='MESSAGE' value='Tracon 8'>
-    <input type='hidden' name='LANGUAGE' value='FI'>
-    <input type='hidden' name='MERCHANT' value='375917'>
-    <input type='hidden' name='RETURN' value='http://localhost:8000/process/?test=1'>
-    <input type='hidden' name='CANCEL' value=''>
-    <input type='hidden' name='REJECT' value=''>
-    <input type='hidden' name='DELAYED' value=''>
-    <input type='hidden' name='COUNTRY' value='FIN'>
-    <input type='hidden' name='CURRENCY' value='EUR'>
-    <input type='hidden' name='DEVICE' value='1'>
-    <input type='hidden' name='CONTENT' value='1'>
-    <input type='hidden' name='TYPE' value='0'>
-    <input type='hidden' name='ALGORITHM' value='2'>
-    <input type='hidden' name='DELIVERY_DATE' value='20130505'>
-    <input type='hidden' name='FIRSTNAME' value='{{ order.customer.first_name }}'>
-    <input type='hidden' name='FAMILYNAME' value='{{ order.customer.last_name }}'>
-    <input type='hidden' name='ADDRESS' value='{{ order.customer.address }}'>
-    <input type='hidden' name='POSTCODE' value='{{ order.customer.zip_code }}'>
-    <input type='hidden' name='POSTOFFICE' value='{{ order.customer.city}}'>
-    <input type='hidden' name='MAC' value='{{ phase.mac }}'>
   </p>
 </div>

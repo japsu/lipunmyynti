@@ -2,6 +2,7 @@
 # vim: shiftwidth=4 expandtab
 
 import datetime
+import md5
 from time import mktime
 from collections import defaultdict
 
@@ -299,10 +300,42 @@ class ConfirmPhase(Phase):
 
     def vars(self, request, form):
         order = get_order(request)
-        global mac
-        mac.append(order.get_mac())
         products = OrderProduct.objects.filter(order=order, count__gt=0)
-
+        mac = md5.new()
+        mac.update("0001")
+        mac.update("+")
+        mac.update("12345")
+        mac.update("+")
+        mac.update("1000")
+        mac.update("+")
+        mac.update("12344")
+        mac.update("+")
+        mac.update("FIN")
+        mac.update("+")
+        mac.update("EUR")
+        mac.update("+")
+        mac.update("1")
+        mac.update("+")
+        mac.update("1")
+        mac.update("+")
+        mac.update("0")
+        mac.update("+")
+        mac.update("2")
+        mac.update("+")
+        mac.update("20130505")
+        mac.update("+")
+        mac.update(order.customer.first_name)
+        mac.update("+")
+        mac.update(order.customer.last_name)
+        mac.update("+")
+        mac.update(order.customer.address)
+        mac.update("+")
+        mac.update(order.customer.zip_code)
+        mac.update("+")
+        mac.update(order.customer.city)
+        mac.update("+")
+        mac.update("SAIPPUAKAUPPIAS")
+        mac = 12345
         return dict(products=products)
 
     def save(self, request, form):
