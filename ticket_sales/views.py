@@ -2,6 +2,7 @@
 # vim: shiftwidth=4 expandtab
 
 import datetime
+from time import mktime
 from collections import defaultdict
 
 try:
@@ -69,6 +70,9 @@ class Phase(object):
     template = "ticket_sales/dummy.html"
     prev_phase = None
     next_phase = None
+    payment_phase = None
+    stamp = None
+    mac = None
     next_text = "Seuraava &raquo;"
     can_cancel = True
     index = None
@@ -116,6 +120,17 @@ class Phase(object):
                 return self.prev(request)
 
             # "Next" with invalid data falls through.
+        elif request.method == "GET":
+            if request.session.get('payment_status') == 2:
+                del request.session['payment_status']
+                if not order.is_confirmed:
+                    order.confirm_order()
+                    complete_phase(request, self.name)
+                    return self.next(request)
+                else:
+                    return redirect("confirm_phase")
+            else:
+                errors = []
         else:
             errors = []
 
@@ -151,7 +166,11 @@ class Phase(object):
             next_phase=bool(self.next_phase),
             prev_phase=bool(self.prev_phase),
             can_cancel=self.can_cancel,
-            next_text=self.next_text
+            next_text=self.next_text,
+            payment_phase=self.payment_phase,
+            stamp=self.stamp,
+            mac=self.mac,
+            name=self.name
         )   
 
         vars = dict(self.vars(request, form), form=form, errors=errors, order=order, phase=phase, phases=phases)
@@ -263,7 +282,11 @@ class ConfirmPhase(Phase):
     template = "ticket_sales/confirm.html"
     prev_phase = "address_phase"
     next_phase = "thanks_phase"
-    next_text = "Vahvista &#10003;"
+    payment_phase = True
+    next_text ="Siirry maksamaan &#10003;"
+    stamp = int(mktime(datetime.datetime.now().timetuple()))
+    mac = None
+
 
     def validate(self, request, form):
         errors = multiform_validate(form)
@@ -276,6 +299,8 @@ class ConfirmPhase(Phase):
 
     def vars(self, request, form):
         order = get_order(request)
+        global mac
+        mac.append(order.get_mac())
         products = OrderProduct.objects.filter(order=order, count__gt=0)
 
         return dict(products=products)
@@ -285,11 +310,13 @@ class ConfirmPhase(Phase):
 
     def next(self, request):
         order = get_order(request)
-
         # .confirm_* call .save
-        order.confirm_order()
-        
-        return super(ConfirmPhase, self).next(request)
+        if not order.is_confirmed:
+            return HttpResponseRedirect("http://localhost:8000/process/?test=1")
+        else:
+            payment_phase = None
+            return super(ConfirmPhase, self).next(request)
+
 
 confirm_view = ConfirmPhase()
 

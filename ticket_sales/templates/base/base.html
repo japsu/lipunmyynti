@@ -67,7 +67,8 @@ vim: shiftwidth=2 expandtab
         </ul>
       </div>
 
-      <form method="post" action="{{ phase.url }}">
+        <form method="post" action="{{ phase.url }}">
+
         {% csrf_token %}
         <div id="top">
           <div id="t_right"></div>
@@ -124,7 +125,10 @@ vim: shiftwidth=2 expandtab
                 <button class="buttongradient btndisabled" type="submit" name="action" value="prev" disabled="disabled">&laquo; Edellinen</button>
               {% endif %}
 
-              {% if phase.next_phase %}
+              {% if phase.payment_phase %}
+
+                <button class="buttongradient" id="nextbutton" type="submit" formaction="https://payment.checkout.fi/" tabindex="100">{{ phase.next_text|safe }}</button>
+              {% elif phase.next_phase %}
                 <button class="buttongradient" id="nextbutton" type="submit" name="action" value="next" tabindex="100">{{ phase.next_text|safe }}</button>
               {% else %}
               <button class="buttongradient btndisabled" type="submit" name="action" value="next" disabled="disabled">{{ phase.next_text|safe }}</button>
@@ -136,6 +140,7 @@ vim: shiftwidth=2 expandtab
       </div>
     </div>
     <div id="footer">
+      {{ payment_status }}
       <p>Tracon ry 2009&ndash;2013 &middot; liput12 ät tracon piste fi</p>
       <p id="rekisteriseloste"><a href="http://2012.tracon.fi/liput/rekisteriseloste" target="_blank">Henkilötietolain (523/99) 10 § mukainen rekisteriseloste</a></p>
     </div>
