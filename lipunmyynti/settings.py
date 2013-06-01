@@ -174,7 +174,7 @@ USE_X_FORWARDED_HOST = True
 EMAIL_HOST='smtp.b2.fi'
 DATE_FORMAT='d.m.Y'
 DEFAULT_FROM_EMAIL='Traconin lipunmyynti <liput@tracon.fi>'
-TICKET_SPAM_EMAIL=DEFAULT_FROM_EMAIL
+TICKET_SPAM_EMAIL='Santtu Pajukanta <japsu@tracon.fi>'
 
 LOGIN_URL='/kirjaudu/'
 #ANALYTICS_ACCOUNT="UA-21225387-3"
