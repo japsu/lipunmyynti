@@ -38,8 +38,4 @@ urlpatterns = patterns('',
     url(r'kirjaudu/ulos/$', 'django.contrib.auth.views.logout', dict(template_name="ticket_admin/logged_out.html"), name="logout"),
 
     url(r'$', welcome_view, name="welcome_phase"),
-    #url(r'$', closed_view, name="closed_phase"),
-
-    #url(r'$', redirect_to, dict(url='https://kauppadev.tracon.fi/tervetuloa/'), name="empty_url")
-    #url(r'$', redirect_to, dict(url='http://2012.tracon.fi/liput'), name="empty_url")
 )
