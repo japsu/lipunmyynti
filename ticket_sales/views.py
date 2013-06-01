@@ -12,6 +12,7 @@ except ImportError:
     from warnings import warn
     warn('Failed to import ReportLab. Generating receipts will fail.')
 
+from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
@@ -53,7 +54,7 @@ __all__ = [
 
 FIRST_PHASE = "welcome_phase"
 LAST_PHASE = "thanks_phase"
-EXIT_URL = "http://2012.tracon.fi"
+EXIT_URL = settings.EVENT_URL
 
 def multiform_validate(forms):
     return ["syntax"] if not all(
@@ -411,7 +412,7 @@ class ClosedPhase(Phase):
         pass
 
     def next(self, request):
-        return HttpResponseRedirect("http://2012.tracon.fi")
+        return HttpResponseRedirect(settings.EVENT_URL)
 
 thanks_view = ThanksPhase()
 closed_view = ClosedPhase()

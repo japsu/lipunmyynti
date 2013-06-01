@@ -40,7 +40,7 @@ def render_receipt(order, c):
     render_logo(135*mm, 265*mm, c)
 
     c.setFont("Times-Roman", 12)
-    c.drawString(135*mm, 260*mm, u"Tampere-talossa 8.-9.9.2012")
+    c.drawString(135*mm, 260*mm, settings.EVENT_HEADLINE)
 
     c.drawString(BASE_INDENT, 270*mm, order.customer.name)
     c.drawString(BASE_INDENT, 265*mm, order.customer.address)
@@ -48,7 +48,7 @@ def render_receipt(order, c):
 
     c.drawString(BASE_INDENT, 200*mm, u"Hyvä vastaanottaja,")
 
-    c.drawString(BASE_INDENT, 190*mm, u"Tässä tilaamanne Tracon 7 -tapahtuman pääsyliput:")
+    c.drawString(BASE_INDENT, 190*mm, u"Tässä tilaamanne {0} -pääsyliput:".format(settings.EVENT_NAME))
 
     ypos = 180*mm
 
@@ -77,12 +77,12 @@ def render_receipt(order, c):
 
     ypos -= 30*mm
 
-    c.drawString(BASE_INDENT, ypos, u"Lisätietoja Tracon 7 -tapahtumasta löydätte kotisivuiltamme: http://2012.tracon.fi/")
+    c.drawString(BASE_INDENT, ypos, u"Lisätietoja {settings.EVENT_NAME} -tapahtumasta löydätte kotisivuiltamme: {settings.EVENT_URL}".format(**locals()))
 
     ypos -= 15*mm
 
     c.drawString(BASE_INDENT, ypos, u"Ystävällisin terveisin")
-    c.drawString(BASE_INDENT, ypos - 10*mm, u"Tracon 7 -tapahtuman järjestäjät")
+    c.drawString(BASE_INDENT, ypos - 10*mm, u"{0} järjestäjät".format(settings.EVENT_NAME_GENITIVE))
 
     c.line(BASE_INDENT, 20*mm, 210*mm - BASE_INDENT, 20*mm)
     c.setFont("Helvetica", 8)

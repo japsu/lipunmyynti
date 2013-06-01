@@ -6,4 +6,5 @@ def tracon_specific(request):
         EVENT_URL=getattr(settings, 'EVENT_URL', 'http://localhost'),
         EVENT_NAME=getattr(settings, 'EVENT_NAME', 'Unnamed Event'),
         EVENT_NAME_GENITIVE=getattr(settings, 'EVENT_NAME_GENITIVE', "Unnamed Event's"),
+        EVENT_NAME_ILLATIVE=getattr(settings, 'EVENT_NAME_ILLATIVE', "to Unnamed Event"),
     )

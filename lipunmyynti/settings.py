@@ -215,5 +215,7 @@ PIPELINE_JS_COMPRESSOR = None
 
 SHOP_TITLE = 'Traconin lippukauppa'
 EVENT_NAME = 'Tracon 8'
+EVENT_HEADLINE = 'Tampere-talossa 14.-15. syyskuuta 2013'
 EVENT_NAME_GENITIVE = 'Tracon 8:n'
+EVENT_NAME_ILLATIVE = 'Tracon 8:aan'
 EVENT_URL = 'http://2013.tracon.fi'
