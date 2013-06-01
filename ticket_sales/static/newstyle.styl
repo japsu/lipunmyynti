@@ -1,10 +1,29 @@
-body
-  padding-top 60px
+body, html
+  height 100%
+
+#content
+  width 100% !important
+
+  min-height 100%
+  height auto !important
+  height 100%
+  margin 0 auto -61px
 
 .breadcrumb
   .active
     color black
     font-weight bold
+
+#push
+  height 60px
+
+footer
+  min-height 60px
+  background-color #eee
+  border-top 1px solid #ddd
+
+  .credit
+    padding-top 10px
 
 @media (max-width: 979px)
   .breadcrumb
@@ -13,5 +32,7 @@ body
 
 @media (min-width: 980px)
   .breadcrumb
+    margin-top 60px
+
     li + li:before
       content " → "

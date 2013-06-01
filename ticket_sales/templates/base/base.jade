@@ -6,41 +6,45 @@ html
     include base/analytics.jade
 
   body
-    .navbar.navbar-inverse.navbar-fixed-top
-      .navbar-inner
-        .container
-          .brand {{ SHOP_TITLE }}
-          ul.nav
-            li: a(href='{{ EVENT_URL }}') Takaisin {{ EVENT_NAME_GENITIVE }} sivuille
+    #content
+      .navbar.navbar-inverse.navbar-fixed-top
+        .navbar-inner
+          .container
+            .brand {{ SHOP_TITLE }}
+            ul.nav
+              li: a(href='{{ EVENT_URL }}') Takaisin {{ EVENT_NAME_GENITIVE }} sivuille
 
-    .container
-      ul.breadcrumb
-        for the_phase in phases
-          if the_phase.available
-            li
-              a(href='{{ the_phase.url }}') {{ forloop.counter }}. {{ the_phase.friendly_name }}
-          else
-            if the_phase.current
-              li.active {{ forloop.counter }}. {{ the_phase.friendly_name }}
+      .container
+        ul.breadcrumb
+          for the_phase in phases
+            if the_phase.available
+              li
+                a(href='{{ the_phase.url }}') {{ forloop.counter }}. {{ the_phase.friendly_name }}
             else
-              li {{ forloop.counter }}. {{ the_phase.friendly_name }}
+              if the_phase.current
+                li.active {{ forloop.counter }}. {{ the_phase.friendly_name }}
+              else
+                li {{ forloop.counter }}. {{ the_phase.friendly_name }}
 
-      block body_text
-        p Sisältö tulee tähän.
+        block body_text
+          p Sisältö tulee tähän.
 
-      form(method='post', action='{{ phase.url }}')
-        {% csrf_token %}
+        form(method='post', action='{{ phase.url }}')
+          {% csrf_token %}
 
-        block form_content
-          p Lomakkeen sisältö tulee tähän.
+          block form_content
+            p Lomakkeen sisältö tulee tähän.
 
-        p: button.btn.btn-primary.btn-block.btn-large(type='submit', name='action', value='next') Seuraava &rarr;
-        p
-          button.btn(type='submit', name='action', value='previous') &larr; Edellinen
-          button.btn.btn-danger(type='submit', name='action', value='cancel') &times; Keskeytä
+          p: button.btn.btn-primary.btn-block.btn-large(type='submit', name='action', value='next') Seuraava &rarr;
+          p
+            button.btn(type='submit', name='action', value='previous') &larr; Edellinen
+            button.btn.btn-danger(type='submit', name='action', value='cancel') &times; Keskeytä
 
-
+      #push
 
     footer
-
-    script(src='{{ STATIC_URL }}bootstrap/js/bootstrap.min.js')
+      .container
+        p.muted.credit
+          | {{ EVENT_NAME_GENITIVE }} järjestää 
+          a(href="http://ry.tracon.fi") Tracon ry
+          | . Verkkokauppa &copy; 2009&ndash;2013 Santtu Pajukanta, Jussi Sorjonen, Petri Haikonen, Meeri Panula ja  Esa Ollitervo.
