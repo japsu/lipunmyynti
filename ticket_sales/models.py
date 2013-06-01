@@ -3,7 +3,7 @@
 
 from datetime import datetime, timedelta, date
 from datetime import time as dtime
-from time import time
+from time import time, mktime
 
 from django.db import models, IntegrityError
 from django.template.loader import render_to_string
@@ -316,7 +316,7 @@ class Order(models.Model):
 
     @property
     def reference_number_base(self):
-        return "5%04d" % self.pk
+        return settings.REFERENCE_NUMBER_TEMPLATE.format(self.pk)
 
     @property
     def reference_number(self):
@@ -419,7 +419,10 @@ class Order(models.Model):
 
     @property
     def checkout_stamp(self):
-        return self.reference_number
+        return "{0}{1:010.0f}".format(
+            self.reference_number, # 6 digits
+            mktime(self.start_time.timetuple()), # 10 digits
+        )
 
     @property
     def checkout_message(self):

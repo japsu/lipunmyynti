@@ -231,3 +231,5 @@ CHECKOUT_PARAMS = dict(CHECKOUT_PARAMS,
     RETURN='http://localhost:8000/process/', # XXX
     DELIVERY_DATE='20130914' # Tracon 8 start
 )
+
+REFERENCE_NUMBER_TEMPLATE = "8{:04d}"
