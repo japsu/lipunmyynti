@@ -197,7 +197,7 @@ class Phase(object):
 class WelcomePhase(Phase):
     name = "welcome_phase"
     friendly_name = "Tervetuloa"
-    template = "ticket_sales/welcome.html"
+    template = "ticket_sales/welcome.jade"
     prev_phase = None
     next_phase = "tickets_phase"
     permit_new = True

@@ -1,5 +1,5 @@
 Django==1.4.3
 South==0.7.6
 gunicorn==0.17.2
-reportlab==2.6
+pyjade==1.9
 django-pipeline==1.3.11
