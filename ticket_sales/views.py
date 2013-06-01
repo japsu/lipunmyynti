@@ -2,15 +2,8 @@
 # vim: shiftwidth=4 expandtab
 
 import datetime
-import md5
 from time import mktime
 from collections import defaultdict
-
-try:
-    from reportlab.pdfgen import canvas
-except ImportError:
-    from warnings import warn
-    warn('Failed to import ReportLab. Generating receipts will fail.')
 
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponse
@@ -22,6 +15,13 @@ from django.views.decorators.http import require_POST, require_GET, require_http
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.db.models import Sum
 
+try:
+    from reportlab.pdfgen import canvas
+except ImportError:
+    from warnings import warn
+    warn('Failed to import ReportLab. Generating receipts will fail.')
+
+# XXX * imports
 from ticket_sales.models import *
 from ticket_sales.forms import *
 from ticket_sales.helpers import *
@@ -73,7 +73,6 @@ class Phase(object):
     prev_phase = None
     next_phase = None
     payment_phase = None
-    stamp = None
     next_text = "Seuraava &raquo;"
     can_cancel = True
     index = None
@@ -169,7 +168,6 @@ class Phase(object):
             can_cancel=self.can_cancel,
             next_text=self.next_text,
             payment_phase=self.payment_phase,
-            stamp=self.stamp,
             name=self.name
         )   
 
@@ -284,8 +282,6 @@ class ConfirmPhase(Phase):
     next_phase = "thanks_phase"
     payment_phase = True
     next_text ="Siirry maksamaan &#10003;"
-    stamp = int(mktime(datetime.datetime.now().timetuple()))
-
 
     def validate(self, request, form):
         errors = multiform_validate(form)
@@ -299,59 +295,8 @@ class ConfirmPhase(Phase):
     def vars(self, request, form):
         order = get_order(request)
         products = OrderProduct.objects.filter(order=order, count__gt=0)
-        # MD5(VERSION+ STAMP+ AMOUNT+ REFERENCE+ MESSAGE+ LANGUAGE+
-        # MERCHANT+RETURN+CANCEL+REJECT+DELAYED+COUNTRY+CURRENCY+
-        # DEVICE+CONTENT+TYPE+ALGORITHM+DELIVERY_DATE+FIRSTNAME+FAMILYNAME+
-        # ADDRESS+POSTCODE+POSTOFFICE+turva-avain)
-        mac = md5.new()
-        mac.update(order.checkout_vars['VERSION'])
-        mac.update("+")
-        mac.update(str(self.stamp))
-        mac.update("+")
-        mac.update(str(order.price_cents))
-        mac.update("+")
-        mac.update(order.reference_number)
-        mac.update("+")
-        mac.update("Tracon 8") # MESSAGE
-        mac.update("+")
-        mac.update(order.checkout_vars['LANGUAGE'])
-        mac.update("+")
-        mac.update(order.checkout_vars['MERCHANT'])
-        mac.update("+")
-        mac.update(order.checkout_vars['RETURN'])
-        mac.update("+")
-        mac.update("")
-        mac.update("+")
-        mac.update("")
-        mac.update("+")
-        mac.update("")
-        mac.update("+")
-        mac.update(order.checkout_vars['COUNTRY'])
-        mac.update("+")
-        mac.update(order.checkout_vars['CURRENCY'])
-        mac.update("+")
-        mac.update(order.checkout_vars['DEVICE'])
-        mac.update("+")
-        mac.update(order.checkout_vars['CONTENT'])
-        mac.update("+")
-        mac.update(order.checkout_vars['TYPE'])
-        mac.update("+")
-        mac.update(order.checkout_vars['ALGORITHM'])
-        mac.update("+")
-        mac.update("20130630") # DELIVERY DATE
-        mac.update("+")
-        mac.update(order.customer.first_name)
-        mac.update("+")
-        mac.update(order.customer.last_name)
-        mac.update("+")
-        mac.update(order.customer.address)
-        mac.update("+")
-        mac.update(order.customer.zip_code)
-        mac.update("+")
-        mac.update(order.customer.city)
-        mac.update("+")
-        mac.update("SAIPPUAKAUPPIAS")
-        return dict(products=products,mac=mac.hexdigest().upper())
+
+        return dict(products=products)
 
     def save(self, request, form):
         pass

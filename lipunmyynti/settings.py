@@ -169,6 +169,8 @@ LOGGING = {
     }
 }
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
 USE_X_FORWARDED_HOST = True
 
 EMAIL_HOST='smtp.b2.fi'
@@ -220,3 +222,11 @@ EVENT_HEADLINE = 'Tampere-talossa 14.-15. syyskuuta 2013'
 EVENT_NAME_GENITIVE = 'Tracon 8:n'
 EVENT_NAME_ILLATIVE = 'Tracon 8:aan'
 EVENT_URL = 'http://2013.tracon.fi'
+
+from payments.defaults import CHECKOUT_PARAMS
+CHECKOUT_PARAMS = dict(CHECKOUT_PARAMS, 
+    PASSWORD='SAIPPUAKAUPPIAS', # test account
+    MERCHANT='375917', # test account
+    RETURN='http://localhost:8000/process/', # XXX
+    DELIVERY_DATE='20130914' # Tracon 8 start
+)

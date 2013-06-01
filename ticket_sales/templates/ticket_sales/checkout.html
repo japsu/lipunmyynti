@@ -2,27 +2,27 @@
 vim: shiftwidth=2 expandtab
 encoding: utf-8
 {% endcomment %}
-<input type='hidden' name='VERSION' value='{{ order.checkout_vars.VERSION }}'>
-<input type='hidden' name='STAMP' value='{{ phase.stamp }}'>
+<input type='hidden' name='VERSION' value='{{ settings.CHECKOUT_VARS.VERSION }}'>
+<input type='hidden' name='STAMP' value='{{ order.checkout_stamp }}'>
 <input type='hidden' name='AMOUNT' value='{{ order.price_cents }}'>
 <input type='hidden' name='REFERENCE' value='{{ order.reference_number }}'>
-<input type='hidden' name='MESSAGE' value='Tracon 8'>
-<input type='hidden' name='LANGUAGE' value='{{ order.checkout_vars.LANGUAGE }}'>
-<input type='hidden' name='MERCHANT' value='{{ order.checkout_vars.MERCHANT }}'>
-<input type='hidden' name='RETURN' value='{{ order.checkout_vars.RETURN }}'>
+<input type='hidden' name='MESSAGE' value='{{ order.checkout_message }}'>
+<input type='hidden' name='LANGUAGE' value='{{ settings.CHECKOUT_VARS.LANGUAGE }}'>
+<input type='hidden' name='MERCHANT' value='{{ settings.CHECKOUT_VARS.MERCHANT }}'>
+<input type='hidden' name='RETURN' value='{{ settings.CHECKOUT_VARS.RETURN }}'>
 <input type='hidden' name='CANCEL' value=''>
 <input type='hidden' name='REJECT' value=''>
 <input type='hidden' name='DELAYED' value=''>
-<input type='hidden' name='COUNTRY' value='{{ order.checkout_vars.COUNTRY }}'>
-<input type='hidden' name='CURRENCY' value='{{ order.checkout_vars.CURRENCY }}'>
-<input type='hidden' name='DEVICE' value='{{ order.checkout_vars.DEVICE }}'>
-<input type='hidden' name='CONTENT' value='{{ order.checkout_vars.CONTENT }}'>
-<input type='hidden' name='TYPE' value='{{ order.checkout_vars.TYPE }}'>
-<input type='hidden' name='ALGORITHM' value='{{ order.checkout_vars.ALGORITHM }}'>
-<input type='hidden' name='DELIVERY_DATE' value='20130630'>
+<input type='hidden' name='COUNTRY' value='{{ settings.CHECKOUT_VARS.COUNTRY }}'>
+<input type='hidden' name='CURRENCY' value='{{ settings.CHECKOUT_VARS.CURRENCY }}'>
+<input type='hidden' name='DEVICE' value='{{ settings.CHECKOUT_VARS.DEVICE }}'>
+<input type='hidden' name='CONTENT' value='{{ settings.CHECKOUT_VARS.CONTENT }}'>
+<input type='hidden' name='TYPE' value='{{ settings.CHECKOUT_VARS.TYPE }}'>
+<input type='hidden' name='ALGORITHM' value='{{ settings.CHECKOUT_VARS.ALGORITHM }}'>
+<input type='hidden' name='DELIVERY_DATE' value='{{ settings.CHECKOUT_VARS.DELIVERY_DATE }}'>
 <input type='hidden' name='FIRSTNAME' value='{{ order.customer.first_name }}'>
 <input type='hidden' name='FAMILYNAME' value='{{ order.customer.last_name }}'>
 <input type='hidden' name='ADDRESS' value='{{ order.customer.address }}'>
 <input type='hidden' name='POSTCODE' value='{{ order.customer.zip_code }}'>
 <input type='hidden' name='POSTOFFICE' value='{{ order.customer.city}}'>
-<input type='hidden' name='MAC' value='{{ mac }}'>
+<input type='hidden' name='MAC' value='{{ order.checkout_mac }}'>

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 import md5
 
@@ -12,21 +13,25 @@ class Payment(models.Model):
     ALGORITHM = models.IntegerField()
     MAC = models.CharField(max_length=32)
 
-    def check_mac(self):
-        password = "SAIPPUAKAUPPIAS"
-    	_mac = md5.new()
-    	_mac.update(password)
-        _mac.update("&")
-    	_mac.update(self.VERSION)
-        _mac.update("&")
-    	_mac.update(self.STAMP)
-        _mac.update("&")
-    	_mac.update(self.REFERENCE)
-        _mac.update("&")
-    	_mac.update(self.PAYMENT)
-        _mac.update("&")
-    	_mac.update(str(self.STATUS))
-        _mac.update("&")
-    	_mac.update(str(self.ALGORITHM))
-    	if self.MAC != _mac.hexdigest().upper():
-    		raise RuntimeError(self.MAC+' '+str(_mac.hexdigest()).upper())    
+    def _check_mac(self):
+    	computed_mac = md5.new()
+    	computed_mac.update(settings.CHECKOUT_PARAMS['PASSWORD'])
+        computed_mac.update("&")
+    	computed_mac.update(self.VERSION)
+        computed_mac.update("&")
+    	computed_mac.update(self.STAMP)
+        computed_mac.update("&")
+    	computed_mac.update(self.REFERENCE)
+        computed_mac.update("&")
+    	computed_mac.update(self.PAYMENT)
+        computed_mac.update("&")
+    	computed_mac.update(str(self.STATUS))
+        computed_mac.update("&")
+    	computed_mac.update(str(self.ALGORITHM))
+
+    	return self.MAC != computed_mac.hexdigest().upper
+
+    def clean(self):
+        if not self._check_mac():
+            from django.core.exceptions import ValidationError
+            raise ValidationError('MAC does not match')

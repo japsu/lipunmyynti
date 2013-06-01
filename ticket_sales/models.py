@@ -9,9 +9,10 @@ from django.core.mail import EmailMessage
 from django.conf import settings
 from django.utils import timezone
 
-from ticket_sales.format import format_date, format_datetime, format_price
+from payments.utils import compute_payment_request_mac
+
+from .format import format_date, format_datetime, format_price
 from .receipt import render_receipt
-import md5
 
 __all__ = [
     "School",
@@ -239,19 +240,6 @@ class Order(models.Model):
     cancellation_time = models.DateTimeField(null=True, blank=True)
     batch = models.ForeignKey(Batch, null=True, blank=True)
     school = models.ForeignKey(School, null=True, blank=True)
-    checkout_vars = {
-        'PASSWORD' : 'SAIPPUAKAUPPIAS',
-        'VERSION' : '0001',
-        'LANGUAGE' : 'FI',
-        'MERCHANT' : '375917',
-        'RETURN' : 'http://localhost:8000/process/',
-        'COUNTRY' : 'FIN',
-        'CURRENCY' : 'EUR',
-        'DEVICE' : '1',
-        'CONTENT' : '1',
-        'TYPE' : '0',
-        'ALGORITHM' : '2',
-    }
 
     @property
     def is_active(self):
@@ -414,26 +402,28 @@ class Order(models.Model):
 
     @property
     def due_date(self):
-        # XXX
-        mytz = timezone.get_default_timezone()
-
-        PURKKA_THRESHOLD = datetime(2012, 8, 12, 12, 33, tzinfo=mytz)
-        PURKKA_DUEDATE = datetime(2012, 8, 17, 23, 59, 59, tzinfo=mytz)
-
-        PURKKA2_DUEDATE = datetime(2012, 8, 30, 23, 59, 59, tzinfo=mytz)
-
-        if not self.confirm_time:
-            return None
-        elif self.requires_shipping and self.confirm_time >= PURKKA_THRESHOLD:
-            return PURKKA_DUEDATE
-        elif not self.requires_shipping:
-            return PURKKA2_DUEDATE
-        else:
+        if self.confirm_time:
             return datetime.combine((self.confirm_time + timedelta(days=DUE_DAYS)).date(), dtime(23, 59, 59))
+        else:
+            return None
 
     @property
     def formatted_due_date(self):
         return format_date(self.due_date)
+
+    @property
+    def checkout_stamp(self):
+        # TODO stub
+        raise NotImplementedError()
+
+    @property
+    def checkout_message(self):
+        # TODO stub
+        raise NotImplementedError()
+
+    @property
+    def checkout_mac(self):
+        return compute_payment_request_mac(self)
 
     def send_confirmation_message(self, msgtype):
         # don't fail silently, warn admins instead
