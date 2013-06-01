@@ -84,14 +84,17 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '+@)+n!)a=by12)*x5eh0qq10drwe^j^pi!!7@a3j=yc-1@!@zp'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    ('pyjade.ext.django.Loader',(
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )),
 )
 
 MIDDLEWARE_CLASSES = (
@@ -115,9 +118,9 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
-#TEMPLATE_CONTEXT_PROCESSORS = defaults.TEMPLATE_CONTEXT_PROCESSORS + (
-#    'ticket_sales.context_processors.tracon_specific',
-#)
+TEMPLATE_CONTEXT_PROCESSORS = defaults.TEMPLATE_CONTEXT_PROCESSORS + (
+    'ticket_sales.context_processors.tracon_specific',
+)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -132,6 +135,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'gunicorn',
     'south',
+    'pipeline',
     'ticket_sales',
     'payments'
 )
@@ -174,4 +178,42 @@ TICKET_SPAM_EMAIL=DEFAULT_FROM_EMAIL
 
 LOGIN_URL='/kirjaudu/'
 #ANALYTICS_ACCOUNT="UA-21225387-3"
-ANALYTICS_ACCOUNT="UA-00000000-0"
+#ANALYTICS_ACCOUNT="UA-00000000-0"
+
+PIPELINE_CSS = {
+    'default': {
+        'source_filenames': (
+          'bootstrap/css/bootstrap.css',
+          'bootstrap/css/bootstrap-responsive.css',
+          'newstyle.styl'
+        ),
+        'output_filename': 'default.css',
+        'extra_context': {
+            'media': 'screen,projection',
+        },
+    },
+}
+
+PIPELINE_JS = {
+    'default': {
+        'source_filenames': (
+          #'jquery-1.8.3.js',
+          #'bootstrap/js/bootstrap.js'
+        ),
+        'output_filename': 'default.js',
+    }
+}
+
+PIPELINE_COMPILERS = (
+    'pipeline.compilers.stylus.StylusCompiler',
+)
+
+# XXX
+PIPELINE_STYLUS_BINARY = 'stylus' # hail PATH
+PIPELINE_CSS_COMPRESSOR = None
+PIPELINE_JS_COMPRESSOR = None
+
+SHOP_TITLE = 'Traconin lippukauppa'
+EVENT_NAME = 'Tracon 8'
+EVENT_NAME_GENITIVE = 'Tracon 8:n'
+EVENT_URL = 'http://2013.tracon.fi'

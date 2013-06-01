@@ -1,0 +1,17 @@
+body
+  padding-top 60px
+
+.breadcrumb
+  .active
+    color black
+    font-weight bold
+
+@media (max-width: 979px)
+  .breadcrumb
+    li
+      display block
+
+@media (min-width: 980px)
+  .breadcrumb
+    li + li:before
+      content " → "

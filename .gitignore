@@ -2,3 +2,4 @@
 *.sqlite3
 /static/
 EFS*.TMP
+ticket_sales/static/newstyle.css
