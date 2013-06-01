@@ -73,7 +73,6 @@ class Phase(object):
     next_phase = None
     payment_phase = None
     stamp = None
-    mac = None
     next_text = "Seuraava &raquo;"
     can_cancel = True
     index = None
@@ -170,7 +169,6 @@ class Phase(object):
             next_text=self.next_text,
             payment_phase=self.payment_phase,
             stamp=self.stamp,
-            mac=self.mac,
             name=self.name
         )   
 
@@ -286,7 +284,6 @@ class ConfirmPhase(Phase):
     payment_phase = True
     next_text ="Siirry maksamaan &#10003;"
     stamp = int(mktime(datetime.datetime.now().timetuple()))
-    mac = None
 
 
     def validate(self, request, form):
@@ -301,28 +298,46 @@ class ConfirmPhase(Phase):
     def vars(self, request, form):
         order = get_order(request)
         products = OrderProduct.objects.filter(order=order, count__gt=0)
+        # MD5(VERSION+ STAMP+ AMOUNT+ REFERENCE+ MESSAGE+ LANGUAGE+
+        # MERCHANT+RETURN+CANCEL+REJECT+DELAYED+COUNTRY+CURRENCY+
+        # DEVICE+CONTENT+TYPE+ALGORITHM+DELIVERY_DATE+FIRSTNAME+FAMILYNAME+
+        # ADDRESS+POSTCODE+POSTOFFICE+turva-avain)
         mac = md5.new()
-        mac.update("0001")
+        mac.update(order.checkout_vars['VERSION'])
         mac.update("+")
-        mac.update("12345")
+        mac.update(str(self.stamp))
         mac.update("+")
-        mac.update("1000")
+        mac.update(str(order.price_cents))
         mac.update("+")
-        mac.update("12344")
+        mac.update(order.reference_number)
         mac.update("+")
-        mac.update("FIN")
+        mac.update("Tracon 8") # MESSAGE
         mac.update("+")
-        mac.update("EUR")
+        mac.update(order.checkout_vars['LANGUAGE'])
         mac.update("+")
-        mac.update("1")
+        mac.update(order.checkout_vars['MERCHANT'])
         mac.update("+")
-        mac.update("1")
+        mac.update(order.checkout_vars['RETURN'])
         mac.update("+")
-        mac.update("0")
+        mac.update("")
         mac.update("+")
-        mac.update("2")
+        mac.update("")
         mac.update("+")
-        mac.update("20130505")
+        mac.update("")
+        mac.update("+")
+        mac.update(order.checkout_vars['COUNTRY'])
+        mac.update("+")
+        mac.update(order.checkout_vars['CURRENCY'])
+        mac.update("+")
+        mac.update(order.checkout_vars['DEVICE'])
+        mac.update("+")
+        mac.update(order.checkout_vars['CONTENT'])
+        mac.update("+")
+        mac.update(order.checkout_vars['TYPE'])
+        mac.update("+")
+        mac.update(order.checkout_vars['ALGORITHM'])
+        mac.update("+")
+        mac.update("20130630") # DELIVERY DATE
         mac.update("+")
         mac.update(order.customer.first_name)
         mac.update("+")
@@ -335,8 +350,7 @@ class ConfirmPhase(Phase):
         mac.update(order.customer.city)
         mac.update("+")
         mac.update("SAIPPUAKAUPPIAS")
-        mac = 12345
-        return dict(products=products)
+        return dict(products=products,mac=mac.hexdigest().upper())
 
     def save(self, request, form):
         pass

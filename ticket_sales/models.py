@@ -244,12 +244,13 @@ class Order(models.Model):
         'VERSION' : '0001',
         'LANGUAGE' : 'FI',
         'MERCHANT' : '375917',
+        'RETURN' : 'http://localhost:8000/process/?test=1',
         'COUNTRY' : 'FIN',
         'CURRENCY' : 'EUR',
         'DEVICE' : '1',
         'CONTENT' : '1',
         'TYPE' : '0',
-        'ALGORITHM' : '0',
+        'ALGORITHM' : '1',
     }
 
     @property
