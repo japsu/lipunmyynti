@@ -1,5 +1,8 @@
 == Getting started ==
 
+    apt-get install nodejs
+    npm install -g stylus
+
     virtualenv --distribute --no-site-packages venv-lipunmyynti
     source venv-lipunmyynti/bin/activate
 
