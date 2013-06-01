@@ -1,10 +1,12 @@
 # encoding: utf-8
 # vim: shiftwidth=4 expandtab
 
-from django.db import models, IntegrityError
-from django.template.loader import render_to_string
 from datetime import datetime, timedelta, date
 from datetime import time as dtime
+from time import time
+
+from django.db import models, IntegrityError
+from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.utils import timezone
@@ -204,13 +206,13 @@ class School(models.Model):
 
 class Customer(models.Model):
     # REVERSE: order = OneToOne(Order)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField()
-    address = models.CharField(max_length=200)
-    zip_code = models.CharField(max_length=5)
-    city = models.CharField(max_length=30)
-    phone_number = models.CharField(max_length=30, null=True, blank=True)
+    first_name = models.CharField(max_length=100, verbose_name="Etunimi")
+    last_name = models.CharField(max_length=100, verbose_name="Sukunimi")
+    email = models.EmailField(verbose_name="Sähköpostiosoite")
+    address = models.CharField(max_length=200, verbose_name="Katuosoite")
+    zip_code = models.CharField(max_length=5, verbose_name="Postinumero")
+    city = models.CharField(max_length=30, verbose_name="Postitoimipaikka")
+    phone_number = models.CharField(max_length=30, null=True, blank=True, verbose_name="Puhelinnumero")
 
     def __unicode__(self):
         return self.name
@@ -325,7 +327,7 @@ class Order(models.Model):
     def formatted_reference_number(self):
         return "".join((i if (n+1) % 5 else i+" ") for (n, i) in enumerate(self.reference_number[::-1]))[::-1]
 
-    def confirm_order(self):
+    def confirm_order(self, send_email=True):
         assert self.customer is not None
         assert not self.is_confirmed
 
@@ -334,9 +336,11 @@ class Order(models.Model):
         self.confirm_time = timezone.now()
 
         self.save()
-        self.send_confirmation_message("tilausvahvistus")
 
-    def confirm_payment(self, payment_date=None):
+        if send_email:
+            self.send_confirmation_message("tilausvahvistus")
+
+    def confirm_payment(self, payment_date=None, send_email=True):
         assert self.is_confirmed
         
         if payment_date is None:
@@ -344,8 +348,10 @@ class Order(models.Model):
 
         self.payment_date = payment_date
 
-        self.save()        
-        self.send_confirmation_message("maksuvahvistus")
+        self.save() 
+
+        if send_email:       
+            self.send_confirmation_message("maksuvahvistus")
 
     def cancel(self):
         assert self.is_confirmed
@@ -403,7 +409,7 @@ class Order(models.Model):
     @property
     def due_date(self):
         if self.confirm_time:
-            return datetime.combine((self.confirm_time + timedelta(days=DUE_DAYS)).date(), dtime(23, 59, 59))
+            return datetime.combine((self.confirm_time + timedelta(days=DUE_DAYS)).date(), dtime(23, 59, 59)).replace(tzinfo=get_default_timezone())
         else:
             return None
 
@@ -413,13 +419,11 @@ class Order(models.Model):
 
     @property
     def checkout_stamp(self):
-        # TODO stub
-        raise NotImplementedError()
+        return self.reference_number
 
     @property
     def checkout_message(self):
-        # TODO stub
-        raise NotImplementedError()
+        return ", ".join(i.description for i in self.order_product_set.filter(count__gte=1))
 
     @property
     def checkout_mac(self):
@@ -499,8 +503,12 @@ class OrderProduct(models.Model):
     def formatted_price(self):
         return format_price(self.price_cents)
 
-    def __unicode__(self):
+    @property
+    def description(self):
         return u"%dx %s" % (
             self.count,
             self.product.name if self.product is not None else None
         )
+
+    def __unicode__(self):
+        return self.description

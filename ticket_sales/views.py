@@ -215,7 +215,7 @@ welcome_view = WelcomePhase()
 class TicketsPhase(Phase):
     name = "tickets_phase"
     friendly_name = "Liput"
-    template = "ticket_sales/tickets.html"
+    template = "ticket_sales/tickets.jade"
     prev_phase = "welcome_phase"
     next_phase = "address_phase"
 
@@ -256,7 +256,7 @@ tickets_view = TicketsPhase()
 class AddressPhase(Phase):
     name = "address_phase"
     friendly_name = "Toimitusosoite"
-    template = "ticket_sales/address.html"
+    template = "ticket_sales/address.jade"
     prev_phase = "tickets_phase"
     next_phase = "confirm_phase"
 
@@ -277,7 +277,7 @@ address_view = AddressPhase()
 class ConfirmPhase(Phase):
     name = "confirm_phase"
     friendly_name = "Vahvistaminen"
-    template = "ticket_sales/confirm.html"
+    template = "ticket_sales/confirm.jade"
     prev_phase = "address_phase"
     next_phase = "thanks_phase"
     payment_phase = True
@@ -316,7 +316,7 @@ confirm_view = ConfirmPhase()
 class ThanksPhase(Phase):
     name = "thanks_phase"
     friendly_name = "Kiitos!"
-    template = "ticket_sales/thanks.html"
+    template = "ticket_sales/thanks.jade"
     prev_phase = None
     next_phase = "welcome_phase"
     next_text = "Uusi tilaus"

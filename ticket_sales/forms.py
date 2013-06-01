@@ -4,6 +4,8 @@
 from django import forms
 from django.contrib.localflavor.fi.forms import FIZipCodeField
 
+from crispy_forms.helper import FormHelper
+
 from ticket_sales.models import *
 
 __all__ = [
@@ -45,8 +47,10 @@ class OrderProductForm(forms.ModelForm):
         model = OrderProduct
         
 class CustomerForm(forms.ModelForm):
-    #XXX hackily commented out
-    #zip_code = FIZipCodeField()
+    def __init__(self, *args, **kwargs):
+        super(CustomerForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
 
     class Meta:
         model = Customer

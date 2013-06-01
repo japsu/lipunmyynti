@@ -1,0 +1,31 @@
+{% comment %}
+  Implementation of navigation buttons.
+{% endcomment %}
+
+{% if phase.next_phase %}
+  {% comment %}
+    This button is removed from view using CSS.
+  {% endcomment %}
+  <button class="enterhack buttongradient" type="submit" name="action" value="next">&nbsp;</button><br />
+{% endif %}
+
+{% if phase.can_cancel %}
+  <button class="abort buttongradient" type="submit" name="action" value="cancel" tabindex="300">&times; Keskeytä</button>
+{% else %}
+  <button class="abort buttongradient btndisabled" type="submit" name="action" value="cancel" disabled="disabled">&times; Keskeytä</button>
+{% endif %}
+
+{% if phase.prev_phase %}
+  <button class="buttongradient" type="submit" name="action" value="prev" tabindex="200">&laquo; Edellinen</button>
+{% else %}
+  <button class="buttongradient btndisabled" type="submit" name="action" value="prev" disabled="disabled">&laquo; Edellinen</button>
+{% endif %}
+
+{% if phase.payment_phase %}
+
+  <button class="buttongradient" id="nextbutton" type="submit" formaction="https://payment.checkout.fi/" tabindex="100">{{ phase.next_text|safe }}</button>
+{% elif phase.next_phase %}
+  <button class="buttongradient" id="nextbutton" type="submit" name="action" value="next" tabindex="100">{{ phase.next_text|safe }}</button>
+{% else %}
+<button class="buttongradient btndisabled" type="submit" name="action" value="next" disabled="disabled">{{ phase.next_text|safe }}</button>
+{% endif %}

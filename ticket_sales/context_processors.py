@@ -1,6 +1,7 @@
 def tracon_specific(request):
     from django.conf import settings
     return dict(
+        CHECKOUT_PARAMS=getattr(settings, 'CHECKOUT_PARAMS', dict()),
         ANALYTICS_ACCOUNT=getattr(settings, 'ANALYTICS_ACCOUNT', None),
         SHOP_TITLE=getattr(settings, 'SHOP_TITLE', 'Generic Web Shop'),
         EVENT_URL=getattr(settings, 'EVENT_URL', 'http://localhost'),

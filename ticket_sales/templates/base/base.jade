@@ -29,16 +29,13 @@ html
         block body_text
           p Sisältö tulee tähän.
 
-        form(method='post', action='{{ phase.url }}')
+        form(method='post', action='{{ phase.url }}').form-horizontal
           {% csrf_token %}
 
           block form_content
             p Lomakkeen sisältö tulee tähän.
 
-          p: button.btn.btn-primary.btn-block.btn-large(type='submit', name='action', value='next') Seuraava &rarr;
-          p
-            button.btn(type='submit', name='action', value='previous') &larr; Edellinen
-            button.btn.btn-danger(type='submit', name='action', value='cancel') &times; Keskeytä
+          include ticket_sales/buttons.jade
 
       #push
 

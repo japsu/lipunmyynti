@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'gunicorn',
     'south',
     'pipeline',
+    'crispy_forms',
     'ticket_sales',
     'payments'
 )
