@@ -9,4 +9,5 @@ def tracon_specific(request):
         EVENT_NAME_GENITIVE=getattr(settings, 'EVENT_NAME_GENITIVE', "Unnamed Event's"),
         EVENT_NAME_ILLATIVE=getattr(settings, 'EVENT_NAME_ILLATIVE', "to Unnamed Event"),
         DEFAULT_FROM_EMAIL=getattr(settings, 'DEFAULT_FROM_EMAIL', 'admin@example.com'),
+        PLAIN_CONTACT_EMAIL=getattr(settings, 'PLAIN_CONTACT_EMAIL', 'admin@example.com'),
     )
