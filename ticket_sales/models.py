@@ -26,10 +26,10 @@ __all__ = [
     "SHIPPING_AND_HANDLING_CENTS",
 ]
 
-SHIPPING_AND_HANDLING_CENTS = 100
-DUE_DAYS = 7
-LOW_AVAILABILITY_THRESHOLD = 10
-DEFAULT_FINAL_DEATH_DAYS = 14
+SHIPPING_AND_HANDLING_CENTS = getattr(settings, 'SHIPPING_AND_HANDLING_CENTS', 0)
+DUE_DAYS = getattr(settings, 'DUE_DAYS', 7)
+LOW_AVAILABILITY_THRESHOLD = getattr(settings, 'LOW_AVAILABILITY_THRESHOLD', 10)
+DEFAULT_FINAL_DEATH_DAYS = 14 # XXX no longer used
 
 class Batch(models.Model):
     create_time = models.DateTimeField(auto_now=True)
@@ -143,8 +143,6 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     mail_description = models.TextField(null=True, blank=True)
-    image = models.CharField(max_length=32)
-    classname = models.CharField(max_length=32)
     sell_limit = models.IntegerField()
     price_cents = models.IntegerField()
     requires_shipping = models.BooleanField(default=True)
