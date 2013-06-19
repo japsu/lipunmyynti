@@ -23,7 +23,8 @@ Yhteensä: {{ order.formatted_price }} (ALV 0%)
 
 Jos ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
 yhteyttä lipunmyyntiin joko vastaamalla tähän viestiin tai lähettämällä
-sähköpostia: {{ DEFAULT_FROM_EMAIL }}.
+sähköpostia: {notice: Finished catalog run in 13.37 seconds
+{ DEFAULT_FROM_EMAIL|safe }}.
 
 Jos ylläolevat tiedot ovat oikein, maksakaa tilaus seuraavilla tiedoilla:
 
