@@ -149,6 +149,10 @@ class Product(models.Model):
     requires_shipping = models.BooleanField(default=True)
     available = models.BooleanField(default=True)
     ilmoitus_mail = models.CharField(max_length=100, null=True, blank=True)
+    ordering = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ('ordering', 'id')
 
     @property
     def formatted_price(self):
