@@ -34,4 +34,4 @@ Saatte erillisen vahvistusviestin, kun lippunne on postitettu.
 
 {% endif %}Ystävällisin terveisin
 -- 
-{{ DEFAULT_FROM_EMAIL }}
+{{ DEFAULT_FROM_EMAIL|safe }}

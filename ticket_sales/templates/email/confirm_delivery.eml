@@ -29,4 +29,4 @@ Tervetuloa Traconiin!
 
 Ystävällisin terveisin
 -- 
-{{ DEFAULT_FROM_EMAIL }}
+{{ DEFAULT_FROM_EMAIL|safe }}
