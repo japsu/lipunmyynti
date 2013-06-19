@@ -387,6 +387,10 @@ class Order(models.Model):
 
             # only used by payment reminder messages
             final_death=timezone.now() + timedelta(days=DEFAULT_FINAL_DEATH_DAYS),
+
+            EVENT_NAME=settings.EVENT_NAME,
+            EVENT_NAME_GENITIVE=settings.EVENT_NAME_GENITIVE,
+            DEFAULT_FROM_EMAIL=settings.DEFAULT_FROM_EMAIL,
         )
 
     @property
@@ -443,14 +447,19 @@ class Order(models.Model):
             else:
                 msgbcc = (settings.TICKET_SPAM_EMAIL,)
         
+        subject_vars = dict(
+            EVENT_NAME=settings.EVENT_NAME,
+            order_number=self.pk
+        )
+
         if msgtype == "tilausvahvistus":
-            msgsubject = "Tracon 7: Tilausvahvistus (#%04d)" % self.pk
+            msgsubject = "{EVENT_NAME}: Tilausvahvistus (#{order_number:04d})".format(**subject_vars)
             msgbody = self.order_confirmation_message
         elif msgtype == "maksuvahvistus":
-            msgsubject = "Tracon 7: Maksuvahvistus (#%04d)" % self.pk
+            msgsubject = "{EVENT_NAME}: Maksuvahvistus (#{order_number:04d})".format(**subject_vars)
             msgbody = self.payment_confirmation_message
         elif msgtype == "toimitusvahvistus":
-            msgsubject = "Tracon 7: Toimitusvahvistus (#%04d)" % self.pk
+            msgsubject = "{EVENT_NAME}: Toimitusvahvistus (#{order_number:04d})".format(**subject_vars)
             msgbody = self.delivery_confirmation_message
         else:
             raise NotImplementedError(msgtype)
@@ -465,7 +474,7 @@ class Order(models.Model):
     def send_payment_reminder_message(self):
         # TODO see above
         EmailMessage(
-            subject="Tracon 7: Maksumuistutus (#%04d)" % self.pk,
+            subject="Tracon 7: Maksumuistutus (#%04d)".format(**subject_vars),
             body=self.payment_reminder_message,
             to=(self.customer.name_and_email,),
             bcc=(settings.TICKET_SPAM_EMAIL,)
@@ -473,7 +482,7 @@ class Order(models.Model):
 
     def send_cancellation_notice_message(self):
         EmailMessage(
-            subject="Tracon 7: Tilaus peruuntunut (#%04d)" % self.pk,
+            subject="Tracon 7: Tilaus peruuntunut (#%04d)".format(**subject_vars),
             body=self.cancellation_notice_message,
             to=(self.customer.name_and_email,),
             bcc=(settings.TICKET_SPAM_EMAIL,)
