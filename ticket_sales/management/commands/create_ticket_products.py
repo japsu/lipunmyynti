@@ -7,8 +7,8 @@ from ticket_sales.models import *
 
 DAYS = [
     (u'Koko viikonlopun lippu', u'koko tapahtuman ajan (la klo 10 - su klo 18)',    (1550, 1750)),
-    (u'Lauantailippu',          u'lauantain ajan (la klo 10 - su klo 08',           (1050, 1250)),
-    (u'Sunnuntailippu',         u'sunnuntain ajan (su klo 00 - su klo 18',          (1050, 1250)),
+    (u'Lauantailippu',          u'lauantain ajan (la klo 10 - su klo 08)',           (1050, 1250)),
+    (u'Sunnuntailippu',         u'sunnuntain ajan (su klo 00 - su klo 18)',          (1050, 1250)),
 ]
 
 METHODS = [
