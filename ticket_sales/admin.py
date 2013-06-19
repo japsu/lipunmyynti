@@ -4,6 +4,18 @@
 from ticket_sales.models import *
 from django.contrib import admin
 
+class ProductAdmin(admin.ModelAdmin):
+    model = Product
+    list_display = (
+      'name',
+      'internal_description',
+      'formatted_price',
+      'sell_limit',
+      'amount_available',
+      'available',
+      'requires_shipping',
+    )
+
 class CustomerInline(admin.StackedInline):
     model = Customer
 
@@ -18,6 +30,7 @@ class OrderAdmin(admin.ModelAdmin):
     ]
 
 admin.site.register(Order, OrderAdmin)
+admin.site.register(Product, ProductAdmin)
 
-for cls in (School, Batch, Product, Customer):
+for cls in (School, Batch, Customer):
     admin.site.register(cls)
