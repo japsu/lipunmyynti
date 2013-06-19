@@ -23,7 +23,7 @@ Liput on postitettu seuraavaan osoitteeseen:
 
 Jos ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
 yhteyttä lipunmyyntiin joko vastaamalla tähän viestiin tai lähettämällä
-sähköpostia osoitteella liput12@tracon.fi.
+sähköpostia: {{ DEFAULT_FROM_EMAIL }}.
 
 Tervetuloa Traconiin!
 

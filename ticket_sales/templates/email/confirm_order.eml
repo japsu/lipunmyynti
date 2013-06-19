@@ -23,7 +23,7 @@ Yhteensä: {{ order.formatted_price }} (ALV 0%)
 
 Jos ylläolevissa tiedoissa on virheitä, pyydämme ottamaan viipymättä
 yhteyttä lipunmyyntiin joko vastaamalla tähän viestiin tai lähettämällä
-sähköpostia osoitteella liput12@tracon.fi.
+sähköpostia: {{ DEFAULT_FROM_EMAIL }}.
 
 Jos ylläolevat tiedot ovat oikein, maksakaa tilaus seuraavilla tiedoilla:
 

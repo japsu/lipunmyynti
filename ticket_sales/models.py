@@ -361,7 +361,7 @@ class Order(models.Model):
 
         self.cancellation_time = timezone.now()
         self.save()
-        self.send_cancellation_notice_message()
+        self.send_confirmation_message('peruutus')
 
     @property
     def deduplicated_product_messages(self):
@@ -461,6 +461,12 @@ class Order(models.Model):
         elif msgtype == "toimitusvahvistus":
             msgsubject = "{EVENT_NAME}: Toimitusvahvistus (#{order_number:04d})".format(**subject_vars)
             msgbody = self.delivery_confirmation_message
+        elif msgtype == "maksumuistutus":
+            msgsubject = "{EVENT_NAME}: Maksumuistutus (#{order_number:04d})".format(**subject_vars)
+            msgbody = self.payment_reminder_message
+        elif msgtype == "peruutus":
+            msgsubject = "{EVENT_NAME}: Tilaus peruuntunut (#{order_number:04d})".format(**subject_vars)
+            msgbody = self.cancellation_notice_message
         else:
             raise NotImplementedError(msgtype)
         
@@ -469,23 +475,6 @@ class Order(models.Model):
             body=msgbody,
             to=(self.customer.name_and_email,),
             bcc=msgbcc
-        ).send(fail_silently=True)
-
-    def send_payment_reminder_message(self):
-        # TODO see above
-        EmailMessage(
-            subject="Tracon 7: Maksumuistutus (#%04d)".format(**subject_vars),
-            body=self.payment_reminder_message,
-            to=(self.customer.name_and_email,),
-            bcc=(settings.TICKET_SPAM_EMAIL,)
-        ).send(fail_silently=True)
-
-    def send_cancellation_notice_message(self):
-        EmailMessage(
-            subject="Tracon 7: Tilaus peruuntunut (#%04d)".format(**subject_vars),
-            body=self.cancellation_notice_message,
-            to=(self.customer.name_and_email,),
-            bcc=(settings.TICKET_SPAM_EMAIL,)
         ).send(fail_silently=True)
 
     def render(self, c):
