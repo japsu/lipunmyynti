@@ -1,6 +1,6 @@
 Hyvä vastaanottaja,
 
-Olemme {{ order.batch.delivery_date|date }} postittaneet Tracon 7-ennakkolipputilauksenne
+Olemme {{ order.batch.delivery_date|date }} postittaneet {{ EVENT_NAME }} -ennakkolipputilauksenne
 numero {{ order.pk|stringformat:"04d" }}.
 
 Vahvistamme postitetuiksi seuraavat lipputuotteet:
@@ -29,4 +29,4 @@ Tervetuloa Traconiin!
 
 Ystävällisin terveisin
 -- 
-Tracon 7 -lipunmyynti <liput12@tracon.fi>
+{{ DEFAULT_FROM_EMAIL }}

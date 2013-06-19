@@ -1,6 +1,6 @@
 Hyvä vastaanottaja,
 
-Olemme vastaanottaneet {{ order.payment_date|date }} maksun Tracon 7
+Olemme vastaanottaneet {{ order.payment_date|date }} maksun {{ EVENT_NAME }}
 -ennakkolipputilauksestanne numero {{ order.pk|stringformat:"04d" }}.
 
 Vahvistamme maksetuiksi seuraavat lipputuotteet:
@@ -34,4 +34,4 @@ Saatte erillisen vahvistusviestin, kun lippunne on postitettu.
 
 {% endif %}Ystävällisin terveisin
 -- 
-Tracon 7 -lipunmyynti <liput12@tracon.fi>
+{{ DEFAULT_FROM_EMAIL }}

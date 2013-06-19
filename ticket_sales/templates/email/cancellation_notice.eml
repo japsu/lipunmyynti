@@ -1,6 +1,6 @@
 Hyvä vastaanottaja,
 
-Tracon 7 -lipputilauksenne numero {{ order.pk|stringformat:"04d" }} on peruutettu,
+{{ EVENT_NAME }} -lipputilauksenne numero {{ order.pk|stringformat:"04d" }} on peruutettu,
 koska sitä ei maksettu eräpäivään mennessä.
 
 Tilauksenne sisälsi seuraavat lipputuotteet:
@@ -26,4 +26,4 @@ vastatkaa tähän sähköpostiviestiin välittömästi.
 
 Ystävällisin terveisin
 -- 
-Tracon 7 -lipunmyynti <liput12@tracon.fi>
+{{ DEFAULT_FROM_EMAIL }}
