@@ -2,6 +2,8 @@ import md5
 
 from django.conf import settings
 
+ENCODING = 'UTF-8'
+
 def compute_payment_request_mac(order):
     mac = md5.new()
     mac.update(settings.CHECKOUT_PARAMS['VERSION'])
@@ -12,7 +14,7 @@ def compute_payment_request_mac(order):
     mac.update("+")
     mac.update(order.reference_number)
     mac.update("+")
-    mac.update(order.checkout_message)
+    mac.update(order.checkout_message.encode(ENCODING))
     mac.update("+")
     mac.update(settings.CHECKOUT_PARAMS['LANGUAGE'])
     mac.update("+")
@@ -40,15 +42,15 @@ def compute_payment_request_mac(order):
     mac.update("+")
     mac.update(settings.CHECKOUT_PARAMS['DELIVERY_DATE'])
     mac.update("+")
-    mac.update(order.customer.first_name)
+    mac.update(order.customer.first_name.encode(ENCODING))
     mac.update("+")
-    mac.update(order.customer.last_name)
+    mac.update(order.customer.last_name.encode(ENCODING))
     mac.update("+")
-    mac.update(order.customer.address)
+    mac.update(order.customer.address.encode(ENCODING))
     mac.update("+")
-    mac.update(order.customer.zip_code)
+    mac.update(order.customer.zip_code.encode(ENCODING))
     mac.update("+")
-    mac.update(order.customer.city)
+    mac.update(order.customer.city.encode(ENCODING))
     mac.update("+")
     mac.update(settings.CHECKOUT_PARAMS['PASSWORD'])
 
