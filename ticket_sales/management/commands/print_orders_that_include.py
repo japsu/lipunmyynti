@@ -13,12 +13,10 @@ class Command(BaseCommand):
     help = 'Print orders that include the given product'
 
     def handle(*args, **options):
-      product_id = int(args.pop(0))
-      assert len(args) == 0
-
+      product_id = int(args[1])
       writer = csv.writer(sys.stdout)
 
       product = Product.objects.get(id=product_id)
       for op in product.order_product_set.filter(order__confirm_time__isnull=False, order__payment_date__isnull=False):
         order = op.order
-        writer.write([op.order.customer.name, op.order.customer.email, op.count])
+        writer.writerow([op.order.customer.name.encode('UTF-8'), op.order.customer.email, op.count])
