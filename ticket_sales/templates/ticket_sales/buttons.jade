@@ -1,6 +1,6 @@
 p
   if phase.payment_phase
-    button.btn.btn-success.btn-block.btn-large(type='submit', formaction="https://payment.checkout.fi/") Siirry maksamaan &#10004;
+    span
   elif phase.next_phase and phase.can_cancel
     button.btn.btn-primary.btn-block.btn-large(type='submit', name='action', value='next') Seuraava &rarr;
   else

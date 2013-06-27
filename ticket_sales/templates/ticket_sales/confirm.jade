@@ -1,7 +1,6 @@
 extends base/base.jade
 block body_text
   h2 Vahvista tilaus
-block form_content
   p
     | Tarkista vielä tilauksen tietosi ja tilaamiesi tuotteiden määrät. Valitsemalla
     em Siirry maksamaan
@@ -12,4 +11,8 @@ block form_content
     |  Muistathan maksun suoritettuasi painaa maksusivulla olevaa "Palaa myyjän sivulle"-nappia.
 
   include ticket_sales/order_statement.jade
-  include ticket_sales/checkout.html
+
+  form(method='post', action='https://payment.checkout.fi/')
+    include ticket_sales/checkout.html
+    button.btn.btn-success.btn-block.btn-large(type='submit') Siirry maksamaan &#10004;
+block form_content
