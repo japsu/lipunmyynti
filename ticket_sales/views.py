@@ -444,17 +444,14 @@ def stats_view(request):
     context = RequestContext(request, {})
     return render_to_response("ticket_admin/stats.html", vars, context_instance=context)
 
-# XXX hardkood0r
-TICKET_PRODUCT_IDS = (1,2,3)
-
 @login_required
 def tickets_by_date_view(request, raw=False):
-    confirmed_orders = Order.objects.filter(confirm_time__isnull=False, cancellation_time__isnull=True, order_product_set__product__id__in=TICKET_PRODUCT_IDS).distinct()
+    confirmed_orders = Order.objects.filter(confirm_time__isnull=False, cancellation_time__isnull=True, order_product_set__product__name__contains='lippu').distinct()
     tickets_by_date = defaultdict(int)
 
     for order in confirmed_orders:
         date = order.confirm_time.date()
-        for op in order.order_product_set.filter(product__id__in=TICKET_PRODUCT_IDS).distinct():
+        for op in order.order_product_set.filter(product__name__contains='lippu').distinct():
             tickets_by_date[date] += op.count
 
     min_date = min(tickets_by_date.keys())
