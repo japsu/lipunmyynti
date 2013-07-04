@@ -77,7 +77,7 @@ def render_receipt(order, c):
 
     ypos -= 30*mm
 
-    c.drawString(BASE_INDENT, ypos, u"Lisätietoja {settings.EVENT_NAME} -tapahtumasta löydätte kotisivuiltamme: {0}".format(settings.EVENT_URL))
+    c.drawString(BASE_INDENT, ypos, u"Lisätietoja {0} -tapahtumasta löydätte kotisivuiltamme: {1}".format(settings.EVENT_NAME, settings.EVENT_URL))
 
     ypos -= 15*mm
 
