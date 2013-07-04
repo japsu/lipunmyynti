@@ -34,7 +34,7 @@ def state_saved(canvas):
 def render_logo(x, y, c):
     with state_saved(c):
         c.translate(x, y)
-        c.drawImage(LOGO_FILENAME, 0, 0, 48*mm, 21.4*mm)
+        c.drawImage(LOGO_FILENAME, 0, 0, 48*mm, 15.5*mm)
         
 def render_receipt(order, c):
     render_logo(135*mm, 265*mm, c)
