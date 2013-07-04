@@ -21,7 +21,7 @@ except ImportError:
     warn('Failed to import ReportLab. Generating receipts will fail.')
 
 # XXX correct path
-LOGO_FILENAME = os.path.join(settings.MEDIA_ROOT, "images", "tracon_logo_kuitille.png")
+LOGO_FILENAME = os.path.join(settings.STATIC_ROOT, "images", "tracon_logo_kuitille.png")
 
 @contextmanager
 def state_saved(canvas):
