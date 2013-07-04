@@ -30,7 +30,7 @@ encoding: utf-8
   {% endif %}
 {% endfor %}
 
-<form action="{% url confirm_multiple_payments_view %}" method="post">
+<form action="{% url confirm_multiple_payments_view %}" method="post">{% csrf_token %}
 <input type="hidden" name="dump" value="{{ dump|escape }}" />
 <p><input type="submit" value="Vahvista tilaukset" /></p>
 </form>

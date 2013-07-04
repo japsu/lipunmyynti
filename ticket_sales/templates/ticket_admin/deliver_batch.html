@@ -8,7 +8,7 @@ encoding: utf-8
 <h1>Merkitse toimituserä toimitetuksi</h1>
 <p>Vahvista toimituserän {{ batch.id }} merkitseminen toimitetuksi.</p>
 <p><em>HUOM!</em> Lähettää toimitusvahvistukset asiakkaille! Peruuttamaton operaatio.</p>
-<form action="{% url deliver_batch_view batch_id=batch.id %}" method="post">
+<form action="{% url deliver_batch_view batch_id=batch.id %}" method="post">{% csrf_token %}
 {{ form }}
 <p><input type="submit" value="Vahvista toimituserä" /></p>
 </form>

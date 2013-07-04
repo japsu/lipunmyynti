@@ -9,7 +9,7 @@ encoding: utf-8
 <p>Sisäänkirjautuminen epäonnistui.</p>
 {% endif %}
 
-<h1>Tracon VI: Lipunmyynnin hallinta</h1>
+<h1>{{ EVENT_NAME }}: Lipunmyynnin hallinta</h1>
 
 <form method="post" action="{% url django.contrib.auth.views.login %}">
 {% csrf_token %}

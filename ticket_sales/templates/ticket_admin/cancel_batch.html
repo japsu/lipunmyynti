@@ -7,7 +7,7 @@ encoding: utf-8
 {% block content %}
 <h1>Peru toimituserä</h1>
 <p>Vahvista toimituserän {{ batch.id }} peruminen.</p>
-<form action="{% url cancel_batch_view batch_id=batch.id %}" method="post">
+<form action="{% url cancel_batch_view batch_id=batch.id %}" method="post">{% csrf_token %}
 {{ form }}
 <p><input type="submit" value="Peru toimituserä" /></p>
 </form>

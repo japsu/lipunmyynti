@@ -8,7 +8,7 @@ encoding: utf-8
 <h1>Merkitse tilaus maksetuksi</h1>
 <p>Tarkista tilauksen tiedot:</p>
 {% render_order_compact order %}
-<form action="{% url confirm_single_payment_view %}" method="post">
+<form action="{% url confirm_single_payment_view %}" method="post">{% csrf_token %}
 <input type="hidden" name="order_id" value="{{ order.id }}">
 <p><input type="submit" value="Vahvista maksetuksi" /></p>
 </form>

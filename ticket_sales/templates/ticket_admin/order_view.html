@@ -17,7 +17,7 @@ function cancel() {
 <h1>Tilauksen tiedot</h1>
 <a href="{% url search_view %}">Takaisin listaukseen</a><br /><br />
 
-<form method="post" action="{% url order_view %}?id={{ order.id }}">
+<form method="post" action="{% url order_view %}?id={{ order.id }}">{% csrf_token %}
 <div style="width:400px;float:left">
 <table>
 {% if order.cancellation_time %}<tr><td><b>Tilaus peruttu</b></td><td><b>{{ order.cancellation_time|date:"d.m.Y H:i" }}</b></td></tr>{% endif %}
