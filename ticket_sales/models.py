@@ -184,7 +184,6 @@ class School(models.Model):
 
     name = models.CharField(max_length=40)
     address = models.CharField(max_length=40)
-    product = models.ForeignKey(Product)
     max_people = models.IntegerField()
     priority = models.IntegerField()
 
@@ -195,7 +194,7 @@ class School(models.Model):
 
         total = 0
         for order in self.order_set.filter(confirm_time__isnull=False, payment_date__isnull=False, cancellation_time__isnull=True):
-            sleepy_op = order.order_product_set.get(product=self.product)
+            sleepy_op = order.order_product_set.get(product__name__icontains=u'majoitus')
             total += sleepy_op.count
         return total
 
