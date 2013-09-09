@@ -1,23 +1,21 @@
-PÄIVITTÄMÄTTÄ
-
 Hei!
 
 {% if perjantai %}
 Olet varannut Traconin lattiamajoituksesta {{ count }} majoituspai{{ count|pluralize:"kan,kkaa" }}
-perjantain 7.9.2011 ja lauantain 8.9.2011 väliseksi yöksi nimellä {{ name|upper }}. 
+perjantain 13.9.2013 ja lauantain 14.9.2013 väliseksi yöksi nimellä {{ name|upper }}. 
 
-Majoituspaikkasi on Tammerkosken koulu osoitteessa Rautatienkatu 3-5.
+Majoituspaikkasi on Tammerkosken koulutalo osoitteessa Rautatienkatu 3-5.
 {% endif %}
 
 {% if not perjantai %}
 Olet varannut Traconin lattiamajoituksesta {{ count }} majoituspai{{ count|pluralize:"kan,kkaa" }}
-lauantain 8.9.2011 ja sunnuntain 9.9.2011 väliseksi yöksi nimellä {{ name|upper }}. 
+lauantain 14.9.2013 ja sunnuntain 15.9.2013 väliseksi yöksi nimellä {{ name|upper }}. 
 
 {% if tammerkoski %}
-Majoituspaikkasi on Tammerkosken koulu osoitteessa Rautatienkatu 3-5.
+Majoituspaikkasi on Tammerkosken koulutalo osoitteessa Rautatienkatu 3-5.
 {% endif %}
 {% if not tammerkoski %}
-Majoituspaikkasi on Amurin koulu osoitteessa Satakunnankatu 60.
+Majoituspaikkasi on Finnish International School of Tampere ("Amurin koulu") osoitteessa Satakunnankatu 60.
 {% endif %}
 
 {% endif %}
@@ -43,31 +41,30 @@ TAPAHTUMAAN SAAPUMINEN
 Saapuessasi tapahtumaan voit jättää majoitusvälineesi Tampere-talolla 
 sijaitsevaan ISOTAVARANARIKKAAN. Huomaathan, että 
 majoituksen yhteydessä ei ole narikkaa lauantaina päivällä, vaan sinne 
-voi viedä tavaraa vasta majoituksen avautuessa kello 18. Tavaroita ei 
+voi viedä tavaraa vasta majoituksen avautuessa kello 19. Tavaroita ei 
 myöskään voi jättää sunnuntaina päivän ajaksi, vaan ne on otettava 
 mukaan aamupäivällä majoituksesta poistuttaessa.
 {% endif %}
 
 TAPAHTUMAPAIKALTA MAJOITUKSEEN
 
-{% if tammerkoski %}Tampere-talosta Tammerkosken koululle (Rautatienkatu 3-5) on matkaa
+{% if tammerkoski %}Tampere-talosta Tammerkosken koulutalolle (Rautatienkatu 3-5) on matkaa
 noin kilometri. Koulu on rautatieasemalta 5 korttelia pohjoiseen, suoraan
 Rautatienkatua pitkin ja heti Tuomiokirkon jälkeen.
 {% endif %}{% if not tammerkoski %}Tampere-talosta Amurin koululle (Satakunnankatu 60) on matkaa
 noin kaksi ja puoli kilometriä. Koulu on rautatieasemalta länteen, ensin Hämeenkatua
 pitkin Hämeenpuistoon asti, jossa katu muuttuu Pirkankaduksi. Viiden korttelin päästä Sotkankatua
-oikealle. Koulu on ensimmäisessä risteyksessä vasemmalla. Amurin koululle pääset myös conibussilla.
+oikealle. Koulu on ensimmäisessä risteyksessä vasemmalla. Koululle pääset myös conibussilla.
 {% endif %}
 Tampere-talon ja majoituspaikkojen väliä liikennöi lauantaina myös Traconin ikioma 
-CONIBUSSI, jolla taitat matkan helposti ja edullisesti. Conibussilla matka 
-maksaa 1 €/hlö/suunta (varaathan tasarahan!). Conibussin aikataulu
+CONIBUSSI, jolla taitat matkan helposti ja ilmaiseksi. Conibussin aikataulu
 ilmoitetaan paikan päällä.
 
 
 MAJOITUKSEEN SAAPUMINEN
 
 {% if perjantai %}Majoituspaikka avautuu perjantaina kello 19.{% endif %}
-{% if not perjantai %}Majoituspaikka avautuu lauantaina kello 18.{% endif %}
+{% if not perjantai %}Majoituspaikka avautuu lauantaina kello 19.{% endif %}
 Tämän jälkeen majoitukseen voi saapua milloin vain koko yön ajan.
 
 Ilmoittaudu majoitukseen saapuessasi majoituksen valvojalle ja ilmoita nimi, 
@@ -108,7 +105,7 @@ Mikäli poistut majoituksesta aikaisemmin, ilmoita siitä majoituksen
 valvojalle.
 
 {% if not perjantai %}Sunnuntaiaamuna conibussi liikennöi majoituspaikkojen ja Tampere-talon 
-väliä. Hinta on sama kuin illallakin eli 1 €/hlö/suunta.{% endif %}
+väliä.{% endif %}
 
 TURVALLISUUS MAJOITUSPAIKOISSA
 
@@ -139,10 +136,10 @@ koulun väliltä löytyy useita myöhään auki olevia ravintoloita.{% endif %}
 
 KYSY LISÄÄ!
 
-Jos jokin jäi epäselväksi, kysy lisää esimerkiksi Anikin foorumeilla 
+Jos jokin jäi epäselväksi, kysy lisää esimerkiksi Facebookissa 
 osoitteessa
 
-http://forums.aniki.fi/viewtopic.php?f=18&t=12854
+https://www.facebook.com/Tracon.fi
 
 tai sähköpostitse vastaamalla tähän viestiin! Vastaamme mielellämme 
 tapahtumaa koskeviin kysymyksiisi.
@@ -152,4 +149,4 @@ Nähdään Traconissa, ja kauniita unia! ;)
 
 Ystävällisin terveisin
 -- 
-Tracon 7 -tapahtuman järjestäjät <yhteys12@tracon.fi>
+Tracon 8 -tapahtuman järjestäjät <yhteys@tracon.fi>
