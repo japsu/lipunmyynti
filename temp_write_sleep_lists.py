@@ -32,4 +32,5 @@ for (product, school, school_shortname, dayname) in [
         w = writer(output_file)
         w.writerow(utf8(school.name, dayname))
         for op in product.order_product_set.filter(order__school=school):
-            w.writerow(utf8(op.order.customer.name, op.order.customer.phone_number, op.count))
+            if op.count > 0:
+                w.writerow(utf8(op.order.customer.name, op.order.customer.phone_number, op.count))
