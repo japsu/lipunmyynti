@@ -20,6 +20,8 @@ LASU = Product.objects.get(name__icontains='la-su')
 TAMMERKOSKI = School.objects.get(name__icontains='tammerkosk')
 AMURI = School.objects.get(name__icontains='amuri')
 
+FORMAT = u"{last_name}, {first_name}, {count}\n"
+
 def utf8(*args):
     return [unicode(arg).encode('UTF-8') for arg in args]
 
@@ -29,8 +31,10 @@ for (product, school, school_shortname, dayname) in [
     (LASU, AMURI,       u"amuri",       u"lauantai")
 ]:
     with open("{school_shortname}-{dayname}.csv".format(**locals()), 'w') as output_file:
-        w = writer(output_file)
-        w.writerow(utf8(school.name, dayname))
-        for op in product.order_product_set.filter(order__school=school):
+        for op in product.order_product_set.filter(order__school=school).order_by('last_name','first_name'):
             if op.count > 0:
-                w.writerow(utf8(op.order.customer.name, op.order.customer.phone_number, op.count))
+                output_file.write(OUTPUT_FORMAT.format(
+                    last_name=op.order.customer.last_name,
+                    first_name=op.order.customer.first_name,
+                    count=op.count
+                ).encode('UTF-8'))
