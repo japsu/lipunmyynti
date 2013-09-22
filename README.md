@@ -1,4 +1,8 @@
-== Getting started ==
+# Tracon ticket sales system
+
+Copyright (C) 2009-2013 Santtu Pajukanta, Jussi Sorjonen, Petri Haikonen, Meeri Panula ja Esa Ollitervo.
+
+## Getting started
 
     apt-get install nodejs
     npm install -g stylus
